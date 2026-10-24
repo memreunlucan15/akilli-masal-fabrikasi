@@ -1,0 +1,836 @@
+<title>Akıllı Masal Fabrikası</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/* Layout: one narrow column like a picture book; a toy-like sticky action bar at the bottom of each wizard step. */
+:root{
+  --bg:#EEF1FB; --surface:#FFFFFF; --ink:#221F45; --muted:#5E5987; --line:#D8DAF0;
+  --accent:#FF7A30; --accent-deep:#D2581A; --accent-ink:#FFFFFF; --accent-soft:#FFE7D7;
+  --leaf:#178F75; --leaf-soft:#DDF4EC; --sun:#FFC928; --sun-soft:#FFF2C2; --sky:#4B63F0;
+  --chip-on:#221F45; --chip-on-ink:#FFFFFF; --danger:#C8323C;
+  --font-display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --font-body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-read:"Andika","Nunito",system-ui,sans-serif;
+  --r-lg:24px; --r-md:18px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#13132B; --surface:#1F1E42; --ink:#F2EFFF; --muted:#ADA8D8; --line:#363463;
+  --accent:#FF8C4A; --accent-deep:#B5501A; --accent-ink:#1B1030; --accent-soft:#3D2A3A;
+  --leaf:#4FD1B0; --leaf-soft:#173A36; --sun:#FFD248; --sun-soft:#3A3418; --sky:#8C9BFF;
+  --chip-on:#FFD248; --chip-on-ink:#1B1030; --danger:#FF6B74; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#13132B; --surface:#1F1E42; --ink:#F2EFFF; --muted:#ADA8D8; --line:#363463;
+  --accent:#FF8C4A; --accent-deep:#B5501A; --accent-ink:#1B1030; --accent-soft:#3D2A3A;
+  --leaf:#4FD1B0; --leaf-soft:#173A36; --sun:#FFD248; --sun-soft:#3A3418; --sky:#8C9BFF;
+  --chip-on:#FFD248; --chip-on-ink:#1B1030; --danger:#FF6B74; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+h1,h2,h3{font-family:var(--font-display);line-height:1.1;margin:0;text-wrap:balance}
+
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:8px;background:none;border:0;padding:4px 0;font-family:var(--font-display);font-weight:800;font-size:1.15rem;white-space:nowrap;min-width:0}
+@media (max-width:420px){ .top-actions .pill{display:none} }
+.brand .gear{display:inline-block;font-size:1.3rem}
+.top-actions{display:flex;gap:8px;align-items:center}
+.pill{font-size:.75rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--surface);border:2px solid var(--line);color:var(--muted);white-space:nowrap}
+.pill.ai{border-color:var(--leaf);color:var(--leaf)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding-bottom:10px}
+.step{display:flex;flex-direction:column;gap:4px;font-size:.72rem;font-weight:800;color:var(--muted);letter-spacing:.03em}
+.step i{display:block;height:8px;border-radius:99px;background:var(--line)}
+.step.on{color:var(--ink)} .step.on i{background:var(--accent)}
+.step.done i{background:var(--leaf)}
+
+main{padding-block:8px 140px}
+main.nobar{padding-bottom:48px}
+.screen{display:flex;flex-direction:column;gap:22px}
+.lead h1{font-size:clamp(1.8rem,7vw,2.3rem)}
+.lead p{margin:6px 0 0;color:var(--muted);font-size:1.02rem}
+.section{display:flex;flex-direction:column;gap:10px}
+.section h2{font-size:1.3rem}
+.label{font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:var(--r-md);padding:14px 22px;font-family:var(--font-display);font-weight:700;font-size:1.15rem;background:var(--accent);color:var(--accent-ink);box-shadow:0 4px 0 var(--accent-deep);transition:transform .08s,box-shadow .08s;min-height:54px}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--accent-deep)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.btn.ghost{background:var(--surface);color:var(--ink);box-shadow:0 4px 0 var(--line);border:2px solid var(--line)}
+.btn.ghost:active{box-shadow:0 1px 0 var(--line)}
+.btn.sm{min-height:42px;padding:8px 14px;font-size:1rem;border-radius:14px}
+.btn.wide{width:100%}
+.btn.icon{min-width:54px;padding:0 12px;font-size:1.4rem}
+.btn.listening{background:var(--danger);box-shadow:0 4px 0 var(--accent-deep);color:#fff;animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.06)}}
+
+/* picks */
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:520px){.grid2.worlds{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pick{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 6px 12px;border-radius:var(--r-lg);border:3px solid var(--line);background:var(--surface);text-align:center;font-weight:800;font-size:.95rem;line-height:1.2;min-width:0}
+.pick .em{font-size:2.6rem;line-height:1.1}
+.pick small{display:block;font-weight:600;color:var(--muted);font-size:.78rem}
+.pick[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.pick[aria-pressed="true"]::after{content:"✓";position:absolute;top:6px;right:8px;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:.8rem;display:grid;place-items:center}
+.world .em{font-size:2.2rem}
+.world{padding:12px 8px;gap:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 15px;font-weight:800;font-size:.98rem;min-height:44px}
+.chip[aria-pressed="true"]{background:var(--chip-on);color:var(--chip-on-ink);border-color:var(--chip-on)}
+.swatches{display:flex;flex-wrap:wrap;gap:12px}
+.sw{width:48px;height:48px;border-radius:50%;border:4px solid var(--surface);box-shadow:0 0 0 2px var(--line)}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 4px var(--ink)}
+.field{display:flex;gap:8px;align-items:stretch}
+.field input{flex:1;min-width:0;border:3px solid var(--line);background:var(--surface);border-radius:var(--r-md);padding:12px 14px;font-size:1.15rem;font-weight:700}
+.field input:focus{border-color:var(--sky);outline:none}
+.hint{font-size:.88rem;color:var(--muted);margin:0}
+
+/* action bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bg);border-top:2px solid var(--line);padding-top:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+.bar .row{display:flex;gap:10px;align-items:center}
+.bar .row .btn:last-child{flex:1}
+.bar .why{font-size:.85rem;color:var(--muted);margin:0 0 8px;text-align:center}
+
+/* home */
+.factory{position:relative;overflow:hidden;border-radius:28px;background:var(--surface);border:3px solid var(--line);padding:22px 18px 0;display:flex;flex-direction:column;gap:10px}
+.factory h1{font-size:clamp(2.1rem,9vw,2.9rem);letter-spacing:-.01em}
+.factory h1 span{color:var(--accent)}
+.factory p{margin:0;color:var(--muted);font-size:1.05rem;max-width:34ch}
+.factory .btn{align-self:flex-start;margin-top:6px}
+.belt{position:relative;margin:14px -18px 0;height:92px;border-top:3px dashed var(--line);overflow:hidden}
+.belt-track{position:absolute;bottom:22px;display:flex;gap:28px;font-size:2.4rem;white-space:nowrap;animation:belt 18s linear infinite}
+.belt::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;background:repeating-linear-gradient(90deg,var(--line) 0 14px,transparent 14px 26px);animation:roll 1.2s linear infinite}
+.belt .book{position:absolute;right:12px;bottom:20px;font-size:2.8rem;z-index:2;filter:drop-shadow(-12px 0 10px var(--surface))}
+@keyframes belt{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@keyframes roll{from{background-position:0 0}to{background-position:26px 0}}
+.spin{display:inline-block;animation:spin 4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.shelf{display:flex;flex-direction:column;gap:10px}
+.book-card{display:flex;align-items:center;gap:12px;background:var(--surface);border:2px solid var(--line);border-radius:var(--r-md);padding:10px 12px}
+.book-card .cover{width:54px;height:54px;flex:none;border-radius:14px;display:grid;place-items:center;font-size:1.9rem}
+.book-card .meta{flex:1;min-width:0}
+.book-card b{display:block;font-family:var(--font-display);font-size:1.08rem;line-height:1.2}
+.book-card span{font-size:.85rem;color:var(--muted)}
+.book-card .open{background:none;border:0;padding:0;text-align:left;display:flex;align-items:center;gap:12px;flex:1;min-width:0}
+.tag{display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--sun-soft);color:var(--ink);border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:2px}
+.del{background:none;border:0;color:var(--muted);font-weight:800;font-size:.85rem;padding:8px;border-radius:10px;white-space:nowrap}
+.del.sure{color:var(--danger);background:var(--accent-soft)}
+.empty{border:2px dashed var(--line);border-radius:var(--r-md);padding:16px;color:var(--muted);text-align:center;margin:0}
+
+.parents{background:var(--surface);border:2px solid var(--line);border-radius:var(--r-lg);padding:18px;display:flex;flex-direction:column;gap:12px}
+.parents ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.parents li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.parents li b{display:block}
+.parents li span{color:var(--muted);font-size:.93rem}
+.dot{width:12px;height:12px;border-radius:50%;margin-top:6px}
+
+/* story */
+.story-head{display:flex;flex-direction:column;gap:6px}
+.story-head h1{font-size:clamp(1.7rem,7vw,2.3rem)}
+.story-head .sub{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:.9rem}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:.9rem;background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:6px 12px;min-height:40px}
+.toggle[aria-pressed="true"]{border-color:var(--leaf);color:var(--leaf)}
+.chapter{display:flex;flex-direction:column;gap:14px;scroll-margin-top:130px}
+.scene{position:relative;aspect-ratio:16/8;max-width:100%;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;gap:clamp(10px,4vw,26px);overflow:hidden}
+.scene .e{font-size:clamp(2.6rem,13vw,4.2rem);line-height:1;filter:drop-shadow(0 6px 6px rgba(0,0,0,.18))}
+.scene .e.hero{animation:bob 3s ease-in-out infinite}
+.scene .glow{position:absolute;width:44%;aspect-ratio:1;border-radius:50%;opacity:.45;filter:blur(24px)}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.scene .num{position:absolute;top:10px;left:10px;background:var(--surface);color:var(--ink);font-weight:800;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 10px}
+.picked{align-self:flex-start;display:inline-flex;gap:8px;align-items:center;background:var(--chip-on);color:var(--chip-on-ink);border-radius:999px;padding:6px 14px;font-weight:800;font-size:.92rem}
+.cause{border:2px dashed var(--leaf);background:var(--leaf-soft);border-radius:var(--r-md);padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.cause .label{color:var(--leaf)}
+.cause p{margin:0;font-weight:700}
+.read{font-family:var(--font-read);font-size:1.24rem;line-height:1.75;max-width:62ch}
+.read p{margin:0 0 .8em}
+.read p:last-child{margin-bottom:0}
+.chapter-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.word{display:flex;flex-direction:column;gap:2px;background:var(--sun-soft);border-radius:var(--r-md);padding:10px 14px}
+.word b{font-family:var(--font-display);font-size:1.2rem}
+.word span{font-size:.95rem}
+.divider{height:0;border-top:3px dotted var(--line);margin:6px 0}
+
+.ask{display:flex;flex-direction:column;gap:12px;background:var(--surface);border:3px solid var(--line);border-radius:var(--r-lg);padding:16px}
+.ask h2{font-size:1.35rem}
+.choices{display:flex;flex-direction:column;gap:10px}
+.choice{display:grid;grid-template-columns:34px 44px 1fr;align-items:center;gap:6px;text-align:left;background:var(--bg);border:3px solid var(--line);border-radius:var(--r-md);padding:10px 12px;font-family:var(--font-display);font-weight:700;font-size:1.12rem;line-height:1.2;box-shadow:0 4px 0 var(--line);min-height:64px}
+.choice:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.choice .n{width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-size:.9rem}
+.choice .ce{font-size:1.9rem}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-weight:800;font-size:.85rem}
+.or::before,.or::after{content:"";flex:1;border-top:2px solid var(--line)}
+
+.loading{display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;background:var(--surface);border:3px dashed var(--line);border-radius:var(--r-lg);text-align:center}
+.gears{font-size:2.6rem;display:flex;gap:2px}
+.gears span:nth-child(2){animation-direction:reverse;font-size:1.8rem;margin-top:22px}
+.loading p{margin:0;font-weight:800;font-family:var(--font-display);font-size:1.15rem}
+
+.end{display:flex;flex-direction:column;gap:14px;background:var(--surface);border:3px solid var(--accent);border-radius:var(--r-lg);padding:18px}
+.end .moral{font-family:var(--font-display);font-size:1.35rem;font-weight:700;line-height:1.25;margin:0}
+.end ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;font-size:1.05rem}
+.end .row{display:flex;flex-wrap:wrap;gap:10px}
+.end .row .btn{flex:1 1 200px}
+
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;max-width:min(92vw,460px);background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:14px;font-weight:700;font-size:.95rem;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+
+<header class="top"><div class="wrap" id="head"></div></header>
+<main class="wrap" id="main"></main>
+<div class="bar" id="bar" hidden><div class="wrap" id="barIn"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+"use strict";
+document.documentElement.lang = "tr";
+/* ---------- veri ---------- */
+const TOTAL = 4;
+const HEROES = {
+  kedi:    {label:"Uzaylı Kedi",     e:"🐱", noun:"uzaylı kedi",      def:"Pıtırcık"},
+  sincap:  {label:"Cesur Sincap",    e:"🐿️", noun:"sincap",           def:"Fındık"},
+  ejderha: {label:"Minik Ejderha",   e:"🐉", noun:"minik ejderha",    def:"Közcük"},
+  robot:   {label:"Robot",           e:"🤖", noun:"robot",            def:"Vidalı"},
+  tavsan:  {label:"Tavşan",          e:"🐰", noun:"tavşan",           def:"Pamuk"},
+  dinozor: {label:"Dinozor",         e:"🦕", noun:"dinozor",          def:"Dino"},
+  tilki:   {label:"Tilki",           e:"🦊", noun:"tilki",            def:"Tarçın"},
+  unicorn: {label:"Tek Boynuzlu At", e:"🦄", noun:"tek boynuzlu at",  def:"Işıltı"},
+  ozel:    {label:"Kendi kahramanım",e:"⭐", noun:"",                 def:"Yıldız"}
+};
+const TRAITS = ["cesur","meraklı","komik","nazik","akıllı","utangaç","hızlı","yardımsever"];
+const POWERS = {
+  uc:      {label:"Uçabilir",            e:"🕊️", ability:"kanat çırpıp gökyüzüne uçabiliyormuş",   use:"kanatlarını çırpıp engelin üstünden uçmuş", because:"uçabildiği"},
+  gorunmez:{label:"Görünmez olur",       e:"👻", ability:"istediği zaman görünmez olabiliyormuş",    use:"bir anda görünmez olup engelin yanından sessizce süzülmüş", because:"görünmez olabildiği"},
+  konus:   {label:"Hayvanlarla konuşur", e:"🗣️", ability:"bütün hayvanlarla konuşabiliyormuş",       use:"etraftaki hayvanlara seslenmiş ve hep birlikte bir köprü kurmuşlar", because:"hayvanlarla konuşabildiği"},
+  guc:     {label:"Çok güçlü",           e:"💪", ability:"kocaman kayaları bile kaldırabiliyormuş",   use:"bütün gücüyle kocaman bir kütüğü itip kendine köprü yapmış", because:"çok güçlü olduğu"},
+  isik:    {label:"Işık saçar",          e:"🌟", ability:"karanlıkta ışıl ışıl parlayabiliyormuş",   use:"ışıl ışıl parlayıp önündeki gizli yolu aydınlatmış", because:"ışık saçabildiği"},
+  zipla:   {label:"Süper zıplar",        e:"🦘", ability:"bulutlara kadar zıplayabiliyormuş",       use:"öyle bir zıplamış ki engelin üstünden aşıvermiş", because:"çok yükseğe zıplayabildiği"}
+};
+const COLORS = {
+  mor:{v:"#9B6CFF"}, turuncu:{v:"#FF8A3D"}, mavi:{v:"#3E8BFF"}, "yeşil":{v:"#2DBE7E"}, pembe:{v:"#FF6FB1"}, "sarı":{v:"#FFC928"}
+};
+const WORLDS = {
+  orman:{label:"Fısıltılı Orman", e:"🌳", bg:["#C9F0D3","#7FCB98"], desc:"konuşan ağaçların olduğu yemyeşil bir orman",
+    loc:"Fısıltılı Orman'da", title:"ve Işık Pınarı",
+    problem:"ormanın en yaşlı ağacı Koca Çınar'ın yaprakları birden solmaya başlamış", fix:"Koca Çınar'ın yaprakları yeniden yemyeşil olmuş",
+    helper:"Bilge Baykuş", helperDat:"Bilge Baykuş'a", helperE:"🦉",
+    item:"parlayan bir meşe palamudu", itemN:"parlayan meşe palamudu", itemAcc:"parlayan meşe palamudunu", itemE:"🌰",
+    obstacle:"köpük köpük akan bir dere", obstacleE:"🌊", goalDat:"Işık Pınarı'na", goalE:"✨",
+    friends:"sincaplar, kirpiler ve tavşanlar", final:"ışığı sönmüş minik bir ateş böceği oturuyormuş"},
+  uzay:{label:"Yıldız Galaksisi", e:"🪐", bg:["#2B2E7A","#7B5BD6"], desc:"gezegenler ve yıldızlarla dolu bir galaksi",
+    loc:"Yıldız Tozu Galaksisi'nde", title:"ve Sönen Yıldız",
+    problem:"gökyüzünün en parlak yıldızı Parıltı yavaş yavaş sönmeye başlamış", fix:"Parıltı yeniden ışıl ışıl parlamaya başlamış",
+    helper:"Kuyruklu Yıldız Zıpzıp", helperDat:"Kuyruklu Yıldız Zıpzıp'a", helperE:"☄️",
+    item:"cebe sığan minik bir roket", itemN:"cebe sığan minik roket", itemAcc:"minik roketini", itemE:"🚀",
+    obstacle:"fırıl fırıl dönen bir meteor yağmuru", obstacleE:"🌠", goalDat:"Ay'ın arkasındaki Işık Fabrikası'na", goalE:"🌙",
+    friends:"minik uzaylılar ve gezegen kurbağaları", final:"yolunu kaybetmiş minik bir uzaylı ağlıyormuş"},
+  deniz:{label:"Mercan Krallığı", e:"🐠", bg:["#9EE6F5","#2F8FD0"], desc:"rengarenk mercanlarla dolu bir deniz altı krallığı",
+    loc:"Mercan Krallığı'nda", title:"ve Renkli Mercanlar",
+    problem:"mercanların rengarenk renkleri birer birer solmuş", fix:"mercanlar gökkuşağı gibi rengarenk olmuş",
+    helper:"Yaşlı Kaplumbağa Tospi", helperDat:"Yaşlı Kaplumbağa Tospi'ye", helperE:"🐢",
+    item:"şarkı söyleyen bir deniz kabuğu", itemN:"şarkı söyleyen deniz kabuğu", itemAcc:"şarkı söyleyen deniz kabuğunu", itemE:"🐚",
+    obstacle:"karanlık bir deniz mağarası", obstacleE:"🪨", goalDat:"İnci Sarayı'na", goalE:"🦪",
+    friends:"yunuslar, ahtapotlar ve denizatları", final:"arkadaşlarını kaybetmiş minik bir balık bekliyormuş"},
+  seker:{label:"Şeker Kasabası", e:"🍭", bg:["#FFD3E8","#FF97C4"], desc:"evleri kurabiyeden yapılmış tatlı bir kasaba",
+    loc:"Şeker Kasabası'nda", title:"ve Gökkuşağı Çeşmesi",
+    problem:"kasabanın ortasındaki gökkuşağı çeşmesi birden durmuş", fix:"gökkuşağı çeşmesi yeniden rengarenk fışkırmaya başlamış",
+    helper:"Pastacı Ayıcık Bal", helperDat:"Pastacı Ayıcık Bal'a", helperE:"🧸",
+    item:"sihirli bir tahta kaşık", itemN:"sihirli tahta kaşık", itemAcc:"sihirli tahta kaşığını", itemE:"🥄",
+    obstacle:"yapış yapış bir karamel bataklığı", obstacleE:"🍯", goalDat:"Kurabiye Dağı'na", goalE:"🍪",
+    friends:"şekerleme cüceleri ve lolipop kuşları", final:"karnı guruldayan küçük bir şeker cücesi oturuyormuş"},
+  buz:{label:"Kar Tanesi Vadisi", e:"❄️", bg:["#E2F3FF","#9CC9EE"], desc:"her yerin bembeyaz karla kaplı olduğu bir vadi",
+    loc:"Kar Tanesi Vadisi'nde", title:"ve Kayıp Kuzey Işıkları",
+    problem:"geceleri gökyüzünü boyayan kuzey ışıkları kaybolmuş", fix:"kuzey ışıkları gökyüzünde yeniden dans etmeye başlamış",
+    helper:"Penguen Pofuduk", helperDat:"Penguen Pofuduk'a", helperE:"🐧",
+    item:"hiç erimeyen bir kar tanesi", itemN:"hiç erimeyen kar tanesi", itemAcc:"hiç erimeyen kar tanesini", itemE:"❄️",
+    obstacle:"kaygan mı kaygan bir buz tepesi", obstacleE:"🏔️", goalDat:"Kuzey Işıkları Mağarası'na", goalE:"🌌",
+    friends:"kutup ayıları ve kar tilkileri", final:"üşüyen küçük bir penguen yavrusu titriyormuş"},
+  sato:{label:"Bulut Şatosu", e:"🏰", bg:["#FFF1C9","#B9A7FF"], desc:"bulutların üstünde süzülen bir şato",
+    loc:"Bulut Şatosu'nda", title:"ve Susan Müzik Kutusu",
+    problem:"şatonun herkesi neşelendiren müzik kutusu susmuş", fix:"müzik kutusu yeniden neşeli şarkılar çalmaya başlamış",
+    helper:"Rüzgâr Perisi Esinti", helperDat:"Rüzgâr Perisi Esinti'ye", helperE:"🧚",
+    item:"altın bir müzik anahtarı", itemN:"altın müzik anahtarı", itemAcc:"altın müzik anahtarını", itemE:"🗝️",
+    obstacle:"sallanıp duran bir gökkuşağı köprüsü", obstacleE:"🌈", goalDat:"şatonun en yüksek kulesine", goalE:"🎵",
+    friends:"bulut kuzuları ve rüzgâr kuşları", final:"kanadı incinmiş küçük bir kuş duruyormuş"}
+};
+const AGES = {
+  "3-5": {label:"3–5 yaş", rule:"çok kısa ve basit cümleler (en fazla 8 kelime), 60-90 kelime"},
+  "6-8": {label:"6–8 yaş", rule:"kısa ve anlaşılır cümleler, 100-130 kelime"},
+  "9-11":{label:"9–11 yaş", rule:"zengin ama anlaşılır bir dil, 140-180 kelime"}
+};
+const NAMES = ["Pıtırcık","Fındık","Boncuk","Zıpzıp","Minnoş","Tarçın","Limon","Pofuduk","Şimşek","Karamel","Yıldız","Bulut","Pırıl","Gofret"];
+const LOADING = ["Hayal çarkları dönüyor…","Kelimeler kazana dökülüyor…","Masal fabrikası çalışıyor…","Sihirli mürekkep hazırlanıyor…"];
+
+/* ---------- Türkçe ek yardımcıları ---------- */
+const VOW = "aeıioöuü";
+const lower = s => s.toLocaleLowerCase("tr");
+function lastV(w){ const l = lower(w); for (let i = l.length - 1; i >= 0; i--) if (VOW.includes(l[i])) return l[i]; return "e"; }
+const endsV = w => VOW.includes(lower(w).slice(-1));
+const four = v => ({a:"ı",ı:"ı",o:"u",u:"u",e:"i",i:"i",ö:"ü",ü:"ü"})[v];
+const two = v => "aıou".includes(v) ? "a" : "e";
+const gen = n => n + "'" + (endsV(n) ? "n" : "") + four(lastV(n)) + "n";
+const dat = n => n + "'" + (endsV(n) ? "y" : "") + two(lastV(n));
+const cap = s => s ? s.charAt(0).toLocaleUpperCase("tr") + s.slice(1) : s;
+function traitText(t){ if (!t.length) return "neşeli"; return t.length === 1 ? t[0] : t[0] + " ve " + t[1]; }
+
+/* ---------- yardımcılar ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+const emo = (s, d) => Array.from(String(s || "")).slice(0, 4).join("") || d;
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+const LIB = "masal-kitapligi-v1";
+let toastT;
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 4200); }
+
+/* ---------- durum ---------- */
+function freshDraft(){ return {hero:null, custom:"", name:"", traits:[], power:"uc", color:"mor", world:null, age:"6-8"}; }
+const S = {
+  screen:"home", draft:freshDraft(), story:null, readOnly:false,
+  busy:false, ctl:null, loadMsg:LOADING[0], confirmDel:null, listening:null,
+  library:store.get(LIB, []),
+  autoRead:store.get("masal-oto-oku", false),
+  engine:store.get("masal-motor", "auto")
+};
+let sample = null, aiState = "checking";
+(async () => {
+  await 0;
+  try { if (window.claude && window.claude.use) sample = await window.claude.use("sample"); } catch {}
+  aiState = sample ? "ready" : "off";
+  render();
+})();
+const useAI = () => aiState === "ready" && S.engine === "auto";
+
+/* ---------- yedek masal motoru ---------- */
+function offlineChapter(st, n, picked){
+  const h = st.hero, w = WORLDS[h.world], nm = h.name, P = POWERS[h.power] || POWERS.uc;
+  const kind = picked ? picked.kind : null, idea = picked ? picked.label : "";
+  let text = "", cause = "", word, choices = [], scene, moral = "", questions = [];
+  if (n === 0){
+    text = `Bir varmış bir yokmuş, ${w.loc} ${nm} adında ${traitText(h.traits)}, ${h.colorAdj} renkli bir ${h.noun} yaşarmış. ${gen(nm)} bir süper gücü varmış: ${P.ability}.\n\nBir sabah ${nm} uyandığında bir terslik olduğunu fark etmiş: ${w.problem}! "Bunu mutlaka çözmeliyim," demiş ${nm}. Ama nereden başlamalıymış?`;
+    word = {w:"terslik", m:"Bir şeyin olması gerektiği gibi gitmemesi."};
+    choices = [{e:w.helperE, label:`${w.helperDat} danış`, kind:"ask"}, {e:"🔍", label:"İpuçlarını kendin ara", kind:"explore"}, {e:"🏃", label:"Hemen yola koyul", kind:"brave"}];
+    scene = [h.e, w.e];
+  } else if (n === 1){
+    const P1 = {
+      ask:[`${nm} hemen ${w.helperDat} gitmiş ve olanları anlatmış. ${w.helper} onu dikkatle dinlemiş, sonra gülümsemiş: "Bu sorunun çaresi ${w.goalDat} gitmekte. Al, bu ${w.itemN} yol boyunca sana yardım edecek."`,
+        `Sen ${w.helperDat} danışmayı seçtin. Bu yüzden ${nm} hem yolu öğrendi hem de yardımcı bir hediye kazandı.`, {w:"danışmak", m:"Bilmediğimiz bir şeyi, bilen birine sormak."}],
+      explore:[`${nm} etrafı dikkatle incelemeye başlamış. Yerde minik, parıl parıl izler varmış! İzleri takip etmiş, etmiş… Sonunda ${w.item} bulmuş. Yanında küçük bir not varmış: "Çare, ${w.goalDat} giden yolda."`,
+        `Sen ipuçlarını aramayı seçtin. ${nm} dikkatlice baktığı için gizli ipucunu buldu.`, {w:"ipucu", m:"Bir sırrı çözmemize yardım eden küçük işaret."}],
+      brave:[`${nm} hiç vakit kaybetmeden yola koyulmuş. Koşa koşa giderken ${w.helper} ile karşılaşmış. "Nereye böyle telaşla?" diye sormuş ${w.helper}. "Sorunu çözmeye!" demiş ${nm}. Bu cesarete çok sevinen ${w.helper} ona yolu göstermiş: "${w.goalDat} git. Bu ${w.itemN} de senin olsun."`,
+        `Sen hemen yola çıkmayı seçtin. ${nm} cesurca harekete geçtiği için yolda yeni bir yardımcı buldu.`, {w:"cesaret", m:"Biraz korksak bile doğru olanı yapabilmek."}],
+      custom:[`${nm} kulağına fısıldanan fikri denemiş: "${idea}". Bu fikir harika işe yaramış! Tam o sırada ${w.item} bulmuş ve ${w.goalDat} giden gizli bir patika görmüş.`,
+        `Sen kendi fikrini söyledin: "${idea}". Bu yüzden masal senin istediğin yöne döndü!`, {w:"fikir", m:"Aklımıza gelen yeni bir düşünce."}]
+    }[kind] || null;
+    const p = P1 || [`${nm} yola koyulmuş ve kısa süre sonra ${w.item} bulmuş.`, "", {w:"yolculuk", m:"Bir yerden başka bir yere gitmek."}];
+    text = p[0] + `\n\nYola devam etmiş, etmiş… Derken karşısına ${w.obstacle} çıkmış! Şimdi ne yapmalıymış?`;
+    cause = p[1]; word = p[2];
+    choices = [{e:P.e, label:"Süper gücünü kullan", kind:"power"}, {e:"🤝", label:"Arkadaşlarından yardım iste", kind:"friends"}, {e:"💡", label:"Akıllıca bir plan yap", kind:"think"}];
+    scene = [h.e, w.itemE, w.obstacleE];
+  } else if (n === 2){
+    const P2 = {
+      power:[`${nm} derin bir nefes almış ve ${P.use}. Bir, iki, üç… Engeli kolayca aşmış!`,
+        `Sen süper gücü kullanmayı seçtin. ${nm} ${P.because} için engeli aşabildi.`, {w:"engel", m:"Yolumuzu kesen, aşmamız gereken şey."}],
+      friends:[`${nm} yüksek sesle seslenmiş: "Bana yardım eder misiniz?" Bir anda ${w.friends} koşa koşa gelmiş. Hep birlikte el ele vermişler ve engeli birlikte aşmışlar.`,
+        `Sen yardım istemeyi seçtin. Herkes birlikte çalıştığı için zor olan iş kolaylaştı.`, {w:"yardımlaşmak", m:"Bir işi birlikte, el ele vererek yapmak."}],
+      think:[`${nm} bir taşın üstüne oturmuş ve düşünmüş, düşünmüş… Sonra aklına parlak bir fikir gelmiş! ${cap(w.itemN)} sayesinde engeli aşmanın yolunu bulmuş.`,
+        `Sen plan yapmayı seçtin. ${nm} sakin kalıp düşündüğü için çözümü buldu.`, {w:"plan", m:"Bir işi nasıl yapacağımızı önceden düşünmek."}],
+      custom:[`${nm} senin fikrini denemiş: "${idea}". Herkes çok şaşırmış, çünkü bu fikir engeli aşmaya yetmiş!`,
+        `Sen kendi fikrini söyledin: "${idea}". Bu yüzden ${nm} engeli kendine özgü bir yolla aştı.`, {w:"yaratıcı", m:"Yeni ve farklı fikirler bulabilen."}]
+    }[kind] || [`${nm} engeli dikkatlice aşmış.`, "", {w:"engel", m:"Yolumuzu kesen, aşmamız gereken şey."}];
+    text = P2[0] + `\n\nSonunda ${w.goalDat} varmış. Ama orada ${w.final}. ${nm} onu öyle görünce çok üzülmüş. Ona nasıl yardım etmeliymiş?`;
+    cause = P2[1]; word = P2[2];
+    choices = [{e:"🎁", label:"Elindekini paylaş", kind:"share"}, {e:"🎶", label:"Neşeli bir şarkı söyle", kind:"sing"}, {e:"🫶", label:"Yanına otur, onu dinle", kind:"listen"}];
+    scene = [h.e, w.goalE];
+  } else {
+    const P3 = {
+      share:[`"Al, bu senin olsun," demiş ${nm} ve ${w.itemAcc} minik dostuna uzatmış. Minik dostunun gözleri sevinçle parlamış.`,
+        `Sen paylaşmayı seçtin. ${nm} elindekini paylaştığı için minik dostu mutlu oldu ve sihir geri geldi.`, {w:"paylaşmak", m:"Sahip olduğumuz bir şeyi başkasıyla birlikte kullanmak."}, "Paylaştıkça mutluluk çoğalır."],
+      sing:[`${nm} en neşeli şarkısını söylemeye başlamış. Şarkı o kadar güzelmiş ki minik dostu önce gülümsemiş, sonra o da şarkıya katılmış.`,
+        `Sen şarkı söylemeyi seçtin. Şarkı herkesi neşelendirdiği için sihir geri geldi.`, {w:"neşe", m:"İçimizi dolduran mutluluk ve sevinç."}, "Neşe bulaşıcıdır; küçük bir şarkı bile dünyayı aydınlatabilir."],
+      listen:[`${nm} minik dostunun yanına oturmuş ve "Neyin var?" diye sormuş. Onu sabırla dinlemiş. Dertleşmek ikisine de çok iyi gelmiş ve minik dostunun yüzü gülmüş.`,
+        `Sen dinlemeyi seçtin. ${nm} sabırla dinlediği için minik dostu kendini iyi hissetti ve sihir geri geldi.`, {w:"sabır", m:"Acele etmeden, sakin bir şekilde beklemek."}, "Birini gerçekten dinlemek, ona verebileceğimiz en güzel hediyedir."],
+      custom:[`${nm} senin fikrini denemiş: "${idea}". Minik dostu buna öyle sevinmiş ki kahkahalarla gülmüş.`,
+        `Sen kendi fikrini söyledin. Bu yüzden masalın sonu da senin fikrinle mutlu bitti!`, {w:"hayal", m:"Aklımızda canlandırdığımız düşünce ve resimler."}, "Her iyi fikir, dünyayı biraz daha güzelleştirebilir."]
+    }[kind] || [`${nm} minik dostuna sarılmış.`, "", {w:"iyilik", m:"Başkasını mutlu etmek için yaptığımız güzel davranış."}, "İyilik her kapıyı açar."];
+    text = P3[0] + `\n\nTam o anda harika bir şey olmuş: ${w.fix}! Herkes sevinçten havalara zıplamış. Meğer sorunu çözen en büyük sihir iyilikmiş.\n\nO günden sonra ${nm}, ${w.loc} herkesin en sevdiği kahraman olmuş. Gökten üç elma düşmüş: biri bu masalı yazan sana, biri dinleyenlere, biri de kahramanımız ${dat(nm)}.`;
+    cause = P3[1]; word = P3[2]; moral = P3[3];
+    questions = [`${nm} neden yola çıktı?`, `${nm} engeli nasıl aştı? Sen olsan ne yapardın?`, `Masalın sonunda sihri geri getiren neydi?`];
+    scene = [h.e, "✨", w.e];
+  }
+  return {text, cause, word, choices, scene, ending:n === TOTAL - 1, moral, questions,
+    title:n === 0 ? `${nm} ${w.title}` : "", src:"offline"};
+}
+
+/* ---------- Claude ile masal ---------- */
+function aiPrompt(st, n, picked){
+  const h = st.hero, w = WORLDS[h.world], P = POWERS[h.power] || POWERS.uc;
+  const past = st.chapters.map((c, i) => `Bölüm ${i + 1}: ${c.text}` + (c.picked ? `\nÇocuğun seçimi: ${c.picked.label}${c.picked.kind === "custom" ? " (çocuğun kendi fikri)" : ""}` : "")).join("\n\n");
+  const ending = n === TOTAL - 1;
+  const stage = ["giriş: kahramanı tanıt ve çözülmesi gereken bir sorun ortaya çıksın",
+    "yolculuk: çocuğun seçiminin sonucu yaşansın, sonra yolda bir engel çıksın",
+    "engel aşılır, hedefe varılır ama son küçük bir sorun belirir",
+    "son: sorun çocuğun seçimleri sayesinde çözülsün, mutlu son ve kısa bir ders"][n];
+  return `Sen çocuklar için interaktif masal yazan, sıcak ve neşeli bir Türk masalcısısın. ${AGES[h.age].label} bir çocuk için Türkçe yazıyorsun.
+
+Kahraman: ${h.name}, ${traitText(h.traits)}, ${h.colorAdj} renkli bir ${h.noun}. Süper gücü: ${P.label.toLocaleLowerCase("tr")}.
+Masal dünyası: ${w.label} (${w.desc}).
+
+Kurallar:
+- Korkutucu, şiddet içeren, üzücü ya da yetişkin içerikli öğe YOK. Kötü karakter yerine çözülmesi gereken bir sorun var; sorunlar dostluk, zekâ, yardımlaşma ve iyilikle çözülür.
+- Dil: ${AGES[h.age].rule}. Geleneksel masal anlatımı (-mış'lı geçmiş zaman). İlk bölüm "Bir varmış bir yokmuş" ile başlasın.
+- Çocuğun kendi fikri uygunsuz ya da anlamsızsa onu nazikçe masala uygun, olumlu bir hale getir.
+- Toplam ${TOTAL} bölüm var. Şimdi ${n + 1}. bölümü yaz. Bu bölümün görevi: ${stage}.
+${n > 0 ? `- Bu bölüm, çocuğun son seçiminin ("${picked ? picked.label : ""}") DOĞRUDAN SONUCU olarak başlamalı.` : ""}
+
+${past ? "Şimdiye kadarki masal:\n" + past + "\n" : ""}
+Yalnızca şu JSON nesnesiyle yanıt ver:
+{${n === 0 ? `"title": "masalın kısa adı",` : ""}
+"text": "bölüm metni, paragraflar arasında \\n\\n",
+"cause": "${n === 0 ? "boş bırak" : "tek cümle: 'Sen ... seçtin. Bu yüzden ...' biçiminde, seçim ile sonucu bağla"}",
+"word": {"w": "bölümde geçen, çocuk için yeni olabilecek bir kelime", "m": "çocuğun anlayacağı kısa anlamı"},
+"scene": "bölümü anlatan 2-3 emoji",
+"choices": ${ending ? "[]" : `[{"e": "tek emoji", "label": "en fazla 6 kelimelik seçenek"}, ... tam 3 tane, birbirinden farklı yönlere giden]`}${ending ? `,
+"moral": "masalın tek cümlelik dersi",
+"questions": ["çocuğa sorulacak 3 kısa anlama/düşünme sorusu; biri neden-sonuç üzerine olsun"]` : ""}}`;
+}
+function cleanAI(o, n, st){
+  if (!o || typeof o.text !== "string" || o.text.trim().length < 30) return null;
+  const ending = n === TOTAL - 1;
+  const choices = Array.isArray(o.choices) ? o.choices.filter(c => c && c.label).slice(0, 3)
+    .map(c => ({e:emo(c.e, "✨"), label:String(c.label).slice(0, 70), kind:"ai"})) : [];
+  if (!ending && choices.length < 2) return null;
+  const scene = Array.from(String(o.scene || "")).filter(ch => /\p{Extended_Pictographic}/u.test(ch)).slice(0, 3);
+  return {
+    text:o.text.trim(), cause:n === 0 ? "" : String(o.cause || ""), title:String(o.title || ""),
+    word:o.word && o.word.w ? {w:String(o.word.w), m:String(o.word.m || "")} : null,
+    scene:[st.hero.e, ...scene.filter(e => e !== st.hero.e)].slice(0, 3),
+    choices:ending ? [] : choices, ending, src:"ai",
+    moral:String(o.moral || ""), questions:Array.isArray(o.questions) ? o.questions.slice(0, 3).map(String) : []
+  };
+}
+function aiError(e){
+  const c = e && e.code;
+  if (["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed","session_expired"].includes(c)){
+    aiState = "off"; toast("Claude şu an kullanılamıyor. Masal hazır masal motoruyla devam ediyor.");
+  } else if (c === "rate_limited") toast("Claude biraz dinleniyor. Bu bölüm hazır masal motorundan geldi.");
+  else toast("Bağlantıda küçük bir sorun oldu. Bu bölüm hazır masal motorundan geldi.");
+}
+
+/* ---------- masal akışı ---------- */
+function heroSnap(d){
+  const H = HEROES[d.hero];
+  return {id:d.hero, e:H.e, noun:d.hero === "ozel" ? (lower(d.custom.trim()) || "kahraman") : H.noun,
+    name:cap(d.name.trim()).slice(0, 20) || H.def, traits:d.traits.slice(0, 2), power:d.power,
+    color:d.color, colorAdj:d.color, colorV:COLORS[d.color].v, world:d.world, age:d.age};
+}
+async function startStory(){
+  S.story = {id:"m" + Date.now(), created:Date.now(), hero:heroSnap(S.draft), chapters:[], ended:false, title:""};
+  S.readOnly = false; S.screen = "story"; window.scrollTo(0, 0);
+  await makeChapter(null);
+}
+async function makeChapter(picked){
+  const st = S.story, n = st.chapters.length;
+  S.busy = true; S.loadMsg = LOADING[Math.floor(Math.random() * LOADING.length)];
+  render(); requestAnimationFrame(() => { const l = $("#loading"); if (l && n) l.scrollIntoView({behavior:"smooth", block:"center"}); });
+  let ch = null;
+  if (useAI()){
+    S.ctl = new AbortController();
+    try {
+      const o = await sample.json(aiPrompt(st, n, picked), {modelTier:"quick", signal:S.ctl.signal, cache:false});
+      ch = cleanAI(o, n, st);
+      if (!ch) toast("Claude'un cevabı eksik geldi. Bu bölüm hazır masal motorundan geldi.");
+    } catch (e){
+      if (e && e.code === "cancelled"){
+        S.busy = false;
+        if (n === 0){ S.story = null; S.screen = "world"; } else st.chapters[n - 1].picked = null;
+        render(); return;
+      }
+      aiError(e);
+    }
+    S.ctl = null;
+  }
+  if (S.story !== st) return;
+  if (!ch) ch = offlineChapter(st, n, picked);
+  st.chapters.push(ch);
+  if (n === 0) st.title = ch.title || offlineChapter(st, 0, null).title;
+  if (ch.ending){ st.ended = true; st.moral = ch.moral; st.questions = ch.questions; saveStory(st); }
+  S.busy = false; render();
+  requestAnimationFrame(() => { const el = document.getElementById("ch" + n); if (el && n) el.scrollIntoView({behavior:"smooth", block:"start"}); });
+  if (S.autoRead) speak(ch.text, n);
+}
+function pick(choice){
+  const st = S.story; if (!st || S.busy || st.ended) return;
+  stopSpeak();
+  st.chapters[st.chapters.length - 1].picked = choice;
+  makeChapter(choice);
+}
+function sendIdea(text){
+  const t = String(text || "").replace(/\s+/g, " ").trim().slice(0, 120);
+  if (t.length < 2){ toast("Önce fikrini yaz ya da söyle."); return; }
+  pick({e:"💭", label:t, kind:"custom"});
+}
+function saveStory(st){
+  S.library = [st, ...S.library.filter(s => s.id !== st.id)].slice(0, 30);
+  store.set(LIB, S.library);
+}
+function exampleStory(){
+  const st = {id:"ornek", example:true, created:0, ended:true, chapters:[],
+    hero:{id:"kedi", e:"🐱", noun:"uzaylı kedi", name:"Pıtırcık", traits:["meraklı","nazik"], power:"uc", color:"mor", colorAdj:"mor", colorV:"#9B6CFF", world:"uzay", age:"6-8"}};
+  const path = ["ask", "friends", "share"];
+  for (let n = 0; n < TOTAL; n++){
+    const prev = n ? st.chapters[n - 1].choices.find(c => c.kind === path[n - 1]) : null;
+    if (n) st.chapters[n - 1].picked = prev;
+    st.chapters.push(offlineChapter(st, n, prev));
+  }
+  st.title = st.chapters[0].title; st.moral = st.chapters[3].moral; st.questions = st.chapters[3].questions;
+  return st;
+}
+
+/* ---------- sesli okuma ---------- */
+const synth = window.speechSynthesis;
+let speaking = null;
+function stopSpeak(){ if (synth) synth.cancel(); speaking = null; markSpeak(); }
+function speak(text, i){
+  if (!synth || !window.SpeechSynthesisUtterance){ toast("Bu cihaz sesli okumayı desteklemiyor."); return; }
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(String(text).replace(/\n+/g, " "));
+  u.lang = "tr-TR"; u.rate = .9; u.pitch = 1.1;
+  const v = synth.getVoices().find(v => /^tr/i.test(v.lang)); if (v) u.voice = v;
+  u.onend = u.onerror = () => { if (speaking === i){ speaking = null; markSpeak(); } };
+  speaking = i; markSpeak(); synth.speak(u);
+}
+function markSpeak(){
+  document.querySelectorAll('[data-act="speak"]').forEach(b => {
+    const on = String(speaking) === b.dataset.i;
+    b.innerHTML = on ? "⏹ Durdur" : "🔊 Dinle"; b.setAttribute("aria-pressed", on);
+  });
+}
+
+/* ---------- sesli komut ---------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let micOk = !!SR, rec = null;
+function listen(target){
+  if (!micOk){ toast("Mikrofon burada çalışmıyor. Klavyendeki mikrofon tuşuna basıp konuşarak yazabilirsin."); return; }
+  if (rec){ try { rec.abort(); } catch {} rec = null; S.listening = null; markMic(); return; }
+  try { rec = new SR(); } catch { micOk = false; render(); return; }
+  rec.lang = "tr-TR"; rec.interimResults = false; rec.maxAlternatives = 1;
+  rec.onresult = e => onHeard(target, e.results[0][0].transcript);
+  rec.onerror = e => {
+    if (["not-allowed","service-not-allowed","audio-capture"].includes(e.error)){
+      micOk = false; render(); toast("Mikrofon izni yok. Klavyendeki mikrofon tuşuna basıp konuşarak da yazabilirsin.");
+    } else if (e.error === "no-speech") toast("Seni duyamadım. Bir daha dener misin?");
+  };
+  rec.onend = () => { rec = null; S.listening = null; markMic(); };
+  S.listening = target; markMic();
+  try { rec.start(); } catch { rec = null; S.listening = null; markMic(); }
+}
+function markMic(){ document.querySelectorAll('[data-act="mic"]').forEach(b => b.classList.toggle("listening", S.listening === b.dataset.t)); }
+const norm = s => lower(s).replace(/[^a-zçğıöşü0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+function matchChoice(said, choices){
+  const s = norm(said); let best = -1, score = 0;
+  choices.forEach((c, i) => {
+    const hit = norm(c.label).split(" ").filter(w => w.length > 2).filter(w => s.includes(w.slice(0, Math.max(3, w.length - 2)))).length;
+    if (hit > score){ score = hit; best = i; }
+  });
+  if (score) return best;
+  if (s.split(" ").length <= 3){
+    const ord = [["bir","birinci","1","ilk","ilki"],["iki","ikinci","2","ortadaki"],["üç","üçüncü","3","sonuncu"]];
+    for (let i = 0; i < choices.length; i++) if (ord[i].some(o => s.split(" ").includes(o))) return i;
+  }
+  return -1;
+}
+function onHeard(target, said){
+  if (target === "name"){
+    const nm = cap(said.trim().split(" ")[0] || "");
+    S.draft.name = nm; const el = $("#heroName"); if (el) el.value = nm;
+  } else if (target === "custom"){
+    S.draft.custom = said; const el = $("#customHero"); if (el) el.value = said;
+  } else if (target === "idea"){
+    const st = S.story, ch = st && st.chapters[st.chapters.length - 1];
+    if (!ch) return;
+    const i = matchChoice(said, ch.choices);
+    if (i >= 0){ toast(`Duydum: "${said}" → ${ch.choices[i].label}`); pick(ch.choices[i]); }
+    else { const el = $("#idea"); if (el) el.value = said; toast(`Duydum: "${said}". Fikrini göndermek için ok tuşuna dokun.`); }
+  }
+}
+
+/* ---------- görünümler ---------- */
+const STEPS = [["hero","Kahraman"],["traits","Özellikler"],["world","Dünya"],["story","Masal"]];
+function renderHead(){
+  const idx = STEPS.findIndex(s => s[0] === S.screen);
+  const mode = S.engine === "offline" || aiState === "off" ? `<span class="pill">Hazır motor</span>`
+    : aiState === "ready" ? `<span class="pill ai">Claude yazıyor</span>` : "";
+  $("#head").innerHTML = `<div class="topbar">
+      <button class="brand" data-act="home" aria-label="Ana sayfa"><span class="gear spin" aria-hidden="true">⚙️</span>Masal Fabrikası</button>
+      <div class="top-actions">${mode}${S.screen !== "home" ? `<button class="btn ghost sm" data-act="shelf">Kitaplığım</button>` : ""}</div>
+    </div>` + (idx >= 0 && !S.readOnly ? `<div class="steps" aria-label="Adım ${idx + 1} / 4">${STEPS.map((s, i) =>
+      `<div class="step ${i === idx ? "on" : i < idx ? "done" : ""}"><i></i>${i + 1}. ${s[1]}</div>`).join("")}</div>` : "");
+}
+function bookCard(st){
+  const w = WORLDS[st.hero.world] || WORLDS.orman;
+  const date = st.example ? "Örnek masal" : new Date(st.created).toLocaleDateString("tr-TR", {day:"numeric", month:"long"});
+  const sure = S.confirmDel === st.id;
+  return `<div class="book-card">
+    <button class="open" data-act="open" data-id="${esc(st.id)}">
+      <span class="cover" style="background:linear-gradient(135deg,${w.bg[0]},${w.bg[1]})" aria-hidden="true">${esc(st.hero.e)}</span>
+      <span class="meta"><b>${esc(st.title)}${st.example ? `<span class="tag">Örnek</span>` : ""}</b><span>${esc(w.label)} · ${esc(date)}</span></span>
+    </button>
+    ${st.example ? "" : `<button class="del ${sure ? "sure" : ""}" data-act="del" data-id="${esc(st.id)}">${sure ? "Emin misin? Sil" : "Sil"}</button>`}
+  </div>`;
+}
+const V = {
+  home(){
+    const belt = Object.values(HEROES).filter(h => h.noun).map(h => h.e).join("");
+    return `<div class="screen">
+      <section class="factory">
+        <span class="label">İnteraktif hikâye oluşturma</span>
+        <h1>Akıllı Masal <span>Fabrikası</span></h1>
+        <p>Kahramanını seç, ona isim ve süper güç ver. Masalın nasıl devam edeceğine sen karar ver.</p>
+        <button class="btn" data-act="new">Yeni masal yap</button>
+        <div class="belt" aria-hidden="true"><div class="belt-track">${belt}${belt}${belt}${belt}</div><span class="book">📖</span></div>
+      </section>
+      <section class="section" id="kitaplik">
+        <h2>Masal kitaplığım</h2>
+        <div class="shelf">
+          ${S.library.length ? S.library.map(bookCard).join("") : `<p class="empty">Bitirdiğin masallar burada birikecek.</p>`}
+          ${bookCard(EXAMPLE)}
+        </div>
+      </section>
+      <section class="parents">
+        <h2>Ebeveynler için</h2>
+        <ul>
+          <li><span class="dot" style="background:var(--leaf)"></span><div><b>Neden-sonuç</b><span>Her bölüm, çocuğun seçiminin sonucunu "Sen … seçtin. Bu yüzden …" kutusuyla gösterir.</span></div></li>
+          <li><span class="dot" style="background:var(--accent)"></span><div><b>Yaratıcı yazarlık</b><span>Kahramanı çocuk kurar, her adımda kendi fikriyle masala yön verebilir.</span></div></li>
+          <li><span class="dot" style="background:var(--sun)"></span><div><b>Dil gelişimi</b><span>Her bölümde yeni bir kelime, sesli okuma ve sonda birlikte konuşacağınız sorular var.</span></div></li>
+        </ul>
+        ${window.claude ? `<div class="section">
+          <span class="label">Masalları kim yazsın?</span>
+          <div class="chips">
+            <button class="chip" data-act="engine" data-v="auto" aria-pressed="${S.engine === "auto"}">Claude${aiState === "off" ? " (bu görünümde kapalı)" : ""}</button>
+            <button class="chip" data-act="engine" data-v="offline" aria-pressed="${S.engine === "offline"}">Hazır masal motoru</button>
+          </div>
+          <p class="hint">Claude, masalı açan kişinin kendi Claude hesabıyla yazar ve ilk seferde izin ister. Hazır motor internetsiz de çalışır.</p>
+        </div>` : ""}
+      </section>
+    </div>`;
+  },
+  hero(){
+    const d = S.draft;
+    return `<div class="screen">
+      <div class="lead"><h1>Kahramanını seç</h1><p>Masalın kahramanı kim olsun?</p></div>
+      <div class="grid3">${Object.entries(HEROES).map(([k, h]) =>
+        `<button class="pick" data-act="hero" data-v="${k}" aria-pressed="${d.hero === k}"><span class="em" aria-hidden="true">${h.e}</span>${h.label}</button>`).join("")}</div>
+      ${d.hero === "ozel" ? `<div class="section">
+        <label class="label" for="customHero">Kahramanın ne?</label>
+        <div class="field"><input id="customHero" maxlength="30" placeholder="örneğin: korsan papağan" value="${esc(d.custom)}" autocomplete="off">${micBtn("custom")}</div>
+        ${micHint()}
+      </div>` : ""}
+    </div>`;
+  },
+  traits(){
+    const d = S.draft, H = HEROES[d.hero];
+    return `<div class="screen">
+      <div class="lead"><h1>${H.e} Kahramanını tanıyalım</h1><p>İsmini koy, nasıl biri olduğunu seç.</p></div>
+      <div class="section">
+        <label class="label" for="heroName">Adı</label>
+        <div class="field"><input id="heroName" maxlength="20" value="${esc(d.name)}" autocomplete="off" placeholder="${esc(H.def)}">${micBtn("name")}<button class="btn ghost icon" data-act="dice" aria-label="Rastgele isim">🎲</button></div>
+        ${micHint()}
+      </div>
+      <div class="section">
+        <span class="label">Nasıl biri? (en fazla 2 tane)</span>
+        <div class="chips">${TRAITS.map(t => `<button class="chip" data-act="trait" data-v="${t}" aria-pressed="${d.traits.includes(t)}">${cap(t)}</button>`).join("")}</div>
+      </div>
+      <div class="section">
+        <span class="label">Süper gücü</span>
+        <div class="chips">${Object.entries(POWERS).map(([k, p]) => `<button class="chip" data-act="power" data-v="${k}" aria-pressed="${d.power === k}">${p.e} ${p.label}</button>`).join("")}</div>
+      </div>
+      <div class="section">
+        <span class="label">En sevdiği renk</span>
+        <div class="swatches">${Object.entries(COLORS).map(([k, c]) => `<button class="sw" data-act="color" data-v="${k}" style="background:${c.v}" aria-label="${cap(k)}" aria-pressed="${d.color === k}"></button>`).join("")}</div>
+      </div>
+    </div>`;
+  },
+  world(){
+    const d = S.draft;
+    return `<div class="screen">
+      <div class="lead"><h1>Masal nerede geçsin?</h1><p>Bir dünya seç, sonra fabrikayı çalıştır.</p></div>
+      <div class="grid2 worlds">${Object.entries(WORLDS).map(([k, w]) =>
+        `<button class="pick world" data-act="world" data-v="${k}" aria-pressed="${d.world === k}" style="background-image:linear-gradient(180deg,transparent 55%,${w.bg[0]}55)"><span class="em" aria-hidden="true">${w.e}</span>${w.label}<small>${w.desc}</small></button>`).join("")}</div>
+      <div class="section">
+        <span class="label">Kaç yaşındasın?</span>
+        <div class="chips">${Object.entries(AGES).map(([k, a]) => `<button class="chip" data-act="age" data-v="${k}" aria-pressed="${d.age === k}">${a.label}</button>`).join("")}</div>
+      </div>
+    </div>`;
+  },
+  story(){
+    const st = S.story; if (!st) return "";
+    const w = WORLDS[st.hero.world];
+    const chs = st.chapters.map((c, i) => chapterHTML(st, c, i, w)).join(`<div class="divider"></div>`);
+    const last = st.chapters[st.chapters.length - 1];
+    let tail = "";
+    if (S.busy) tail = `<div class="loading" id="loading" role="status">
+        <div class="gears" aria-hidden="true"><span class="spin">⚙️</span><span class="spin">⚙️</span></div>
+        <p>${esc(S.loadMsg)}</p>
+        ${S.ctl ? `<button class="btn ghost sm" data-act="cancel">Vazgeç</button>` : ""}
+      </div>`;
+    else if (st.ended) tail = endHTML(st);
+    else if (last && !S.readOnly) tail = `<section class="ask" aria-labelledby="askT">
+        <h2 id="askT">Şimdi ne olsun?</h2>
+        <div class="choices">${last.choices.map((c, i) =>
+          `<button class="choice" data-act="choose" data-i="${i}"><span class="n">${i + 1}</span><span class="ce" aria-hidden="true">${esc(c.e)}</span><span>${esc(c.label)}</span></button>`).join("")}</div>
+        <div class="or">ya da kendi fikrin</div>
+        <div class="field"><input id="idea" maxlength="120" placeholder="örneğin: Bir uçan halı bulsun" autocomplete="off">${micBtn("idea")}<button class="btn icon" data-act="idea" aria-label="Fikrimi gönder">➜</button></div>
+        <p class="hint">${micOk ? "Mikrofona dokunup söyleyebilirsin: “ikinci” ya da “şarkı söylesin” gibi." : "Okumak zorsa seçeneğin numarasına dokun. Klavyedeki mikrofon tuşuyla konuşarak da yazabilirsin."}</p>
+      </section>`;
+    return `<div class="screen">
+      <div class="story-head">
+        <span class="label">${esc(st.hero.e)} ${esc(st.hero.name)} · ${esc(w.label)}</span>
+        <h1>${esc(st.title || "Masal hazırlanıyor…")}</h1>
+        <div class="sub"><button class="toggle" data-act="auto" aria-pressed="${S.autoRead}">🔊 Otomatik sesli oku: ${S.autoRead ? "açık" : "kapalı"}</button></div>
+      </div>
+      ${chs}
+      ${tail}
+    </div>`;
+  }
+};
+function chapterHTML(st, c, i, w){
+  const prev = i ? st.chapters[i - 1].picked : null;
+  const scene = (c.scene && c.scene.length ? c.scene : [st.hero.e]).map((e, k) => `<span class="e ${k === 0 ? "hero" : ""}">${esc(e)}</span>`).join("");
+  return `<article class="chapter" id="ch${i}">
+    ${prev ? `<span class="picked">${esc(prev.e)} Senin seçimin: ${esc(prev.label)}</span>` : ""}
+    <div class="scene" style="background:linear-gradient(135deg,${w.bg[0]},${w.bg[1]})" aria-hidden="true">
+      <span class="glow" style="background:${esc(st.hero.colorV)}"></span>${scene}
+      <span class="num">Bölüm ${i + 1} / ${TOTAL}</span>
+    </div>
+    ${c.cause ? `<div class="cause"><span class="label">Neden → Sonuç</span><p>${esc(c.cause)}</p></div>` : ""}
+    <div class="read">${c.text.split(/\n{2,}/).map(p => `<p>${esc(p)}</p>`).join("")}</div>
+    <div class="chapter-tools">
+      <button class="btn ghost sm" data-act="speak" data-i="${i}" aria-pressed="false">🔊 Dinle</button>
+    </div>
+    ${c.word ? `<div class="word"><span class="label">Yeni kelime</span><b>${esc(c.word.w)}</b><span>${esc(c.word.m)}</span></div>` : ""}
+  </article>`;
+}
+function endHTML(st){
+  return `<section class="end">
+    <span class="label">Masalın sonu</span>
+    ${st.moral ? `<p class="moral">${esc(st.moral)}</p>` : ""}
+    ${st.questions && st.questions.length ? `<div class="section"><span class="label">Birlikte konuşalım</span><ol>${st.questions.map(q => `<li>${esc(q)}</li>`).join("")}</ol></div>` : ""}
+    <p class="hint">${st.example ? "Bu örnek masal. Kendi masalını yapmak için aşağıdaki düğmeye dokun." : "Bu masal kitaplığına kaydedildi."}</p>
+    <div class="row">
+      <button class="btn" data-act="new">Yeni masal yap</button>
+      ${st.example ? "" : `<button class="btn ghost" data-act="again">${esc(st.hero.name)} ile yeni macera</button>`}
+    </div>
+  </section>`;
+}
+const micBtn = t => micOk ? `<button class="btn ghost icon" data-act="mic" data-t="${t}" aria-label="Sesle söyle">🎤</button>` : "";
+const micHint = () => micOk ? "" : `<p class="hint">İpucu: Klavyedeki mikrofon tuşuna basıp konuşarak yazabilirsin.</p>`;
+
+function renderBar(){
+  const d = S.draft, bar = $("#bar"); let html = "";
+  if (S.screen === "hero"){
+    const ok = d.hero && (d.hero !== "ozel" || d.custom.trim());
+    html = `${ok ? "" : `<p class="why">${d.hero === "ozel" ? "Kahramanının ne olduğunu yaz." : "Önce bir kahraman seç."}</p>`}<div class="row"><button class="btn ghost" data-act="home">Geri</button><button class="btn" data-act="go" data-v="traits" ${ok ? "" : "disabled"}>Devam</button></div>`;
+  } else if (S.screen === "traits"){
+    html = `<div class="row"><button class="btn ghost" data-act="go" data-v="hero">Geri</button><button class="btn" data-act="go" data-v="world">Devam</button></div>`;
+  } else if (S.screen === "world"){
+    html = `${d.world ? "" : `<p class="why">Bir masal dünyası seç.</p>`}<div class="row"><button class="btn ghost" data-act="go" data-v="traits">Geri</button><button class="btn" data-act="start" ${d.world ? "" : "disabled"}>Masalı başlat</button></div>`;
+  }
+  bar.hidden = !html; $("#barIn").innerHTML = html;
+  $("#main").classList.toggle("nobar", !html);
+}
+function render(){ renderHead(); $("#main").innerHTML = V[S.screen](); renderBar(); markSpeak(); markMic(); }
+
+/* ---------- olaylar ---------- */
+function go(screen){ stopSpeak(); S.screen = screen; render(); window.scrollTo(0, 0); }
+const A = {
+  home(){ if (S.ctl) S.ctl.abort(); S.readOnly = false; S.confirmDel = null; go("home"); },
+  shelf(){ A.home(); requestAnimationFrame(() => $("#kitaplik").scrollIntoView({behavior:"smooth"})); },
+  new(){ S.draft = freshDraft(); S.story = null; S.readOnly = false; go("hero"); },
+  hero(b){
+    const d = S.draft, old = d.hero ? HEROES[d.hero].def : "";
+    d.hero = b.dataset.v;
+    if (!d.name || d.name === old) d.name = HEROES[d.hero].def;
+    render();
+  },
+  go(b){ go(b.dataset.v); },
+  trait(b){
+    const t = S.draft.traits, v = b.dataset.v, i = t.indexOf(v);
+    if (i >= 0) t.splice(i, 1); else { if (t.length >= 2) t.shift(); t.push(v); }
+    render();
+  },
+  power(b){ S.draft.power = b.dataset.v; render(); },
+  color(b){ S.draft.color = b.dataset.v; render(); },
+  world(b){ S.draft.world = b.dataset.v; render(); },
+  age(b){ S.draft.age = b.dataset.v; render(); },
+  dice(){ const cur = S.draft.name; let n = cur; while (n === cur) n = NAMES[Math.floor(Math.random() * NAMES.length)]; S.draft.name = n; $("#heroName").value = n; },
+  start(){ if (S.draft.world) startStory(); },
+  choose(b){ const st = S.story, ch = st.chapters[st.chapters.length - 1]; pick(ch.choices[+b.dataset.i]); },
+  idea(){ sendIdea($("#idea").value); },
+  mic(b){ listen(b.dataset.t); },
+  speak(b){
+    const i = +b.dataset.i;
+    if (speaking === i) stopSpeak(); else speak(S.story.chapters[i].text, i);
+  },
+  auto(){ S.autoRead = !S.autoRead; store.set("masal-oto-oku", S.autoRead); if (!S.autoRead) stopSpeak(); render(); },
+  cancel(){ if (S.ctl) S.ctl.abort(); },
+  engine(b){ S.engine = b.dataset.v; store.set("masal-motor", S.engine); render(); },
+  open(b){
+    const id = b.dataset.id;
+    S.story = id === "ornek" ? EXAMPLE : S.library.find(s => s.id === id);
+    if (!S.story) return;
+    S.readOnly = true; S.confirmDel = null; go("story");
+  },
+  del(b){
+    const id = b.dataset.id;
+    if (S.confirmDel !== id){ S.confirmDel = id; render(); return; }
+    S.library = S.library.filter(s => s.id !== id); store.set(LIB, S.library); S.confirmDel = null; render(); toast("Masal silindi.");
+  },
+  again(){
+    const h = S.story.hero;
+    S.draft = {hero:h.id, custom:h.id === "ozel" ? h.noun : "", name:h.name, traits:h.traits.slice(), power:h.power, color:h.color, world:null, age:h.age};
+    S.story = null; S.readOnly = false; go("world");
+  }
+};
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]");
+  if (!b || b.disabled) return;
+  if (S.confirmDel && b.dataset.act !== "del"){ S.confirmDel = null; }
+  const f = A[b.dataset.act]; if (f) f(b);
+});
+document.addEventListener("input", e => {
+  if (e.target.id === "heroName") S.draft.name = e.target.value;
+  if (e.target.id === "customHero"){ const had = !!S.draft.custom.trim(); S.draft.custom = e.target.value; if (had !== !!e.target.value.trim()) renderBar(); }
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.id === "idea"){ e.preventDefault(); sendIdea(e.target.value); }
+  if (e.key === "Enter" && (e.target.id === "heroName" || e.target.id === "customHero")) e.target.blur();
+});
+if (synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = () => {};
+
+const EXAMPLE = exampleStory();
+try { window.claude && window.claude.hot && window.claude.hot.snapshot && window.claude.hot.snapshot(() => ({screen:S.screen, draft:S.draft, story:S.busy ? null : S.story, readOnly:S.readOnly})); } catch {}
+function boot(data){
+  if (data && data.screen){
+    S.draft = data.draft || S.draft; S.story = data.story || null; S.readOnly = !!data.readOnly;
+    S.screen = data.screen === "story" && !S.story ? "home" : data.screen;
+  }
+  render();
+}
+const hot = window.claude && window.claude.hot;
+hot && hot.ready ? hot.ready(boot) : boot(hot && hot.data ? hot.data : {});
+</script>
