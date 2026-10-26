@@ -232,6 +232,65 @@ main.nobar{padding-bottom:48px}
 .pz-chip.skip{background:var(--bg);color:var(--muted);border:2px solid var(--line)}
 .stars{font-size:1.6rem;letter-spacing:2px}
 
+/* ebeveyn paneli */
+.panel .srcs{gap:6px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.tab{flex:none;border:0;background:none;border-bottom:3px solid transparent;padding:8px 10px;font-weight:800;color:var(--muted);font-size:.98rem;min-height:44px}
+.tab[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.pbody{display:flex;flex-direction:column;gap:14px}
+.pbody h3,.pcard h3,.pdetail h3{font-size:1.2rem}
+.pstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.pstats div{background:var(--surface);border:2px solid var(--line);border-radius:var(--r-md);padding:10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.pstats b{font-family:var(--font-display);font-size:1.5rem;line-height:1.1;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.pstats span{font-size:.8rem;color:var(--muted);font-weight:700}
+.obs{margin:0;background:var(--leaf-soft);border-radius:var(--r-md);padding:10px 14px;font-weight:700}
+.obs small{font-weight:600;color:var(--muted)}
+.tipbox{background:var(--sun-soft);border-radius:var(--r-md);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.tipbox ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px}
+.plist{display:flex;flex-direction:column;gap:8px}
+.prow{display:flex;align-items:center;gap:12px;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:var(--r-md);padding:10px 12px;width:100%}
+.prow .cover{width:46px;height:46px;flex:none;border-radius:12px;display:grid;place-items:center;font-size:1.6rem}
+.prow .meta{flex:1;min-width:0;display:flex;flex-direction:column}
+.prow b{font-family:var(--font-display);font-size:1.05rem;line-height:1.2}
+.prow .meta span{font-size:.82rem;color:var(--muted)}
+.pcard{background:var(--surface);border:2px solid var(--line);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:10px}
+.pdetail{display:flex;flex-direction:column;gap:12px}
+.tl{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.tl li{display:grid;grid-template-columns:96px 1fr;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:8px 10px;font-weight:700}
+.tl li.own{border-color:var(--accent);background:var(--accent-soft)}
+.tl .lab{font-size:.8rem;color:var(--muted);font-weight:800}
+.tl em{font-style:normal;font-size:.75rem;background:var(--accent);color:var(--accent-ink);border-radius:6px;padding:1px 6px;margin-left:4px}
+.row2{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pin{width:100%;min-width:0;border:3px solid var(--line);background:var(--surface);border-radius:var(--r-md);padding:10px 12px;font-size:1.05rem;font-weight:700}
+.pin:focus{border-color:var(--sky);outline:none}
+textarea.pin{resize:vertical;font-weight:600;font-family:var(--font-body)}
+.code-in{font-family:var(--font-display);letter-spacing:.12em;text-transform:uppercase}
+.words{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.words li{background:var(--sun-soft);border-radius:var(--r-md);padding:10px 14px;display:flex;flex-direction:column}
+.words b{font-family:var(--font-display);font-size:1.15rem}
+.words small{color:var(--muted);font-weight:700}
+.syncbar{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.85rem;color:var(--muted);font-weight:700}
+.pairqr{align-self:center;width:min(220px,70%);background:#FFFFFF;padding:10px;border-radius:16px}
+.pairqr svg{display:block;width:100%;height:auto}
+.code{margin:0;text-align:center;font-family:var(--font-display);font-size:1.9rem;font-weight:800;letter-spacing:.14em;font-variant-numeric:tabular-nums}
+.gate h1{font-size:clamp(1.5rem,6vw,2rem)}
+.bad-t{color:var(--danger);font-weight:800}
+.co{border:2px dashed var(--sky);border-radius:var(--r-md);padding:10px 14px;background:var(--surface)}
+.co .label{color:var(--sky)}
+.co ul{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:.95rem}
+.co b{display:inline-block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--sky);margin-right:6px}
+.famnote{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;background:var(--bg);border:2px solid var(--line);border-radius:var(--r-md);padding:10px 14px;font-weight:700;font-size:.95rem}
+.famnote.hot{border-color:var(--accent);background:var(--accent-soft)}
+.notecard{background:var(--accent-soft);border:2px solid var(--accent);border-radius:var(--r-md);padding:12px 14px;font-family:var(--font-read);font-size:1.15rem}
+.notecard .label{display:block;font-family:var(--font-body);color:var(--accent-deep)}
+.seedtag{display:flex;flex-direction:column;gap:2px;background:var(--sun-soft);border-radius:var(--r-md);padding:10px 14px;font-weight:800}
+.seedtag span{font-weight:600}
+.badges{font-size:.9rem;margin-left:4px}
+.sleep{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:28px 18px;background:var(--surface);border:3px solid var(--line);border-radius:28px}
+.sleep-scene{display:flex;gap:16px;font-size:3.2rem}
+.sleep-scene .z{animation:bob 4s ease-in-out infinite}
+.sleep p{margin:0;color:var(--muted);font-size:1.1rem;max-width:30ch}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
@@ -242,6 +301,7 @@ main.nobar{padding-bottom:48px}
 <div class="bar" id="bar" hidden><div class="wrap" id="barIn"></div></div>
 <div class="toast" id="toast" role="status" hidden></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
 "use strict";
 /* ---------- veri ---------- */
@@ -660,7 +720,7 @@ Rules:
 - NO scary, violent, sad or grown-up content. Instead of a villain there is a problem to solve; problems are solved with friendship, cleverness, teamwork and kindness.
 - Language: ${A.rule}. Classic fairy-tale voice in the past tense. The first chapter starts with "Once upon a time".
 - If the child's own idea is unsuitable or makes no sense, gently turn it into something positive that fits the story.
-- There are ${TOTAL} chapters in total. Write chapter ${n + 1} now. This chapter's job: ${stage}.
+${seedRules(st, true)}- There are ${TOTAL} chapters in total. Write chapter ${n + 1} now. This chapter's job: ${stage}.
 ${n > 0 ? `- This chapter must begin as the DIRECT RESULT of the child's last choice ("${picked ? picked.label : ""}").` : ""}
 
 ${past ? "The story so far:\n" + past + "\n" : ""}
@@ -687,7 +747,7 @@ Kurallar:
 - Korkutucu, şiddet içeren, üzücü ya da yetişkin içerikli öğe YOK. Kötü karakter yerine çözülmesi gereken bir sorun var; sorunlar dostluk, zekâ, yardımlaşma ve iyilikle çözülür.
 - Dil: ${A.rule}. Geleneksel masal anlatımı (-mış'lı geçmiş zaman). İlk bölüm "Bir varmış bir yokmuş" ile başlasın.
 - Çocuğun kendi fikri uygunsuz ya da anlamsızsa onu nazikçe masala uygun, olumlu bir hale getir.
-- Toplam ${TOTAL} bölüm var. Şimdi ${n + 1}. bölümü yaz. Bu bölümün görevi: ${stage}.
+${seedRules(st, false)}- Toplam ${TOTAL} bölüm var. Şimdi ${n + 1}. bölümü yaz. Bu bölümün görevi: ${stage}.
 ${n > 0 ? `- Bu bölüm, çocuğun son seçiminin ("${picked ? picked.label : ""}") DOĞRUDAN SONUCU olarak başlamalı.` : ""}
 
 ${past ? "Şimdiye kadarki masal:\n" + past + "\n" : ""}
@@ -738,7 +798,12 @@ function heroSnap(d, lang){
     color:d.color, colorAdj:COLORS[d.color][lang], colorV:COLORS[d.color].v, world:d.world, age:d.age};
 }
 async function startStory(){
-  S.story = {id:"m" + Date.now(), lang:S.lang, created:Date.now(), hero:heroSnap(S.draft, S.lang), chapters:[], ended:false, title:""};
+  S.story = {id:"m" + Date.now(), lang:S.lang, created:Date.now(), hero:heroSnap(S.draft, S.lang), chapters:[], ended:false, title:"", activeSec:0};
+  const seed = S.parent.seed;
+  if (seed && !seed.usedAt){
+    S.story.seed = {theme:seed.theme || "", chars:seed.chars || [], msg:seed.msg || ""};
+    S.parent.seed = Object.assign({}, seed, {usedAt:Date.now(), storyId:S.story.id}); saveParent();
+  }
   S.readOnly = false; S.screen = "story"; window.scrollTo(0, 0);
   await makeChapter(null);
 }
@@ -765,10 +830,12 @@ async function makeChapter(picked){
   }
   if (S.story !== st) return;
   if (!ch) ch = offlineChapter(st, n, picked);
+  if (n === 0 && ch.src === "offline" && st.seed && st.seed.chars.length) ch.text = ch.text.replace("\n\n", " " + companions(st) + "\n\n");
   if (!ch.ending && S.puzzles) ch.puzzle = makePuzzle(st, ch);
   st.chapters.push(ch);
   if (n === 0) st.title = ch.title || offlineChapter(st, 0, null).title;
-  if (ch.ending){ st.ended = true; st.moral = ch.moral; st.questions = ch.questions; saveStory(st); }
+  if (ch.ending){ st.ended = true; st.moral = ch.moral; st.questions = ch.questions; }
+  saveStory(st);
   S.busy = false; render();
   requestAnimationFrame(() => { const el = document.getElementById("ch" + n); if (el && n) el.scrollIntoView({behavior:"smooth", block:"start"}); });
   if (S.autoRead) speak(ch.text, n);
@@ -789,6 +856,20 @@ function sendIdea(text){
 function saveStory(st){
   S.library = [st, ...S.library.filter(s => s.id !== st.id)].slice(0, 30);
   store.set(LIB, S.library);
+  syncPush();
+}
+function companions(st){
+  const c = st.seed.chars, nm = st.hero.name;
+  if (st.lang === "en") return `${nm} didn't go alone: ${c.length > 1 ? c.slice(0, -1).join(", ") + " and " + c[c.length - 1] : c[0]} came along too.`;
+  const last = c[c.length - 1], de = "aıou".includes(lastV(last)) ? "da" : "de";
+  return `${nm} bu maceraya yalnız çıkmamış: yanında ${c.length > 1 ? c.slice(0, -1).join(", ") + " ve " + last : last} ${de} varmış.`;
+}
+function seedRules(st, en){
+  const r = [], sd = st.seed, avoid = (S.parent.avoid || "").trim();
+  if (sd && sd.theme) r.push(en ? `- The family asked for this topic: "${sd.theme}". Weave it gently into the story.` : `- Ailenin isteği: masal "${sd.theme}" konusunu nazikçe işlesin.`);
+  if (sd && sd.chars && sd.chars.length) r.push(en ? `- These characters from the child's real life join the adventure: ${sd.chars.join(", ")}.` : `- Çocuğun gerçek hayatından şu karakterler de maceraya katılsın: ${sd.chars.join(", ")}.`);
+  if (avoid) r.push(en ? `- Strictly avoid these topics: ${avoid}.` : `- Şu konulardan kesinlikle kaçın: ${avoid}.`);
+  return r.length ? r.join("\n") + "\n" : "";
 }
 function exampleStory(lang){
   const d = {hero:"kedi", custom:"", name:HEROES.kedi[lang].def, traits:["merakli","nazik"], power:"uc", color:"mor", world:"uzay", age:"6-8"};
@@ -1044,6 +1125,649 @@ const PZ_ACT = {
   puzzles(b){ S.puzzles = b.dataset.v === "on"; store.set("masal-bulmaca", S.puzzles); render(); }
 };
 
+/* ---------- ebeveyn: metinler ---------- */
+const PAGES_URL = "https://memreunlucan15.github.io/akilli-masal-fabrikasi/";
+const PNT = {
+  tr:{
+    open:"Ebeveyn paneline gir", headBtn:"Ebeveyn paneli", exit:"Paneli kapat",
+    gateH:"Ebeveyn kontrolü", gateP:"Bu bölüm yetişkinler için. Devam etmek için soruyu cevaplayın.",
+    gateQ:(a, b) => `${cap(numWord(a, "tr"))} artı ${numWord(b, "tr")} kaç eder?`, gatePh:"Cevap (rakamla)", gateGo:"Devam", gateBad:"Olmadı, yeni bir soru geldi.", cancel:"Vazgeç",
+    h1:"Ebeveyn paneli", thisDevice:"Bu cihaz", addChild:"+ Çocuk ekle",
+    tabs:{ozet:"Özet", masallar:"Masallar", kelimeler:"Kelimeler", katil:"Birlikte", ayarlar:"Ayarlar"},
+    week:"Son 7 gün", stories:"masal", minutes:"dakika", words:"yeni kelime", ideas:"kendi fikri", stars:"bulmaca yıldızı",
+    favHero:"En sevdiği kahraman", favWorld:"En sevdiği dünya",
+    obsIdeas:n => `Kendi fikirlerini masala katmayı seviyor: bu hafta ${n} kez kendi fikrini yazdı.`,
+    obsKind:(k, n) => `Masallarda en çok ${k} seçti (${n} kez).`,
+    obsNone:"Bu hafta henüz masal yok. Birlikte bir masal başlatmaya ne dersiniz?",
+    kinds:{ask:"bilen birine danışmayı", explore:"ipucu aramayı", brave:"hemen harekete geçmeyi", power:"süper gücünü kullanmayı", friends:"arkadaşlarından yardım istemeyi", think:"plan yapmayı", share:"paylaşmayı", sing:"şarkı söylemeyi", listen:"dinlemeyi"},
+    tipH:"Bugün deneyebilirsiniz", tipWord:w => `Bu haftanın kelimesi “${w}”. Akşam yemeğinde onu bir cümlede birlikte kullanın.`,
+    tipAsk:(h, q) => `${h} masalı hakkında sorun: “${q}”`, tipCoRead:"Birlikte okuma modunu açarsanız her bölümde size sorulacak sorular önerilir.",
+    recent:"Son masallar", empty:"Henüz masal yok. Çocuğunuz ilk masalını yaptığında burada görünecek.",
+    unfinished:"yarım kaldı", min:n => `~${n} dk`, ideasN:n => `💭 ${n}`, discussed:"👪 Konuştunuz", noteSent:"💌 Not var",
+    back:"← Masallar", choicesH:"Çocuğun seçimleri", ownIdea:"Kendi fikri", chapter:n => `Bölüm ${n}`,
+    pzH:"Bulmacalar", pzSolved:t => `çözüldü${t ? `, ${t + 1}. denemede` : ", ilk denemede"}`, pzSkipped:"atlandı",
+    pzNames:{count:"Saymaca", odd:"Farklı olanı bul", shadow:"Gölge eşleştirme", pattern:"Örüntü", add:"Toplama", numseq:"Sayı örüntüsü", memory:"Hafıza kartları", sequence:"Olay sıralama", cause:"Neden-sonuç", missing:"Eksik harf", anagram:"Harf karıştırma", riddle:"Bilmece"},
+    seedUsed:"Bu masal sizin tohumunuzla başladı", readStory:"Masalı oku", markDiscussed:"👪 Bu masalı konuştuk", unmarkDiscussed:"👪 Konuştuk işaretini kaldır",
+    noteH:"Çocuğa not bırakın", notePh:"Örneğin: Pamuk'un şarkısı çok güzeldi! 💛", noteSend:"Notu gönder", noteHint:"Not, çocuk masalı kitaplığında açtığında görünür.",
+    wordsH:"Kelime defteri", wordsEmpty:"Masallarda geçen yeni kelimeler burada birikecek.", inStory:t => `“${t}” masalında`,
+    coH:"Birlikte okuma", coP:"Açıkken her bölümün altında size özel küçük bir kart çıkar: çocuğa sorabileceğiniz 3 soru. Masal sonunda “Konuştuk” işaretlenir ve çocuğun kitabına “Ailemle okudum” çıkartması eklenir.",
+    seedH:"Masal tohumu", seedP:"Bir sonraki masal için konu, karakter ve kısa bir mesaj hazırlayın. Çocuk yeni masal başlattığında “Ailenden sürpriz” olarak görünür.",
+    seedTheme:"Konu", seedThemePh:"ya da kendi konunuzu yazın", seedChars:"Masala katılacaklar (en fazla 3, virgülle)", seedCharsPh:"örneğin: Ayşe, Mert, kedimiz Boncuk",
+    seedMsg:"Çocuğa kısa mesaj (isteğe bağlı)", seedMsgPh:"Bu masalı senin için hazırladım!", seedSend:"Tohumu gönder", seedClear:"Tohumu kaldır",
+    seedWaiting:"Bekliyor: çocuk yeni masal başlattığında kullanılacak.", seedPending:"Gönderildi: çocuğun cihazı açıldığında alınacak.", seedUsedOn:t => `Kullanıldı: “${t}”`,
+    themes:["Paylaşmak","Yeni kardeş","Okula başlamak","Karanlık korkusu","Diş fırçalamak","Arkadaşlık","Sabırlı olmak","Doğayı korumak"],
+    setH:"Sınırlar ve ayarlar", freeIdea:"Kendi fikir kutusu", freeIdeaHint:"Kapalıyken çocuk yalnızca hazır seçeneklerle ilerler (3–5 yaş için önerilir).",
+    mic:"Mikrofon ile sesli komut", puzzles:"Bölüm aralarında bulmaca", on:"Açık", off:"Kapalı",
+    avoid:"Kaçınılacak konular", avoidPh:"örneğin: köpekler, deniz", avoidHint:"Claude masal yazarken bu konulardan uzak durur.", save:"Kaydet",
+    limit:"Günlük masal sınırı", unlimited:"Sınırsız", bedtime:"Masal saati bitişi", bedtimeOff:"Kapalı",
+    limitHint:"Sınıra gelinince sert bir kilit yerine kahraman “iyi geceler” der. Bir masal daha açmak için bu kontrol sorusu sorulur.",
+    engine:"Masalları kim yazsın?",
+    pairH:"Ebeveyn telefonuna bağla", pairP:"Kendi telefonunuzdan bu cihazdaki masalları takip etmek için bir kod oluşturun. Kodu ya da QR'ı yalnızca ebeveynlerle paylaşın.",
+    pairWhat:"Paylaşılanlar: masallar, seçimler, kelimeler, bulmaca sonuçları, ayarlar. Ses kaydı paylaşılmaz. Veriler cihazda şifrelenir; aracı sunucu içeriği okuyamaz.",
+    pairMake:"Eşleştirme kodu oluştur", pairScan:"Telefonunuzun kamerasıyla QR'ı okutun ya da uygulamada “Çocuk ekle” deyip kodu girin.",
+    pairLast:t => `Son gönderim: ${t}`, pairNever:"Henüz gönderilmedi", pairOn:"Paylaşım açık", pairOff:"Paylaşım durduruldu",
+    pairStop:"Paylaşımı durdur", pairStart:"Paylaşımı başlat", pairRemove:"Bağlantıyı kaldır", pairRemoveSure:"Emin misiniz? Kaldır",
+    pairArtifact:"Cihaz eşleştirme herkese açık sürümde çalışır:", pairNoCrypto:"Bu tarayıcı şifrelemeyi desteklemiyor; eşleştirme kullanılamıyor.",
+    addH:"Çocuğunuzun cihazını ekleyin", addP:"Çocuğun cihazında Ebeveyn paneli → Ayarlar → “Ebeveyn telefonuna bağla” bölümündeki kodu girin.",
+    addCode:"Eşleştirme kodu", addLabel:"Bu çocuğa bir ad verin (sadece sizin telefonunuzda görünür)", addLabelPh:"örneğin: Elif", addGo:"Takip et",
+    addBad:"Kod 10 karakter olmalı (örneğin: ABCD-EFGH-JK).", addEmpty:"Bağlandı ama henüz veri yok. Çocuğun cihazında uygulamayı bir kez açın.",
+    synced:t => `Son eşitleme: ${t}`, refresh:"Yenile", notYet:"Bu cihazdan henüz veri gelmedi. Çocuğun cihazında uygulamayı açıp birkaç saniye bekleyin, sonra Yenile'ye dokunun.",
+    remoteHint:"Değişiklikler çocuğun cihazı açıldığında uygulanır.", unfollow:"Takibi bırak", unfollowSure:"Emin misiniz? Bırak",
+    sent:"Gönderildi. Çocuğun cihazı açıldığında uygulanacak.", saved:"Kaydedildi.", netErr:"Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.", decErr:"Veri okunamadı. Kod yanlış olabilir.",
+    dataH:"Veriler", dataExport:"Masalları panoya kopyala", dataCopied:"Bütün masallar panoya kopyalandı.", dataWipe:"Bütün masalları sil", dataWipeSure:"Emin misiniz? Hepsini sil", dataWiped:"Bütün masallar silindi.",
+    ago:{now:"az önce", m:n => `${n} dk önce`, h:n => `${n} saat önce`, d:n => `${n} gün önce`},
+    // çocuğa görünenler
+    famSees:"👪 Masallarını ailen de görebilir.", newNote:"💌 Ailenden yeni bir not var!", openNote:"Notu aç", seedReady:"🎁 Ailen senin için bir masal sürprizi hazırladı! “Yeni masal yap”a dokun.",
+    seedTag:"🎁 Ailenden sürpriz", seedThemeTag:t => `Konu: ${t}`, noteFrom:"💌 Ailenden not", backPanel:"← Panele dön",
+    coCard:"👪 Ebeveyn için", coTypes:{c:"Tamamla", r:"Hatırla", o:"Düşün", d:"Hayatla bağla", w:"Kelime"},
+    coC:s => `Bu cümlede durun, sonunu çocuk tamamlasın: “${s} …”`, coR:(h, l) => `“${h} az önce ‘${l}’ dedi. Sence neden bunu seçti?”`,
+    coO:h => `“Sence ${h} şu an ne hissediyor?”`, coW:w => `“${w}” kelimesini birlikte bir cümlede kullanın.`,
+    coD:{ask:"“Sen bir şeyi bilmediğinde kime sorarsın?”", explore:"“Sen hiç kaybolan bir şeyi aradın mı? Nasıl buldun?”", brave:"“Sen en son ne zaman cesur davrandın?”", power:"“Senin bir süper gücün olsaydı ne olurdu?”", friends:"“En son kimden yardım istedin, ya da kime yardım ettin?”", think:"“Bir sorunu çözmek için hiç plan yaptın mı?”", share:"“En son neyi paylaştın? Nasıl hissettin?”", sing:"“Seni en çok hangi şarkı neşelendirir?”", listen:"“Üzgün olduğunda seni kim dinler?”", custom:"“Bu fikir aklına nasıl geldi?”", start:"“Sen olsan bu soruna nereden başlardın?”"},
+    discussedBtn:"👪 Konuştuk", discussedOn:"👪 Ailemle okudum", sticker:"Ailemle okudum",
+    sleepH:"Masal saati bitti!", sleepP:h => `${h} uykuya daldı. Yarın yeni maceralar seni bekliyor.`, sleepHome:"Ana sayfa", sleepMore:"Ebeveyn: bir masal daha"
+  },
+  en:{
+    open:"Open the parent panel", headBtn:"Parent panel", exit:"Close panel",
+    gateH:"Grown-ups only", gateP:"This area is for adults. Answer the question to continue.",
+    gateQ:(a, b) => `What is ${numWord(a, "en")} plus ${numWord(b, "en")}?`, gatePh:"Answer (in digits)", gateGo:"Continue", gateBad:"Not quite. Here is a new question.", cancel:"Cancel",
+    h1:"Parent panel", thisDevice:"This device", addChild:"+ Add a child",
+    tabs:{ozet:"Overview", masallar:"Stories", kelimeler:"Words", katil:"Together", ayarlar:"Settings"},
+    week:"Last 7 days", stories:"stories", minutes:"minutes", words:"new words", ideas:"own ideas", stars:"puzzle stars",
+    favHero:"Favourite hero", favWorld:"Favourite world",
+    obsIdeas:n => `Loves adding their own ideas: wrote their own idea ${n} times this week.`,
+    obsKind:(k, n) => `Most often chose ${k} (${n === 1 ? "once" : n + " times"}).`,
+    obsNone:"No stories this week yet. How about starting one together?",
+    kinds:{ask:"to ask someone who knows", explore:"to look for clues", brave:"to act right away", power:"to use the superpower", friends:"to ask friends for help", think:"to make a plan", share:"to share", sing:"to sing", listen:"to listen"},
+    tipH:"Try this today", tipWord:w => `This week's word is “${w}”. Use it together in a sentence at dinner.`,
+    tipAsk:(h, q) => `Ask about the ${h} story: “${q}”`, tipCoRead:"Turn on co-reading to get suggested questions for every chapter.",
+    recent:"Recent stories", empty:"No stories yet. They will appear here once your child makes one.",
+    unfinished:"unfinished", min:n => `~${n} min`, ideasN:n => `💭 ${n}`, discussed:"👪 Talked about", noteSent:"💌 Note sent",
+    back:"← Stories", choicesH:"Your child's choices", ownIdea:"Own idea", chapter:n => `Chapter ${n}`,
+    pzH:"Puzzles", pzSolved:t => `solved${t ? ` on try ${t + 1}` : " first try"}`, pzSkipped:"skipped",
+    pzNames:{count:"Counting", odd:"Odd one out", shadow:"Shadow match", pattern:"Pattern", add:"Addition", numseq:"Number pattern", memory:"Memory cards", sequence:"Put in order", cause:"Cause and effect", missing:"Missing letter", anagram:"Word scramble", riddle:"Riddle"},
+    seedUsed:"This story started from your story seed", readStory:"Read the story", markDiscussed:"👪 We talked about it", unmarkDiscussed:"👪 Remove the talked-about mark",
+    noteH:"Leave your child a note", notePh:"e.g. I loved Cotton's song! 💛", noteSend:"Send note", noteHint:"Your child sees the note when they open the story on their shelf.",
+    wordsH:"Word notebook", wordsEmpty:"New words from the stories will collect here.", inStory:t => `in “${t}”`,
+    coH:"Co-reading", coP:"When on, a small card for you appears under each chapter with 3 questions to ask. At the end you can mark “We talked about it” and your child gets a “Read with my family” sticker.",
+    seedH:"Story seed", seedP:"Prepare a topic, characters and a short message for the next story. Your child sees it as a “Surprise from your family” when starting a new story.",
+    seedTheme:"Topic", seedThemePh:"or type your own topic", seedChars:"Who joins the story (up to 3, comma separated)", seedCharsPh:"e.g. Grandma, Leo, our cat Button",
+    seedMsg:"Short message for your child (optional)", seedMsgPh:"I made this story for you!", seedSend:"Send seed", seedClear:"Remove seed",
+    seedWaiting:"Waiting: it will be used when your child starts a new story.", seedPending:"Sent: your child's device will pick it up when opened.", seedUsedOn:t => `Used in: “${t}”`,
+    themes:["Sharing","A new sibling","Starting school","Fear of the dark","Brushing teeth","Friendship","Being patient","Caring for nature"],
+    setH:"Limits and settings", freeIdea:"Own idea box", freeIdeaHint:"When off, your child moves on with the ready-made choices only (suggested for ages 3–5).",
+    mic:"Voice commands with microphone", puzzles:"Puzzles between chapters", on:"On", off:"Off",
+    avoid:"Topics to avoid", avoidPh:"e.g. dogs, the sea", avoidHint:"Claude stays away from these topics when writing.", save:"Save",
+    limit:"Daily story limit", unlimited:"No limit", bedtime:"Story time ends at", bedtimeOff:"Off",
+    limitHint:"At the limit, instead of a hard lock the hero says good night. This adult question is asked to allow one more story.",
+    engine:"Who should write the stories?",
+    pairH:"Connect to a parent's phone", pairP:"Create a code to follow the stories on this device from your own phone. Share the code or QR only with parents.",
+    pairWhat:"Shared: stories, choices, words, puzzle results, settings. No audio is shared. Data is encrypted on the device; the relay server can't read it.",
+    pairMake:"Create a pairing code", pairScan:"Scan the QR with your phone camera, or tap “Add a child” in the app and enter the code.",
+    pairLast:t => `Last sent: ${t}`, pairNever:"Not sent yet", pairOn:"Sharing is on", pairOff:"Sharing is paused",
+    pairStop:"Pause sharing", pairStart:"Resume sharing", pairRemove:"Remove connection", pairRemoveSure:"Sure? Remove",
+    pairArtifact:"Device pairing works in the public version:", pairNoCrypto:"This browser doesn't support encryption, so pairing isn't available.",
+    addH:"Add your child's device", addP:"Enter the code from your child's device: Parent panel → Settings → “Connect to a parent's phone”.",
+    addCode:"Pairing code", addLabel:"Name this child (only shown on your phone)", addLabelPh:"e.g. Emma", addGo:"Follow",
+    addBad:"The code must be 10 characters (e.g. ABCD-EFGH-JK).", addEmpty:"Connected, but there's no data yet. Open the app once on your child's device.",
+    synced:t => `Last synced: ${t}`, refresh:"Refresh", notYet:"No data from this device yet. Open the app on your child's device, wait a few seconds, then tap Refresh.",
+    remoteHint:"Changes apply when your child's device opens the app.", unfollow:"Stop following", unfollowSure:"Sure? Stop",
+    sent:"Sent. It will apply when your child's device opens the app.", saved:"Saved.", netErr:"Couldn't connect. Check your internet and try again.", decErr:"Couldn't read the data. The code may be wrong.",
+    dataH:"Data", dataExport:"Copy all stories", dataCopied:"All stories copied to the clipboard.", dataWipe:"Delete all stories", dataWipeSure:"Sure? Delete all", dataWiped:"All stories deleted.",
+    ago:{now:"just now", m:n => `${n} min ago`, h:n => `${n} h ago`, d:n => `${n} days ago`},
+    famSees:"👪 Your family can see your stories too.", newNote:"💌 You have a new note from your family!", openNote:"Open note", seedReady:"🎁 Your family made a story surprise for you! Tap “Make a new story”.",
+    seedTag:"🎁 A surprise from your family", seedThemeTag:t => `Topic: ${t}`, noteFrom:"💌 A note from your family", backPanel:"← Back to panel",
+    coCard:"👪 For grown-ups", coTypes:{c:"Complete", r:"Recall", o:"Think", d:"Connect to life", w:"Word"},
+    coC:s => `Pause here and let your child finish the sentence: “${s} …”`, coR:(h, l) => `“${h} just chose ‘${l}’. Why do you think so?”`,
+    coO:h => `“How do you think ${h} feels right now?”`, coW:w => `Use the word “${w}” in a sentence together.`,
+    coD:{ask:"“Who do you ask when you don't know something?”", explore:"“Have you ever searched for something you lost? How did you find it?”", brave:"“When were you brave last time?”", power:"“If you had a superpower, what would it be?”", friends:"“Who did you last ask for help, or help yourself?”", think:"“Have you ever made a plan to solve a problem?”", share:"“What did you last share? How did it feel?”", sing:"“Which song cheers you up the most?”", listen:"“Who listens to you when you feel sad?”", custom:"“How did you come up with that idea?”", start:"“Where would you start if this were your problem?”"},
+    discussedBtn:"👪 We talked about it", discussedOn:"👪 Read with my family", sticker:"Read with my family",
+    sleepH:"Story time is over!", sleepP:h => `${h} has fallen asleep. New adventures are waiting tomorrow.`, sleepHome:"Home", sleepMore:"Grown-up: one more story"
+  }
+};
+const PN = () => PNT[S.lang];
+const NUMW = {
+  tr:{ones:["","bir","iki","üç","dört","beş","altı","yedi","sekiz","dokuz"], tens:["","on","yirmi","otuz","kırk","elli"]},
+  en:{ones:["","one","two","three","four","five","six","seven","eight","nine"], teens:["ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"], tens:["","","twenty","thirty","forty","fifty"]}
+};
+function numWord(n, lang){
+  if (lang === "en"){ const W = NUMW.en; if (n < 10) return W.ones[n]; if (n < 20) return W.teens[n - 10]; return W.tens[Math.floor(n / 10)] + (n % 10 ? "-" + W.ones[n % 10] : ""); }
+  const W = NUMW.tr; return (W.tens[Math.floor(n / 10)] + (n % 10 ? " " + W.ones[n % 10] : "")).trim();
+}
+function ago(t){
+  if (!t) return "—";
+  const a = PN().ago, s = (Date.now() - t) / 1000;
+  return s < 60 ? a.now : s < 3600 ? a.m(Math.round(s / 60)) : s < 86400 ? a.h(Math.round(s / 3600)) : a.d(Math.round(s / 86400));
+}
+const dayKey = d => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+
+/* ---------- ebeveyn: durum ---------- */
+const PARENT_DEF = {freeIdea:true, mic:true, avoid:"", dailyLimit:0, bedtime:"", coRead:false, at:0, seed:null, seedAt:0, extra:{day:"", n:0}};
+S.parent = Object.assign({}, PARENT_DEF, store.get("masal-ebeveyn", {}));
+S.pair = store.get("masal-eslesme", null);          // çocuk cihazı: {code, on, lastPush, parentAt}
+S.follow = store.get("masal-takip", []);            // ebeveyn cihazı: [{code, label, snap, fetchedAt, doc}]
+S.pv = {src:"local", tab:"ozet", story:null, sure:null};
+S.gate = null; S.gateUntil = 0; S.fromPanel = false;
+const saveParent = () => store.set("masal-ebeveyn", S.parent);
+const savePair = () => store.set("masal-eslesme", S.pair);
+const saveFollow = () => store.set("masal-takip", S.follow);
+const micOn = () => micOk && S.parent.mic !== false;
+
+/* ---------- ebeveyn kilidi ---------- */
+const GATE_NEXT = {
+  panel(){ S.pv = {src:S.pv.src, tab:S.pv.tab || "ozet", story:null, sure:null}; go("parent"); },
+  pair(){ S.pv = {src:"add", tab:"ozet", story:null, sure:null}; go("parent"); },
+  extra(){ S.parent.extra = {day:dayKey(new Date()), n:1}; saveParent(); A.new(); }
+};
+function askGate(next){
+  if (Date.now() < S.gateUntil){ GATE_NEXT[next](); return; }
+  S.gate = {a:11 + rnd(9), b:3 + rnd(7), next, bad:false}; go("gate");
+  requestAnimationFrame(() => { const i = $("#gateIn"); if (i) i.focus(); });
+}
+function gateTry(){
+  const g = S.gate, v = parseInt(($("#gateIn") || {}).value, 10);
+  if (v === g.a + g.b){ S.gateUntil = Date.now() + 5 * 60e3; S.gate = null; GATE_NEXT[g.next](); return; }
+  S.gate = {a:11 + rnd(9), b:3 + rnd(7), next:g.next, bad:true}; render();
+}
+
+/* ---------- masal saati ---------- */
+function sleepReason(){
+  const P = S.parent, now = new Date(), today = dayKey(now);
+  const startedToday = S.library.filter(s => s.created && dayKey(new Date(s.created)) === today).length;
+  if (P.dailyLimit && startedToday >= P.dailyLimit) return "limit";
+  if (P.bedtime){
+    const [h, m] = P.bedtime.split(":").map(Number), mins = now.getHours() * 60 + now.getMinutes();
+    if (mins >= h * 60 + m || mins < 6 * 60) return "bedtime";
+  }
+  return null;
+}
+function sleepBlocks(){
+  if (!sleepReason()) return false;
+  const x = S.parent.extra;
+  if (x && x.day === dayKey(new Date()) && x.n > 0){ x.n--; saveParent(); return false; }
+  return true;
+}
+
+/* ---------- şifreli eşitleme ---------- */
+// Kod iki cihazda aynı anahtarları üretir: iki kayıt yeri (çocuk → ebeveyn, ebeveyn → çocuk) ve bir AES anahtarı.
+// Aracı sunucu (textdb.dev) yalnızca şifreli metin görür.
+const RELAY = "https://textdb.dev/api/data/";
+const CODE_ABC = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+const canSync = () => !window.claude && !!(window.crypto && crypto.subtle) && !!window.fetch;
+const normCode = s => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "").split("").filter(c => CODE_ABC.includes(c)).join("");
+const fmtCode = c => `${c.slice(0, 4)}-${c.slice(4, 8)}-${c.slice(8, 10)}`;
+function newCode(){ const r = crypto.getRandomValues(new Uint8Array(10)); return [...r].map(v => CODE_ABC[v % CODE_ABC.length]).join(""); }
+const keyCache = {};
+async function keysFor(code){
+  if (keyCache[code]) return keyCache[code];
+  const enc = new TextEncoder();
+  const h = async s => new Uint8Array(await crypto.subtle.digest("SHA-256", enc.encode(s)));
+  const uuid = b => { const x = [...b.slice(0, 16)].map(v => v.toString(16).padStart(2, "0")).join(""); return `${x.slice(0, 8)}-${x.slice(8, 12)}-${x.slice(12, 16)}-${x.slice(16, 20)}-${x.slice(20, 32)}`; };
+  const base = await crypto.subtle.importKey("raw", enc.encode(code), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({name:"PBKDF2", salt:enc.encode("akilli-masal-fabrikasi/v1"), iterations:150000, hash:"SHA-256"},
+    base, {name:"AES-GCM", length:256}, false, ["encrypt", "decrypt"]);
+  return keyCache[code] = {child:uuid(await h("masal-cocuk:" + code)), parent:uuid(await h("masal-ebeveyn:" + code)), key};
+}
+const b64 = u => { let s = ""; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); };
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function gz(bytes, dir){
+  if (!window.CompressionStream) return null;
+  const t = dir === "in" ? new CompressionStream("gzip") : new DecompressionStream("gzip");
+  return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(t)).arrayBuffer());
+}
+async function relayPut(id, text){
+  const r = await fetch(RELAY + id, {method:"POST", headers:{"content-type":"text/plain"}, body:text});
+  if (!r.ok) throw new Error("relay " + r.status);
+}
+async function relayGet(id){
+  const r = await fetch(RELAY + id, {cache:"no-store"});
+  if (!r.ok) throw new Error("relay " + r.status);
+  return r.text();
+}
+async function sealTo(id, key, obj){
+  let data = new TextEncoder().encode(JSON.stringify(obj)), flag = 0;
+  const z = await gz(data, "in"); if (z){ data = z; flag = 1; }
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, data));
+  const out = new Uint8Array(13 + ct.length); out[0] = flag; out.set(iv, 1); out.set(ct, 13);
+  await relayPut(id, "MF1." + b64(out));
+}
+async function openFrom(id, key){
+  const t = (await relayGet(id)).trim();
+  if (!t.startsWith("MF1.")) return null;
+  const u = unb64(t.slice(4));
+  let data = new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM", iv:u.slice(1, 13)}, key, u.slice(13)));
+  if (u[0] === 1) data = await gz(data, "out");
+  return JSON.parse(new TextDecoder().decode(data));
+}
+function settingsOf(){
+  const P = S.parent;
+  return {freeIdea:P.freeIdea, mic:P.mic, avoid:P.avoid, dailyLimit:P.dailyLimit, bedtime:P.bedtime, coRead:P.coRead, puzzles:S.puzzles, at:P.at};
+}
+function applySettings(o){
+  const P = S.parent;
+  ["freeIdea","mic","avoid","dailyLimit","bedtime","coRead"].forEach(k => { if (k in o) P[k] = o[k]; });
+  if ("puzzles" in o){ S.puzzles = !!o.puzzles; store.set("masal-bulmaca", S.puzzles); }
+  P.at = o.at || Date.now(); saveParent();
+}
+const snapshot = () => ({v:1, at:Date.now(), lang:S.lang, settings:settingsOf(), seed:S.parent.seed, seedAt:S.parent.seedAt,
+  parentAt:(S.pair && S.pair.parentAt) || 0, stories:S.library.slice(0, 30)});
+let pushT = null;
+function syncPush(now){
+  if (!canSync() || !S.pair || !S.pair.on) return;
+  clearTimeout(pushT);
+  pushT = setTimeout(async () => {
+    try { const k = await keysFor(S.pair.code); await sealTo(k.child, k.key, snapshot()); S.pair.lastPush = Date.now(); savePair();
+      if (S.screen === "parent" && S.pv.src === "local" && S.pv.tab === "ayarlar") render(); }
+    catch (e){ /* bir sonraki değişiklikte yeniden denenir */ }
+  }, now ? 0 : 1500);
+}
+async function syncPull(){
+  if (!canSync() || !S.pair || !S.pair.on) return;
+  try {
+    const k = await keysFor(S.pair.code), doc = await openFrom(k.parent, k.key);
+    if (!doc || !doc.at || doc.at <= (S.pair.parentAt || 0)) return;
+    let changed = false;
+    if (doc.settings && (doc.settings.at || 0) > (S.parent.at || 0)){ applySettings(doc.settings); changed = true; }
+    if (doc.seedAt && doc.seedAt > (S.parent.seedAt || 0)){ S.parent.seed = doc.seed; S.parent.seedAt = doc.seedAt; saveParent(); changed = true; }
+    for (const [id, n] of Object.entries(doc.notes || {})){
+      const s = S.library.find(x => x.id === id); if (!s) continue;
+      if (n.t != null && (!s.parentNote || (n.at || 0) > (s.parentNote.at || 0)) && n.t !== (s.parentNote && s.parentNote.t)){ s.parentNote = {t:n.t, at:n.at}; s.noteSeen = !n.t; changed = true; }
+      if ("discussed" in n && !!s.discussed !== !!n.discussed){ s.discussed = !!n.discussed; changed = true; }
+    }
+    if (changed) store.set(LIB, S.library);
+    S.pair.parentAt = doc.at; savePair();
+    if (changed){ if (S.screen === "home") render(); syncPush(); }
+  } catch (e){ /* çevrimdışı: sessizce geç */ }
+}
+async function fetchChild(f){
+  const k = await keysFor(f.code);
+  const [snap, doc] = await Promise.all([openFrom(k.child, k.key), openFrom(k.parent, k.key).catch(() => null)]);
+  if (snap){ f.snap = snap; }
+  if (doc) f.doc = doc;
+  f.fetchedAt = Date.now(); saveFollow();
+  return snap;
+}
+
+/* ---------- ebeveyn: veri kaynağı ve yazma ---------- */
+function pdata(){
+  if (S.pv.src === "local") return {local:true, stories:S.library, settings:settingsOf(), seed:S.parent.seed, seedAt:S.parent.seedAt, pending:false};
+  const f = S.follow.find(x => x.code === S.pv.src);
+  if (!f) return {stories:[], settings:{}, seed:null};
+  const snap = f.snap || {stories:[], settings:{}}, doc = f.doc || {};
+  const notes = doc.notes || {};
+  const stories = (snap.stories || []).map(s => {
+    const n = notes[s.id]; if (!n) return s;
+    const o = Object.assign({}, s);
+    if (n.t != null && (!s.parentNote || (n.at || 0) >= (s.parentNote.at || 0))) o.parentNote = {t:n.t, at:n.at};
+    if ("discussed" in n) o.discussed = n.discussed;
+    return o;
+  });
+  const settings = Object.assign({}, snap.settings || {}, doc.settings && (doc.settings.at || 0) > ((snap.settings || {}).at || 0) ? doc.settings : {});
+  const pending = !!(doc.seedAt && doc.seedAt > (snap.seedAt || 0));
+  return {f, snap:f.snap, stories, settings, seed:pending ? doc.seed : snap.seed, seedAt:pending ? doc.seedAt : snap.seedAt, pending};
+}
+async function pset(kind, payload){
+  const t = PN();
+  if (S.pv.src === "local"){
+    if (kind === "settings") applySettings(Object.assign(settingsOf(), payload, {at:Date.now()}));
+    if (kind === "seed"){ S.parent.seed = payload; S.parent.seedAt = Date.now(); saveParent(); }
+    const s = payload && payload.id ? S.library.find(x => x.id === payload.id) : null;
+    if (kind === "note" && s){ s.parentNote = {t:payload.t, at:Date.now()}; s.noteSeen = !payload.t; store.set(LIB, S.library); }
+    if (kind === "discussed" && s){ s.discussed = payload.v; store.set(LIB, S.library); }
+    syncPush(); render(); toast(t.saved); return;
+  }
+  const f = S.follow.find(x => x.code === S.pv.src); if (!f) return;
+  try {
+    const k = await keysFor(f.code);
+    const doc = (await openFrom(k.parent, k.key)) || {};
+    doc.notes = doc.notes || {};
+    if (kind === "settings") doc.settings = Object.assign({}, (f.snap && f.snap.settings) || {}, doc.settings || {}, payload, {at:Date.now()});
+    if (kind === "seed"){ doc.seed = payload; doc.seedAt = Date.now(); }
+    if (kind === "note") doc.notes[payload.id] = Object.assign({}, doc.notes[payload.id], {t:payload.t, at:Date.now()});
+    if (kind === "discussed") doc.notes[payload.id] = Object.assign({}, doc.notes[payload.id], {discussed:payload.v, at:Date.now()});
+    doc.at = Date.now();
+    await sealTo(k.parent, k.key, doc);
+    f.doc = doc; saveFollow(); render(); toast(t.sent);
+  } catch (e){ toast(t.netErr); }
+}
+
+/* ---------- ebeveyn: hesaplamalar ---------- */
+function weekStats(stories){
+  const since = Date.now() - 7 * 864e5, wk = stories.filter(s => (s.created || 0) > since);
+  const chs = wk.flatMap(s => s.chapters || []);
+  const kinds = {}; let ideas = 0;
+  chs.forEach(c => { const k = c.picked && c.picked.kind; if (!k) return; if (k === "custom") ideas++; else if (k !== "ai") kinds[k] = (kinds[k] || 0) + 1; });
+  const top = Object.entries(kinds).sort((a, b) => b[1] - a[1])[0];
+  const mode = arr => { const m = {}; arr.forEach(x => m[x] = (m[x] || 0) + 1); return (Object.entries(m).sort((a, b) => b[1] - a[1])[0] || [])[0]; };
+  const words = chs.map(c => c.word && c.word.w).filter(Boolean);
+  return {
+    wk, count:wk.length, minutes:Math.round(wk.reduce((a, s) => a + (s.activeSec || 0), 0) / 60),
+    words:[...new Set(words)], ideas, top,
+    stars:chs.filter(c => c.puzzle && c.puzzle.state === "solved").length,
+    hero:mode(wk.map(s => s.hero.e + " " + s.hero.name)), world:mode(wk.map(s => s.hero.world))
+  };
+}
+function allWords(stories){
+  const seen = new Set(), out = [];
+  stories.forEach(s => (s.chapters || []).forEach(c => {
+    if (!c.word || !c.word.w) return; const k = lower(c.word.w);
+    if (seen.has(k)) return; seen.add(k); out.push({w:c.word.w, m:c.word.m, title:s.title, at:s.created, lang:s.lang || "tr"});
+  }));
+  return out;
+}
+function coPrompts(st, c, i){
+  const t = PNT[st.lang || "tr"], nm = st.hero.name, out = [];
+  const sents = c.text.replace(/\n+/g, " ").split(/(?<=[.!?…])\s+/).filter(s => !/["“”]/.test(s) && s.split(" ").length >= 6);
+  if (sents.length){ const s = sents[Math.min(1, sents.length - 1)].replace(/[.!?…]+$/, "").split(" "); s.pop(); out.push(["c", t.coC(s.join(" "))]); }
+  const prev = i ? st.chapters[i - 1].picked : null;
+  out.push(prev ? ["r", t.coR(nm, prev.label)] : ["o", t.coO(nm)]);
+  const kind = prev ? prev.kind : "start";
+  out.push(["d", t.coD[kind] || t.coD.start]);
+  if (c.word && c.word.w && out.length < 3) out.push(["w", t.coW(c.word.w)]);
+  return out.slice(0, 3);
+}
+function coCardHTML(st, c, i){
+  if (!S.parent.coRead && !S.fromPanel) return "";
+  const t = PNT[st.lang || "tr"];
+  return `<aside class="co"><span class="label">${t.coCard}</span><ul>${coPrompts(st, c, i).map(([k, q]) => `<li><b>${t.coTypes[k]}</b>${esc(q)}</li>`).join("")}</ul></aside>`;
+}
+
+/* ---------- ebeveyn: görünümler ---------- */
+function qrSVG(text){
+  try { const q = qrcode(0, "M"); q.addData(text); q.make(); return q.createSvgTag({cellSize:4, margin:2, scalable:true}); }
+  catch (e){ return ""; }
+}
+const pChip = (act, v, on, label, extra = "") => `<button class="chip" data-act="${act}" data-v="${v}" aria-pressed="${on}" ${extra}>${label}</button>`;
+function storyRow(s){
+  const t = PN(), w = world(s.hero.world, s.lang || "tr");
+  const chs = s.chapters || [], ideas = chs.filter(c => c.picked && c.picked.kind === "custom").length;
+  const ps = chs.map(c => c.puzzle).filter(Boolean), won = ps.filter(p => p.state === "solved").length;
+  const bits = [new Date(s.created).toLocaleDateString(T().date, {day:"numeric", month:"short"}), s.activeSec ? t.min(Math.max(1, Math.round(s.activeSec / 60))) : "",
+    s.ended ? "" : t.unfinished, ps.length ? `⭐ ${won}/${ps.length}` : "", ideas ? t.ideasN(ideas) : "", s.discussed ? "👪" : "", s.parentNote && s.parentNote.t ? "💌" : ""].filter(Boolean);
+  return `<button class="prow" data-act="pstory" data-id="${esc(s.id)}">
+    <span class="cover" style="background:linear-gradient(135deg,${w.bg[0]},${w.bg[1]})" aria-hidden="true">${esc(s.hero.e)}</span>
+    <span class="meta"><b lang="${s.lang || "tr"}">${esc(s.title || "…")}</b><span>${esc(bits.join(" · "))}</span></span><span aria-hidden="true">›</span></button>`;
+}
+function pTabOzet(d){
+  const t = PN(), st = weekStats(d.stories);
+  if (!d.stories.length) return `<p class="empty">${t.empty}</p>`;
+  const obs = st.ideas >= 2 ? t.obsIdeas(st.ideas) : st.top ? t.obsKind(t.kinds[st.top[0]] || st.top[0], st.top[1]) : st.count ? "" : t.obsNone;
+  const last = d.stories.find(s => s.ended && s.questions && s.questions.length);
+  const tips = [st.words.length ? t.tipWord(st.words[0]) : "", last ? t.tipAsk(last.hero.name, last.questions[0]) : "", d.settings.coRead ? "" : t.tipCoRead].filter(Boolean).slice(0, 2);
+  const W = st.world ? world(st.world, S.lang) : null;
+  return `<div class="pstats">
+      <div><b>${st.count}</b><span>${t.stories}</span></div><div><b>${st.minutes}</b><span>${t.minutes}</span></div>
+      <div><b>${st.words.length}</b><span>${t.words}</span></div><div><b>${st.ideas}</b><span>${t.ideas}</span></div>
+      <div><b>${st.stars}</b><span>${t.stars}</span></div>
+      <div><b>${st.hero ? esc(st.hero) : "—"}</b><span>${t.favHero}${W ? " · " + W.e : ""}</span></div>
+    </div>
+    ${obs ? `<p class="obs">${esc(obs)}</p>` : ""}
+    ${tips.length ? `<div class="tipbox"><span class="label">${t.tipH}</span><ul>${tips.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
+    <div class="section"><h3>${t.recent}</h3><div class="plist">${d.stories.slice(0, 3).map(storyRow).join("")}</div></div>`;
+}
+function pTabMasallar(d){
+  const t = PN();
+  if (S.pv.story){
+    const s = d.stories.find(x => x.id === S.pv.story);
+    if (s) return pStoryDetail(d, s);
+  }
+  return d.stories.length ? `<div class="plist">${d.stories.map(storyRow).join("")}</div>` : `<p class="empty">${t.empty}</p>`;
+}
+function pStoryDetail(d, s){
+  const t = PN(), chs = s.chapters || [];
+  const steps = chs.map((c, i) => c.picked ? `<li class="${c.picked.kind === "custom" ? "own" : ""}"><span class="lab">${t.chapter(i + 1)}</span>
+      <span>${esc(c.picked.e)} ${esc(c.picked.label)}${c.picked.kind === "custom" ? ` <em>${t.ownIdea}</em>` : ""}</span></li>` : "").join("");
+  const pz = chs.map(c => c.puzzle).filter(Boolean).map(p => `<li><span class="lab">${t.pzNames[p.type] || p.type}</span><span>${p.state === "solved" ? "⭐ " + t.pzSolved(p.tries) : p.state === "skipped" ? t.pzSkipped : "…"}</span></li>`).join("");
+  const note = s.parentNote && s.parentNote.t ? s.parentNote.t : "";
+  return `<button class="btn ghost sm" data-act="pback">${t.back}</button>
+    <div class="pdetail">
+      <h3 lang="${s.lang || "tr"}">${esc(s.hero.e)} ${esc(s.title)}</h3>
+      <p class="hint">${esc(storyRowMeta(s))}</p>
+      ${s.seed ? `<p class="obs">🎁 ${t.seedUsed}${s.seed.theme ? ": " + esc(s.seed.theme) : ""}</p>` : ""}
+      ${steps ? `<div class="section"><span class="label">${t.choicesH}</span><ol class="tl">${steps}</ol></div>` : ""}
+      ${pz ? `<div class="section"><span class="label">${t.pzH}</span><ul class="tl">${pz}</ul></div>` : ""}
+      <div class="row2">
+        <button class="btn sm" data-act="pread" data-id="${esc(s.id)}">${t.readStory}</button>
+        ${s.ended ? `<button class="btn ghost sm" data-act="pdisc" data-id="${esc(s.id)}" data-v="${s.discussed ? 0 : 1}">${s.discussed ? t.unmarkDiscussed : t.markDiscussed}</button>` : ""}
+      </div>
+      <div class="section">
+        <label class="label" for="pnote">${t.noteH}</label>
+        <textarea id="pnote" rows="2" maxlength="200" placeholder="${esc(t.notePh)}">${esc(note)}</textarea>
+        <div class="row2"><button class="btn ghost sm" data-act="pnote" data-id="${esc(s.id)}">${t.noteSend}</button></div>
+        <p class="hint">${t.noteHint}</p>
+      </div>
+    </div>`;
+}
+const storyRowMeta = s => [new Date(s.created).toLocaleString(T().date, {day:"numeric", month:"long", hour:"2-digit", minute:"2-digit"}),
+  s.activeSec ? PN().min(Math.max(1, Math.round(s.activeSec / 60))) : "", s.ended ? "" : PN().unfinished].filter(Boolean).join(" · ");
+function pTabKelimeler(d){
+  const t = PN(), ws = allWords(d.stories);
+  return `<h3>${t.wordsH}</h3>${ws.length ? `<ul class="words">${ws.map(w => `<li lang="${w.lang}"><b>${esc(w.w)}</b><span>${esc(w.m)}</span><small>${esc(t.inStory(w.title))}</small></li>`).join("")}</ul>` : `<p class="empty">${t.wordsEmpty}</p>`}`;
+}
+function pTabKatil(d){
+  const t = PN(), s = d.settings, seed = d.seed;
+  let seedState = "";
+  if (seed) seedState = seed.usedAt ? t.seedUsedOn((d.stories.find(x => x.id === seed.storyId) || {}).title || "…") : d.pending ? t.seedPending : t.seedWaiting;
+  return `<div class="pcard">
+      <h3>${t.coH}</h3><p class="hint">${t.coP}</p>
+      <div class="chips">${pChip("pset", "coRead:1", !!s.coRead, "👪 " + t.on)}${pChip("pset", "coRead:0", !s.coRead, t.off)}</div>
+    </div>
+    <div class="pcard">
+      <h3>${t.seedH}</h3><p class="hint">${t.seedP}</p>
+      ${seed ? `<p class="obs">🎁 ${esc([seed.theme, (seed.chars || []).join(", ")].filter(Boolean).join(" · ") || "—")}<br><small>${esc(seedState)}</small></p>` : ""}
+      <span class="label">${t.seedTheme}</span>
+      <div class="chips">${t.themes.map(x => `<button class="chip" data-act="ptheme" data-v="${esc(x)}">${esc(x)}</button>`).join("")}</div>
+      <input id="seedTheme" class="pin" maxlength="60" placeholder="${esc(t.seedThemePh)}">
+      <label class="label" for="seedChars">${t.seedChars}</label>
+      <input id="seedChars" class="pin" maxlength="80" placeholder="${esc(t.seedCharsPh)}">
+      <label class="label" for="seedMsg">${t.seedMsg}</label>
+      <input id="seedMsg" class="pin" maxlength="120" placeholder="${esc(t.seedMsgPh)}">
+      <div class="row2"><button class="btn sm" data-act="pseed">${t.seedSend}</button>${seed && !seed.usedAt ? `<button class="btn ghost sm" data-act="pseedclear">${t.seedClear}</button>` : ""}</div>
+    </div>`;
+}
+function pTabAyarlar(d){
+  const t = PN(), s = d.settings, local = d.local;
+  const yn = (k, label, hint = "") => `<div class="section"><span class="label">${label}</span><div class="chips">${pChip("pset", k + ":1", s[k] !== false, t.on)}${pChip("pset", k + ":0", s[k] === false, t.off)}</div>${hint ? `<p class="hint">${hint}</p>` : ""}</div>`;
+  let html = `<div class="pcard"><h3>${t.setH}</h3>
+    ${local ? "" : `<p class="hint">${t.remoteHint}</p>`}
+    ${yn("freeIdea", t.freeIdea, t.freeIdeaHint)}${yn("mic", t.mic)}${yn("puzzles", t.puzzles, PT().settingHint)}
+    <div class="section"><label class="label" for="pavoid">${t.avoid}</label>
+      <div class="field"><input id="pavoid" class="pin" maxlength="120" value="${esc(s.avoid || "")}" placeholder="${esc(t.avoidPh)}"><button class="btn ghost sm" data-act="pavoid">${t.save}</button></div>
+      <p class="hint">${t.avoidHint}</p></div>
+    <div class="section"><span class="label">${t.limit}</span>
+      <div class="chips">${[0, 1, 2, 3, 5].map(n => pChip("pset", "dailyLimit:" + n, (s.dailyLimit || 0) === n, n ? String(n) : t.unlimited)).join("")}</div></div>
+    <div class="section"><label class="label" for="pbed">${t.bedtime}</label>
+      <div class="field"><input id="pbed" class="pin" type="time" value="${esc(s.bedtime || "")}"><button class="btn ghost sm" data-act="pbed">${t.save}</button><button class="btn ghost sm" data-act="pbedoff">${t.bedtimeOff}</button></div>
+      <p class="hint">${t.limitHint}</p></div>
+    ${local && window.claude ? `<div class="section"><span class="label">${t.engine}</span><div class="chips">
+      ${pChip("engine", "auto", S.engine === "auto", "Claude" + (aiState === "off" ? T().engineOffHere : ""))}${pChip("engine", "offline", S.engine === "offline", T().engineOffline)}</div><p class="hint">${T().engineHint}</p></div>` : ""}
+  </div>`;
+  if (local){
+    html += `<div class="pcard" id="pairbox"><h3>${t.pairH}</h3>`;
+    if (!canSync()) html += window.claude ? `<p class="hint">${t.pairArtifact} <a href="${PAGES_URL}" target="_blank" rel="noopener">${PAGES_URL}</a></p>` : `<p class="hint">${t.pairNoCrypto}</p>`;
+    else if (!S.pair) html += `<p class="hint">${t.pairP}</p><p class="hint">${t.pairWhat}</p><button class="btn sm" data-act="pairmake">${t.pairMake}</button>`;
+    else {
+      const url = `${PAGES_URL}#esle=${S.pair.code}`;
+      html += `<div class="pairqr">${qrSVG(url)}</div>
+        <p class="code" aria-label="${t.addCode}">${fmtCode(S.pair.code)}</p>
+        <p class="hint">${t.pairScan}</p><p class="hint">${t.pairWhat}</p>
+        <p class="obs">${S.pair.on ? "🟢 " + t.pairOn : "⏸ " + t.pairOff} · ${S.pair.lastPush ? t.pairLast(ago(S.pair.lastPush)) : t.pairNever}</p>
+        <div class="row2"><button class="btn ghost sm" data-act="pairtoggle">${S.pair.on ? t.pairStop : t.pairStart}</button>
+        <button class="del ${S.pv.sure === "pair" ? "sure" : ""}" data-act="pairremove">${S.pv.sure === "pair" ? t.pairRemoveSure : t.pairRemove}</button></div>`;
+    }
+    html += `</div><div class="pcard"><h3>${t.dataH}</h3><div class="row2">
+      <button class="btn ghost sm" data-act="pexport">${t.dataExport}</button>
+      <button class="del ${S.pv.sure === "wipe" ? "sure" : ""}" data-act="pwipe">${S.pv.sure === "wipe" ? t.dataWipeSure : t.dataWipe}</button></div></div>`;
+  } else {
+    html += `<div class="pcard"><button class="del ${S.pv.sure === "unfollow" ? "sure" : ""}" data-act="punfollow">${S.pv.sure === "unfollow" ? t.unfollowSure : t.unfollow}</button></div>`;
+  }
+  return html;
+}
+function pAddView(){
+  const t = PN();
+  return `<div class="pcard"><h3>${t.addH}</h3><p class="hint">${t.addP}</p>
+    <label class="label" for="pairCode">${t.addCode}</label>
+    <input id="pairCode" class="pin code-in" maxlength="14" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD-EFGH-JK" value="${esc(S.pendingCode ? fmtCode(S.pendingCode) : "")}">
+    <label class="label" for="pairLabel">${t.addLabel}</label>
+    <input id="pairLabel" class="pin" maxlength="24" placeholder="${esc(t.addLabelPh)}">
+    <div class="row2"><button class="btn sm" data-act="padd">${t.addGo}</button></div>
+    ${canSync() ? "" : `<p class="hint">${window.claude ? `${t.pairArtifact} <a href="${PAGES_URL}" target="_blank" rel="noopener">${PAGES_URL}</a>` : t.pairNoCrypto}</p>`}
+  </div>`;
+}
+const PARENT_VIEWS = {};
+PARENT_VIEWS.gate = function(){
+  const t = PN(), g = S.gate || {a:12, b:7};
+  return `<div class="screen"><section class="pcard gate">
+    <span class="label">🔒 ${t.gateH}</span><h1>${t.gateQ(g.a, g.b)}</h1><p class="hint">${t.gateP}</p>
+    <div class="field"><input id="gateIn" class="pin" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" placeholder="${t.gatePh}"><button class="btn" data-act="gatego">${t.gateGo}</button></div>
+    ${g.bad ? `<p class="hint bad-t">${t.gateBad}</p>` : ""}
+    <button class="btn ghost sm" data-act="home">${t.cancel}</button>
+  </section></div>`;
+};
+PARENT_VIEWS.parent = function(){
+  const t = PN(), src = S.pv.src;
+  const srcs = [`<button class="chip" data-act="psrc" data-v="local" aria-pressed="${src === "local"}">📱 ${t.thisDevice}</button>`,
+    ...S.follow.map(f => `<button class="chip" data-act="psrc" data-v="${f.code}" aria-pressed="${src === f.code}">👧 ${esc(f.label || fmtCode(f.code))}</button>`),
+    `<button class="chip" data-act="psrc" data-v="add" aria-pressed="${src === "add"}">${t.addChild}</button>`].join("");
+  let body = "";
+  if (src === "add") body = pAddView();
+  else {
+    const d = pdata();
+    const remoteBar = d.local ? "" : `<div class="syncbar"><span>${d.f && d.f.fetchedAt ? t.synced(ago(d.f.fetchedAt)) : ""}${d.snap ? " · " + ago(d.snap.at) : ""}</span><button class="btn ghost sm" data-act="prefresh">↻ ${t.refresh}</button></div>`;
+    const tabs = Object.entries(t.tabs).map(([k, v]) => `<button class="tab" data-act="ptab" data-v="${k}" aria-pressed="${S.pv.tab === k}">${v}</button>`).join("");
+    const inner = !d.local && !d.snap ? `<p class="empty">${t.notYet}</p>`
+      : {ozet:pTabOzet, masallar:pTabMasallar, kelimeler:pTabKelimeler, katil:pTabKatil, ayarlar:pTabAyarlar}[S.pv.tab](d);
+    body = `${remoteBar}<nav class="tabs" aria-label="${t.h1}">${tabs}</nav><div class="pbody">${inner}</div>`;
+  }
+  return `<div class="screen panel">
+    <div class="lead"><h1>${t.h1}</h1></div>
+    <div class="chips srcs">${srcs}</div>
+    ${body}
+  </div>`;
+};
+PARENT_VIEWS.sleep = function(){
+  const t = PN(), last = S.library[0], h = last ? last.hero : {e:"🌙", name:""};
+  return `<div class="screen"><section class="sleep">
+    <div class="sleep-scene" aria-hidden="true"><span>🌙</span><span class="z">${esc(h.e)}</span><span>✨</span></div>
+    <h1>${t.sleepH}</h1><p>${esc(t.sleepP(h.name || "🌟"))}</p>
+    <div class="row2"><button class="btn" data-act="home">${t.sleepHome}</button><button class="btn ghost sm" data-act="sleepmore">${t.sleepMore}</button></div>
+  </section></div>`;
+};
+
+function famBanners(){
+  const t = PN(), out = [];
+  const noted = S.library.find(s => s.parentNote && s.parentNote.t && !s.noteSeen);
+  if (noted) out.push(`<p class="famnote hot">${t.newNote}<button class="btn ghost sm" data-act="open" data-id="${esc(noted.id)}">${t.openNote}</button></p>`);
+  if (S.parent.seed && !S.parent.seed.usedAt) out.push(`<p class="famnote hot">${t.seedReady}</p>`);
+  if (S.pair && S.pair.on) out.push(`<p class="famnote">${t.famSees}</p>`);
+  return out.join("");
+}
+
+/* ---------- ebeveyn: olaylar ---------- */
+const PARENT_ACT = {
+  panel(){ askGate("panel"); },
+  gatego(){ gateTry(); },
+  sleepmore(){ askGate("extra"); },
+  psrc(b){
+    S.pv = {src:b.dataset.v, tab:"ozet", story:null, sure:null}; render();
+    const f = S.follow.find(x => x.code === b.dataset.v);
+    if (f && (!f.fetchedAt || Date.now() - f.fetchedAt > 30e3)) PARENT_ACT.prefresh();
+  },
+  ptab(b){ S.pv.tab = b.dataset.v; S.pv.story = null; S.pv.sure = null; render(); window.scrollTo(0, 0); },
+  pstory(b){ S.pv.tab = "masallar"; S.pv.story = b.dataset.id; render(); window.scrollTo(0, 0); },
+  pback(){ S.pv.story = null; render(); },
+  async prefresh(){
+    const f = S.follow.find(x => x.code === S.pv.src); if (!f) return;
+    try { await fetchChild(f); render(); }
+    catch (e){ toast(e && e.name === "OperationError" ? PN().decErr : PN().netErr); }
+  },
+  pread(b){
+    const d = pdata(), s = d.stories.find(x => x.id === b.dataset.id); if (!s) return;
+    S.story = s; S.readOnly = true; S.fromPanel = true;
+    if (d.local && s.parentNote && !s.noteSeen){ /* ebeveyn okuyunca çocuğun "yeni not" işareti kalsın */ }
+    go("story");
+  },
+  backpanel(){ S.fromPanel = false; S.story = null; S.readOnly = false; go("parent"); },
+  pdisc(b){ pset("discussed", {id:b.dataset.id, v:b.dataset.v === "1"}); },
+  pnote(b){ pset("note", {id:b.dataset.id, t:($("#pnote").value || "").trim().slice(0, 200)}); },
+  pset(b){
+    const [k, v] = b.dataset.v.split(":");
+    const val = k === "dailyLimit" ? +v : v === "1";
+    pset("settings", {[k]:val});
+  },
+  pavoid(){ pset("settings", {avoid:($("#pavoid").value || "").trim().slice(0, 120)}); },
+  pbed(){ const v = $("#pbed").value; if (v) pset("settings", {bedtime:v}); },
+  pbedoff(){ pset("settings", {bedtime:""}); },
+  ptheme(b){ const i = $("#seedTheme"); if (i) i.value = b.dataset.v; },
+  pseed(){
+    const theme = ($("#seedTheme").value || "").trim().slice(0, 60);
+    const chars = ($("#seedChars").value || "").split(/[,،]/).map(x => x.trim()).filter(Boolean).slice(0, 3).map(x => x.slice(0, 24));
+    const msg = ($("#seedMsg").value || "").trim().slice(0, 120);
+    if (!theme && !chars.length && !msg) return;
+    pset("seed", {theme, chars, msg, at:Date.now()});
+  },
+  pseedclear(){ pset("seed", null); },
+  pairmake(){
+    S.pair = {code:newCode(), on:true, createdAt:Date.now(), lastPush:0, parentAt:0}; savePair(); render(); syncPush(true);
+  },
+  pairtoggle(){ S.pair.on = !S.pair.on; savePair(); if (S.pair.on) syncPush(true); render(); },
+  async pairremove(){
+    if (S.pv.sure !== "pair"){ S.pv.sure = "pair"; render(); return; }
+    const code = S.pair.code; S.pair = null; savePair(); S.pv.sure = null; render();
+    try { const k = await keysFor(code); await Promise.all([relayPut(k.child, ""), relayPut(k.parent, "")]); } catch (e){}
+  },
+  async padd(){
+    const t = PN(), code = normCode($("#pairCode").value), label = ($("#pairLabel").value || "").trim().slice(0, 24);
+    if (code.length !== 10){ toast(t.addBad); return; }
+    if (!canSync()){ toast(t.pairNoCrypto); return; }
+    let f = S.follow.find(x => x.code === code);
+    if (!f){ f = {code, label, addedAt:Date.now()}; S.follow.push(f); }
+    else if (label) f.label = label;
+    saveFollow(); S.pendingCode = null;
+    S.pv = {src:code, tab:"ozet", story:null, sure:null}; render();
+    try { const snap = await fetchChild(f); if (!snap) toast(t.addEmpty); render(); }
+    catch (e){ toast(e && e.name === "OperationError" ? t.decErr : t.netErr); }
+  },
+  punfollow(){
+    if (S.pv.sure !== "unfollow"){ S.pv.sure = "unfollow"; render(); return; }
+    S.follow = S.follow.filter(x => x.code !== S.pv.src); saveFollow(); S.pv = {src:"local", tab:"ozet", story:null, sure:null}; render();
+  },
+  async pexport(){
+    const text = JSON.stringify(S.library, null, 1);
+    try { await navigator.clipboard.writeText(text); toast(PN().dataCopied); } catch (e){ toast(PN().netErr); }
+  },
+  pwipe(){
+    if (S.pv.sure !== "wipe"){ S.pv.sure = "wipe"; render(); return; }
+    S.library = []; store.set(LIB, S.library); S.pv.sure = null; syncPush(); render(); toast(PN().dataWiped);
+  },
+  discussed(){
+    const st = S.story; if (!st) return;
+    st.discussed = !st.discussed; if (S.library.includes(st)) store.set(LIB, S.library); else saveStory(st);
+    syncPush(); render();
+  },
+  readnote(b){ A.open(b); }
+};
+
 /* ---------- sesli okuma ---------- */
 const synth = window.speechSynthesis;
 let speaking = null;
@@ -1120,7 +1844,9 @@ function renderHead(){
   const mode = S.engine === "offline" || aiState === "off" ? `<span class="pill">${t.pillOff}</span>`
     : aiState === "ready" ? `<span class="pill ai">${t.pillAI}</span>` : "";
   const right = S.screen === "home"
-    ? `<div class="lang" role="group" aria-label="Dil / Language">${["tr","en"].map(l => `<button data-act="lang" data-v="${l}" aria-pressed="${S.lang === l}" lang="${l}">${l.toUpperCase()}</button>`).join("")}</div>`
+    ? `<div class="lang" role="group" aria-label="Dil / Language">${["tr","en"].map(l => `<button data-act="lang" data-v="${l}" aria-pressed="${S.lang === l}" lang="${l}">${l.toUpperCase()}</button>`).join("")}</div><button class="btn ghost sm icon" data-act="panel" aria-label="${PN().headBtn}" title="${PN().headBtn}">👪</button>`
+    : S.screen === "parent" || S.screen === "gate" ? `<button class="btn ghost sm" data-act="home">${PN().exit}</button>`
+    : S.fromPanel ? `<button class="btn ghost sm" data-act="backpanel">${PN().backPanel}</button>`
     : `<button class="btn ghost sm" data-act="shelf">${t.shelfBtn}</button>`;
   $("#head").innerHTML = `<div class="topbar">
       <button class="brand" data-act="home" aria-label="${t.home}"><span class="gear spin" aria-hidden="true">⚙️</span>${t.brand}</button>
@@ -1135,7 +1861,7 @@ function bookCard(st){
   return `<div class="book-card">
     <button class="open" data-act="open" data-id="${esc(st.id)}">
       <span class="cover" style="background:linear-gradient(135deg,${w.bg[0]},${w.bg[1]})" aria-hidden="true">${esc(st.hero.e)}</span>
-      <span class="meta"><b lang="${st.lang || "tr"}">${esc(st.title)}${st.example ? `<span class="tag">${t.exampleTag}</span>` : ""}</b><span>${esc(w.label)} · ${esc(date)}</span></span>
+      <span class="meta"><b lang="${st.lang || "tr"}">${esc(st.title)}${st.example ? `<span class="tag">${t.exampleTag}</span>` : ""}${st.discussed || (st.parentNote && st.parentNote.t) ? `<span class="badges">${st.discussed ? "👪" : ""}${st.parentNote && st.parentNote.t ? "💌" : ""}</span>` : ""}</b><span>${esc(w.label)} · ${esc(date)}</span></span>
     </button>
     ${st.example ? "" : `<button class="del ${sure ? "sure" : ""}" data-act="del" data-id="${esc(st.id)}">${sure ? t.delSure : t.del}</button>`}
   </div>`;
@@ -1150,34 +1876,20 @@ const V = {
         <h1>${t.h1}</h1>
         <p>${t.intro}</p>
         <button class="btn" data-act="new">${t.newStory}</button>
+        ${famBanners()}
         <div class="belt" aria-hidden="true"><div class="belt-track">${belt}${belt}${belt}${belt}</div><span class="book">📖</span></div>
       </section>
       <section class="section" id="kitaplik">
         <h2>${t.shelf}</h2>
         <div class="shelf">
-          ${S.library.length ? S.library.map(bookCard).join("") : `<p class="empty">${t.shelfEmpty}</p>`}
+          ${S.library.some(s => s.ended) ? S.library.filter(s => s.ended).map(bookCard).join("") : `<p class="empty">${t.shelfEmpty}</p>`}
           ${bookCard(EXAMPLES[S.lang])}
         </div>
       </section>
       <section class="parents">
         <h2>${t.parents}</h2>
         <ul>${k(t.k1, "--leaf")}${k(t.k2, "--accent")}${k(t.k3, "--sun")}</ul>
-        <div class="section">
-          <span class="label">${PT().setting}</span>
-          <div class="chips">
-            <button class="chip" data-act="puzzles" data-v="on" aria-pressed="${S.puzzles}">🧩 ${PT().on}</button>
-            <button class="chip" data-act="puzzles" data-v="off" aria-pressed="${!S.puzzles}">${PT().off}</button>
-          </div>
-          <p class="hint">${PT().settingHint}</p>
-        </div>
-        ${window.claude ? `<div class="section">
-          <span class="label">${t.engineQ}</span>
-          <div class="chips">
-            <button class="chip" data-act="engine" data-v="auto" aria-pressed="${S.engine === "auto"}">Claude${aiState === "off" ? t.engineOffHere : ""}</button>
-            <button class="chip" data-act="engine" data-v="offline" aria-pressed="${S.engine === "offline"}">${t.engineOffline}</button>
-          </div>
-          <p class="hint">${t.engineHint}</p>
-        </div>` : ""}
+        <button class="btn ghost" data-act="panel">🔒 ${PN().open}</button>
       </section>
     </div>`;
   },
@@ -1246,9 +1958,9 @@ const V = {
         <h2 id="askT">${t.askH}</h2>
         <div class="choices">${last.choices.map((c, i) =>
           `<button class="choice" data-act="choose" data-i="${i}"><span class="n">${i + 1}</span><span class="ce" aria-hidden="true">${esc(c.e)}</span><span>${esc(c.label)}</span></button>`).join("")}</div>
-        <div class="or">${t.or}</div>
-        <div class="field"><input id="idea" maxlength="120" placeholder="${t.ideaPh}" autocomplete="off">${micBtn("idea")}<button class="btn icon" data-act="idea" aria-label="${t.ideaSend}">➜</button></div>
-        <p class="hint">${micOk ? t.micTip : t.noMicTip}</p>
+        ${S.parent.freeIdea !== false ? `<div class="or">${t.or}</div>
+        <div class="field"><input id="idea" maxlength="120" placeholder="${t.ideaPh}" autocomplete="off">${micBtn("idea")}<button class="btn icon" data-act="idea" aria-label="${t.ideaSend}">➜</button></div>` : micBtn("idea")}
+        <p class="hint">${micOn() ? t.micTip : t.noMicTip}</p>
       </section>`;
     return `<div class="screen">
       <div class="story-head">
@@ -1256,6 +1968,8 @@ const V = {
         <h1>${esc(st.title || t.preparing)}</h1>
         <div class="sub"><button class="toggle" data-act="auto" aria-pressed="${S.autoRead}">${t.autoRead(S.autoRead)}</button></div>
       </div>
+      ${st.seed ? `<div class="seedtag">${PNT[L()].seedTag}${st.seed.theme ? `<span>${esc(PNT[L()].seedThemeTag(st.seed.theme))}</span>` : ""}${st.seed.msg ? `<span>“${esc(st.seed.msg)}”</span>` : ""}</div>` : ""}
+      ${S.readOnly && st.parentNote && st.parentNote.t ? `<div class="notecard"><span class="label">${PNT[L()].noteFrom}</span>${esc(st.parentNote.t)}</div>` : ""}
       ${chs}
       ${tail}
     </div>`;
@@ -1277,6 +1991,7 @@ function chapterHTML(st, c, i, w){
     </div>
     ${c.word ? `<div class="word"><span class="label">${t.newWord}</span><b>${esc(c.word.w)}</b><span>${esc(c.word.m)}</span></div>` : ""}
     ${S.readOnly || i < st.chapters.length - 1 ? pzChip(c) : ""}
+    ${coCardHTML(st, c, i)}
   </article>`;
 }
 function endHTML(st){
@@ -1286,15 +2001,16 @@ function endHTML(st){
     ${st.moral ? `<p class="moral">${esc(st.moral)}</p>` : ""}
     ${st.questions && st.questions.length ? `<div class="section"><span class="label">${t.talk}</span><ol>${st.questions.map(q => `<li>${esc(q)}</li>`).join("")}</ol></div>` : ""}
     ${pzStars(st)}
+    ${!st.example && !S.fromPanel && (S.parent.coRead || st.discussed) ? `<button class="btn ghost" data-act="discussed" aria-pressed="${!!st.discussed}">${st.discussed ? PNT[L()].discussedOn + " ✓" : PNT[L()].discussedBtn}</button>` : ""}
     <p class="hint">${st.example ? t.exampleNote : t.savedNote}</p>
-    <div class="row">
+    ${S.fromPanel ? "" : `<div class="row">
       <button class="btn" data-act="new">${t.newStory}</button>
       ${st.example ? "" : `<button class="btn ghost" data-act="again">${esc(t.again(st.hero.name))}</button>`}
-    </div>
+    </div>`}
   </section>`;
 }
-const micBtn = id => micOk ? `<button class="btn ghost icon" data-act="mic" data-t="${id}" aria-label="${T().micAria}">🎤</button>` : "";
-const micHint = () => micOk ? "" : `<p class="hint">${T().keyboardMic}</p>`;
+const micBtn = id => micOn() ? `<button class="btn ghost icon" data-act="mic" data-t="${id}" aria-label="${T().micAria}">🎤</button>` : "";
+const micHint = () => micOn() ? "" : `<p class="hint">${T().keyboardMic}</p>`;
 
 function renderBar(){
   const t = T(), d = S.draft, bar = $("#bar"); let html = "";
@@ -1317,10 +2033,10 @@ function render(){
 /* ---------- olaylar ---------- */
 function go(screen){ stopSpeak(); S.screen = screen; render(); window.scrollTo(0, 0); }
 const A = {
-  home(){ if (S.ctl) S.ctl.abort(); S.readOnly = false; S.confirmDel = null; go("home"); },
+  home(){ if (S.ctl) S.ctl.abort(); S.readOnly = false; S.fromPanel = false; S.confirmDel = null; go("home"); },
   shelf(){ A.home(); requestAnimationFrame(() => $("#kitaplik").scrollIntoView({behavior:"smooth"})); },
   lang(b){ S.lang = b.dataset.v; store.set("masal-dil", S.lang); render(); },
-  new(){ S.draft = freshDraft(); S.story = null; S.readOnly = false; go("hero"); },
+  new(){ if (sleepBlocks()){ S.story = null; S.readOnly = false; go("sleep"); return; } S.fromPanel = false; S.draft = freshDraft(); S.story = null; S.readOnly = false; go("hero"); },
   hero(b){
     const d = S.draft, olds = d.hero ? [HEROES[d.hero].tr.def, HEROES[d.hero].en.def] : [];
     d.hero = b.dataset.v;
@@ -1350,7 +2066,8 @@ const A = {
     const id = b.dataset.id;
     S.story = id.startsWith("ornek") ? EXAMPLES[id.slice(6)] : S.library.find(s => s.id === id);
     if (!S.story) return;
-    S.readOnly = true; S.confirmDel = null; go("story");
+    S.readOnly = true; S.fromPanel = false; S.confirmDel = null; go("story");
+    if (S.story.parentNote && S.story.parentNote.t && !S.story.noteSeen){ S.story.noteSeen = true; store.set(LIB, S.library); syncPush(); }
   },
   del(b){
     const id = b.dataset.id;
@@ -1363,10 +2080,12 @@ const A = {
     const color = COLORS[h.color] ? h.color : (Object.keys(COLORS).find(k => COLORS[k].tr === h.color) || "mor");
     S.lang = lang; store.set("masal-dil", lang);
     S.draft = {hero:h.id, custom:h.id === "ozel" ? h.noun : "", name:h.name, traits:keys, power:h.power, color, world:null, age:h.age};
+    if (sleepBlocks()){ S.story = null; S.readOnly = false; go("sleep"); return; }
     S.story = null; S.readOnly = false; go("world");
   }
 };
-Object.assign(A, PZ_ACT);
+Object.assign(A, PZ_ACT, PARENT_ACT);
+Object.assign(V, PARENT_VIEWS);
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-act]");
   if (!b || b.disabled) return;
@@ -1379,6 +2098,8 @@ document.addEventListener("input", e => {
 });
 document.addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.id === "idea"){ e.preventDefault(); sendIdea(e.target.value); }
+  if (e.key === "Enter" && e.target.id === "gateIn"){ e.preventDefault(); gateTry(); }
+  if (e.key === "Enter" && e.target.id === "pairCode"){ e.preventDefault(); const l = $("#pairLabel"); if (l) l.focus(); }
   if (e.key === "Enter" && (e.target.id === "heroName" || e.target.id === "customHero")) e.target.blur();
 });
 if (synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = () => {};
@@ -1395,5 +2116,24 @@ function boot(data){
 }
 const hot = window.claude && window.claude.hot;
 hot && hot.ready ? hot.ready(boot) : boot(hot && hot.data ? hot.data : {});
+
+/* ---------- ebeveyn: açılış, eşitleme döngüsü, süre ölçümü ---------- */
+(function(){
+  const m = /esle=([A-Za-z0-9-]{10,14})/.exec(location.hash || "");
+  if (m){
+    S.pendingCode = normCode(m[1]);
+    try { history.replaceState(null, "", location.pathname + location.search); } catch (e){}
+    askGate("pair");
+  }
+})();
+syncPull().then(() => syncPush());
+setInterval(() => { if (!document.hidden) syncPull(); }, 60e3);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden){ syncPull(); return; }
+  if (S.story && S.library.includes(S.story)){ store.set(LIB, S.library); syncPush(true); }
+});
+setInterval(() => {
+  if (S.screen === "story" && S.story && !S.readOnly && !S.fromPanel && !document.hidden) S.story.activeSec = (S.story.activeSec || 0) + 15;
+}, 15e3);
 </script>
 </body></html>
