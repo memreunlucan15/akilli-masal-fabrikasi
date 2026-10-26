@@ -9,7 +9,7 @@
   --bg:#EEF1FB; --surface:#FFFFFF; --ink:#221F45; --muted:#5E5987; --line:#D8DAF0;
   --accent:#FF7A30; --accent-deep:#D2581A; --accent-ink:#FFFFFF; --accent-soft:#FFE7D7;
   --leaf:#178F75; --leaf-soft:#DDF4EC; --sun:#FFC928; --sun-soft:#FFF2C2; --sky:#4B63F0;
-  --chip-on:#221F45; --chip-on-ink:#FFFFFF; --danger:#C8323C;
+  --chip-on:#221F45; --chip-on-ink:#FFFFFF; --danger:#C8323C; --sil-bg:#E3E0F7;
   --font-display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
   --font-body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
   --font-read:"Andika","Nunito",system-ui,sans-serif;
@@ -19,13 +19,13 @@
   --bg:#13132B; --surface:#1F1E42; --ink:#F2EFFF; --muted:#ADA8D8; --line:#363463;
   --accent:#FF8C4A; --accent-deep:#B5501A; --accent-ink:#1B1030; --accent-soft:#3D2A3A;
   --leaf:#4FD1B0; --leaf-soft:#173A36; --sun:#FFD248; --sun-soft:#3A3418; --sky:#8C9BFF;
-  --chip-on:#FFD248; --chip-on-ink:#1B1030; --danger:#FF6B74; color-scheme:dark;
+  --chip-on:#FFD248; --chip-on-ink:#1B1030; --danger:#FF6B74; --sil-bg:#CEC9F0; color-scheme:dark;
 }}
 :root[data-theme="dark"]{
   --bg:#13132B; --surface:#1F1E42; --ink:#F2EFFF; --muted:#ADA8D8; --line:#363463;
   --accent:#FF8C4A; --accent-deep:#B5501A; --accent-ink:#1B1030; --accent-soft:#3D2A3A;
   --leaf:#4FD1B0; --leaf-soft:#173A36; --sun:#FFD248; --sun-soft:#3A3418; --sky:#8C9BFF;
-  --chip-on:#FFD248; --chip-on-ink:#1B1030; --danger:#FF6B74; color-scheme:dark;
+  --chip-on:#FFD248; --chip-on-ink:#1B1030; --danger:#FF6B74; --sil-bg:#CEC9F0; color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{min-height:100%}
@@ -185,6 +185,52 @@ main.nobar{padding-bottom:48px}
 .end .row .btn{flex:1 1 200px}
 
 .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;max-width:min(92vw,460px);background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:14px;font-weight:700;font-size:.95rem;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+
+/* bulmaca molası */
+.pz{display:flex;flex-direction:column;gap:14px;background:var(--surface);border:3px solid var(--sky);border-radius:var(--r-lg);padding:16px;scroll-margin-top:130px}
+.pz .label{color:var(--sky)}
+.pz-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.pz-top h2{font-size:1.35rem}
+.pz-top p{margin:4px 0 0;color:var(--muted);font-size:.95rem}
+.pz-stage{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 10px;font-size:2.3rem;line-height:1.15;padding:14px 10px;background:var(--bg);border-radius:var(--r-md);text-align:center}
+.pz-stage.text{font-family:var(--font-read);font-size:1.2rem;line-height:1.5}
+.pz-stage .q{display:inline-grid;place-items:center;width:1.3em;height:1.3em;border-radius:12px;border:3px dashed var(--sky);font-size:.8em;color:var(--sky);font-family:var(--font-display);font-weight:800}
+.pz-stage .op{font-family:var(--font-display);font-weight:800;color:var(--muted);font-size:.8em}
+.pz-stage .big{font-size:1.5em}
+.pz-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:10px}
+.pz-opts.wide{grid-template-columns:1fr}
+.pz-opt{display:flex;align-items:center;justify-content:center;gap:10px;min-height:66px;padding:8px 10px;border-radius:var(--r-md);border:3px solid var(--line);background:var(--bg);box-shadow:0 4px 0 var(--line);font-family:var(--font-display);font-weight:800;font-size:1.9rem;line-height:1.15}
+.pz-opt:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.pz-opt.txt{font-size:1.1rem;justify-content:flex-start;text-align:left}
+.pz-opt.txt .oe{font-size:1.7rem}
+.pz-opt[disabled]{opacity:.35;box-shadow:none;cursor:default;transform:none}
+.pz-opt.sil{background:var(--sil-bg)}
+.pz-opt.sil span{filter:brightness(0);opacity:.85}
+.mem{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:8px}
+.card{aspect-ratio:1;max-width:100%;border-radius:14px;border:3px solid var(--accent-deep);background:var(--accent);color:var(--accent-ink);font-size:clamp(1.5rem,8vw,2.2rem);display:grid;place-items:center;padding:0}
+.card.up{background:var(--surface);border-color:var(--sky)}
+.card.done{background:var(--leaf-soft);border-color:var(--leaf)}
+.seq{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.seq .slot{display:grid;place-items:center;min-width:52px;height:52px;padding:0 6px;border-radius:12px;border:3px dashed var(--line);font-size:1.6rem;font-family:var(--font-display);font-weight:800}
+.seq .slot.on{border-style:solid;border-color:var(--leaf);background:var(--leaf-soft)}
+.seq .slot.miss{border-color:var(--sky);color:var(--sky)}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tile{min-width:52px;height:56px;padding:0 10px;border-radius:14px;border:3px solid var(--line);background:var(--bg);box-shadow:0 4px 0 var(--line);font-family:var(--font-display);font-weight:800;font-size:1.6rem}
+.tile.step{display:flex;align-items:center;gap:8px;font-size:1.05rem;text-align:left;min-height:62px;height:auto;width:100%}
+.tile.step .oe{font-size:1.7rem}
+.tile[disabled]{opacity:.3;box-shadow:none}
+.bad{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.pz-hint{margin:0;font-size:.95rem;color:var(--muted)}
+.pz-hint b{color:var(--ink)}
+.pz-foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.pz-win{display:flex;align-items:center;gap:12px;background:var(--leaf-soft);border:2px solid var(--leaf);border-radius:var(--r-md);padding:12px 14px;font-weight:800}
+.pz-win .burst{font-size:2.2rem;animation:pop .5s ease-out}
+.pz-win small{display:block;font-weight:700;color:var(--muted)}
+@keyframes pop{0%{transform:scale(.3) rotate(-20deg)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+.pz-chip{align-self:flex-start;display:inline-flex;gap:6px;align-items:center;background:var(--leaf-soft);color:var(--ink);border-radius:999px;padding:5px 12px;font-weight:800;font-size:.85rem}
+.pz-chip.skip{background:var(--bg);color:var(--muted);border:2px solid var(--line)}
+.stars{font-size:1.6rem;letter-spacing:2px}
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -457,6 +503,7 @@ const S = {
   library:store.get(LIB, []),
   autoRead:store.get("masal-oto-oku", false),
   engine:store.get("masal-motor", "auto"),
+  puzzles:store.get("masal-bulmaca", true),
   lang:store.get("masal-dil", /^tr/i.test(navigator.language || "tr") ? "tr" : "en")
 };
 // Masal ekranında masalın kendi dili, başka her yerde seçili dil geçerli.
@@ -718,6 +765,7 @@ async function makeChapter(picked){
   }
   if (S.story !== st) return;
   if (!ch) ch = offlineChapter(st, n, picked);
+  if (!ch.ending && S.puzzles) ch.puzzle = makePuzzle(st, ch);
   st.chapters.push(ch);
   if (n === 0) st.title = ch.title || offlineChapter(st, 0, null).title;
   if (ch.ending){ st.ended = true; st.moral = ch.moral; st.questions = ch.questions; saveStory(st); }
@@ -728,7 +776,9 @@ async function makeChapter(picked){
 function pick(choice){
   const st = S.story; if (!st || S.busy || st.ended) return;
   stopSpeak();
-  st.chapters[st.chapters.length - 1].picked = choice;
+  const last = st.chapters[st.chapters.length - 1];
+  if (last.puzzle) delete last.puzzle.fresh;
+  last.picked = choice;
   makeChapter(choice);
 }
 function sendIdea(text){
@@ -753,6 +803,246 @@ function exampleStory(lang){
   return st;
 }
 const EXAMPLES = {tr:exampleStory("tr"), en:exampleStory("en")};
+
+/* ---------- bulmaca molaları ---------- */
+// Her bölümün sonunda, seçimlerden önce yaşa uygun küçük bir bulmaca. Zorluk çocuğun başarısına göre ayarlanır.
+const PZ_TYPES = {
+  "3-5": ["count","odd","shadow","pattern","memory"],
+  "6-8": ["add","pattern","memory","sequence","cause","missing"],
+  "9-11":["anagram","numseq","sequence","riddle","memory","cause"]
+};
+const PZ_POOLS = {
+  orman:["🌳","🦉","🌰","🍄","🦔","🐇","🍂","🌼"], uzay:["🪐","🚀","🌙","⭐","☄️","👽","🛸","🌍"],
+  deniz:["🐠","🐢","🐚","🐙","🦀","🐬","🐳","🦑"], seker:["🍭","🍪","🧁","🍩","🍬","🍫","🎂","🍯"],
+  buz:["❄️","🐧","⛄","🧊","🦭","🎿","🧣","🏔️"], sato:["🏰","🧚","🗝️","🎵","👑","🌈","🦄","☁️"]
+};
+const PZ_CAUSE = [
+  {c:["🌧️","Yağmur yağdı.","It rained."], r:["💧","Yerler ıslandı.","The ground got wet."], w:[["☀️","Güneş doğdu.","The sun came up."],["🎈","Balon uçtu.","A balloon flew away."]]},
+  {c:["🧊","Buzu güneşe koydum.","I put ice in the sun."], r:["💧","Buz eridi.","The ice melted."], w:[["❄️","Kar yağdı.","It snowed."],["🍞","Ekmek pişti.","The bread was baked."]]},
+  {c:["🌱","Tohuma her gün su verdik.","We watered the seed every day."], r:["🌻","Çiçek açtı.","A flower bloomed."], w:[["🍂","Yapraklar döküldü.","The leaves fell."],["🌙","Gece oldu.","Night came."]]},
+  {c:["😴","Çok geç yattım.","I went to bed very late."], r:["🥱","Sabah çok uykum vardı.","I was very sleepy in the morning."], w:[["🎉","Doğum günüm geldi.","My birthday came."],["🍎","Elma kızardı.","The apple turned red."]]},
+  {c:["🎈","Balonu çok fazla şişirdim.","I blew up the balloon too much."], r:["💥","Balon patladı.","The balloon popped."], w:[["🌈","Gökkuşağı çıktı.","A rainbow appeared."],["🐟","Balık yüzdü.","A fish swam."]]},
+  {c:["🍪","Kurabiyemi arkadaşımla paylaştım.","I shared my cookie with my friend."], r:["😊","Arkadaşım çok sevindi.","My friend was very happy."], w:[["🌧️","Yağmur başladı.","It started to rain."],["🚗","Araba durdu.","The car stopped."]]},
+  {c:["🌬️","Rüzgâr esti.","The wind blew."], r:["🪁","Uçurtma havalandı.","The kite flew up."], w:[["🧦","Çorabım kayboldu.","I lost my sock."],["🍲","Çorba soğudu.","The soup got cold."]]},
+  {c:["🏃","Koşarken ayakkabımın bağı çözüldü.","My shoelace came undone while I ran."], r:["🤕","Takılıp düştüm.","I tripped and fell."], w:[["🎶","Şarkı söyledim.","I sang a song."],["🌟","Yıldız kaydı.","A star shot across the sky."]]}
+];
+const PZ_SEQ = [
+  [["🥚","Yumurta","An egg"],["🐣","Civciv çıktı","A chick hatched"],["🐔","Tavuk oldu","It grew into a hen"]],
+  [["🌰","Tohum ekildi","A seed was planted"],["🌱","Filiz çıktı","A sprout came up"],["🌳","Ağaç oldu","It became a tree"],["🍎","Elma verdi","It grew apples"]],
+  [["🥣","Hamur yoğruldu","The dough was mixed"],["🔥","Fırında pişti","It baked in the oven"],["🍪","Kurabiye hazır","The cookies were ready"],["😋","Afiyetle yendi","Everyone ate them up"]],
+  [["☁️","Bulutlar toplandı","Clouds gathered"],["🌧️","Yağmur yağdı","It rained"],["☀️","Güneş açtı","The sun came out"],["🌈","Gökkuşağı çıktı","A rainbow appeared"]],
+  [["🌅","Sabah uyandım","I woke up"],["🪥","Dişlerimi fırçaladım","I brushed my teeth"],["🎒","Okula gittim","I went to school"],["🌙","Gece uyudum","I slept at night"]],
+  [["❄️","Kar yağdı","It snowed"],["⛄","Kardan adam yaptık","We built a snowman"],["☀️","Güneş çıktı","The sun came out"],["💧","Kardan adam eridi","The snowman melted"]]
+];
+const PZ_RIDDLE = {
+  tr:[
+    {q:"Geceleri gökyüzünde parlarım, gündüz saklanırım. Bazen yuvarlak, bazen ince bir hilal olurum.", a:["🌙","Ay"], w:[["☀️","Güneş"],["☁️","Bulut"]]},
+    {q:"Yapraklarım var ama ağaç değilim. Sayfalarımda masallar saklarım.", a:["📖","Kitap"], w:[["🌼","Çiçek"],["🍃","Yaprak"]]},
+    {q:"Ne kadar çok atarsan arkanda o kadar çok bırakırsın.", a:["👣","Adım"], w:[["⚽","Top"],["✏️","Kalem"]]},
+    {q:"Suya düşerim ıslanmam, ateşe düşerim yanmam. Hep peşinden gelirim.", a:["👤","Gölge"], w:[["🪨","Taş"],["🧊","Buz"]]},
+    {q:"Kanadım yok ama uçarım, gözüm yok ama ağlarım.", a:["☁️","Bulut"], w:[["🐦","Kuş"],["🪁","Uçurtma"]]},
+    {q:"Yandıkça kısalırım, karanlığı aydınlatırım.", a:["🕯️","Mum"], w:[["✏️","Kalem"],["🌳","Ağaç"]]}
+  ],
+  en:[
+    {q:"I have hands but I can't clap.", a:["🕰️","A clock"], w:[["🧤","A glove"],["🤖","A robot"]]},
+    {q:"I have keys but I can't open any lock.", a:["🎹","A piano"], w:[["🚪","A door"],["🚗","A car"]]},
+    {q:"The more of me you take, the more you leave behind.", a:["👣","Footsteps"], w:[["🍪","Cookies"],["📷","Photos"]]},
+    {q:"I fall into the water but I never get wet. I follow you everywhere.", a:["👤","A shadow"], w:[["🪨","A stone"],["🍃","A leaf"]]},
+    {q:"I shine at night. Sometimes I am round, sometimes a thin crescent.", a:["🌙","The Moon"], w:[["☀️","The Sun"],["☁️","A cloud"]]},
+    {q:"I get shorter the longer I burn, and I light up the dark.", a:["🕯️","A candle"], w:[["✏️","A pencil"],["🌳","A tree"]]}
+  ]
+};
+const PZ_WORDS = {
+  tr:[["masal","Hayal gücüyle anlatılan hikâye."],["kitap","Sayfalarında yazılar olan, okuduğumuz şey."],["yıldız","Gece gökyüzünde parlayan ışık."],["dostluk","Birbirini seven iki kişinin arkadaşlığı."],["bulut","Gökyüzündeki pamuk gibi su damlacıkları."],["hayal","Aklımızda canlandırdığımız düşünce ve resimler."]],
+  en:[["story","A tale about people and things that happen."],["star","A bright light in the night sky."],["friend","Someone you like who likes you too."],["cloud","A fluffy shape in the sky made of tiny water drops."],["dream","Pictures and stories in your mind while you sleep."],["magic","Something wonderful that seems impossible."]]
+};
+const ABC = {tr:"abcçdefgğhıijklmnoöprsştuüvyz", en:"abcdefghijklmnopqrstuvwxyz"};
+const PZT = {
+  tr:{label:"Bulmaca molası", intro:h => `${h} seni bir bulmacayla bekliyor! Çözünce masal devam edecek.`,
+    count:e => `Kaç tane ${e} var?`, countSay:"Kaç tane var? Birlikte sayalım!", odd:"Hangisi diğerlerinden farklı?", shadow:"Bu resmin gölgesi hangisi?",
+    pattern:"Sırada hangisi gelmeli?", add:"Hepsi kaç tane eder?", numseq:"Sıradaki sayı kaç?", memory:"Kartları çevir, eşlerini bul!",
+    sequence:"Doğru sıraya diz: önce hangisi oldu?", cause:"Sonra ne oldu?", missing:"Eksik harfi bul!", anagram:"Harfleri sıraya koy, kelimeyi bul!",
+    riddle:"Bilmece! Ben neyim?", meaning:"İpucu", say:"🔊 Soruyu dinle", skip:"Bu sefer atla",
+    praise:["Harika!","Süpersin!","Bravo!","Aferin sana!"], star:"Bir bulmaca yıldızı kazandın.", skipped:"Sorun değil, masala devam!",
+    chipSolved:"Bulmaca çözüldü", chipSkipped:"Bulmaca atlandı", stars:"Bulmaca yıldızların",
+    setting:"Bölüm aralarında bulmaca", on:"Açık", off:"Kapalı",
+    settingHint:"Bulmacalar yaş grubuna göre seçilir; çocuk kolayca çözerse zorlaşır, zorlanırsa kolaylaşır. Her bulmaca atlanabilir."},
+  en:{label:"Puzzle break", intro:h => `${h} has a puzzle for you! Solve it and the story goes on.`,
+    count:e => `How many ${e} can you see?`, countSay:"How many can you see? Let's count together!", odd:"Which one is different?", shadow:"Which shadow matches this picture?",
+    pattern:"What comes next?", add:"How many altogether?", numseq:"What number comes next?", memory:"Flip the cards and find the pairs!",
+    sequence:"Put them in order: what happened first?", cause:"What happened next?", missing:"Find the missing letter!", anagram:"Put the letters in order to make the word!",
+    riddle:"Riddle! What am I?", meaning:"Hint", say:"🔊 Hear the question", skip:"Skip this time",
+    praise:["Great job!","Amazing!","Well done!","Brilliant!"], star:"You earned a puzzle star.", skipped:"That's okay, back to the story!",
+    chipSolved:"Puzzle solved", chipSkipped:"Puzzle skipped", stars:"Your puzzle stars",
+    setting:"Puzzles between chapters", on:"On", off:"Off",
+    settingHint:"Puzzles are picked for the child's age group; they get harder when solved easily and easier after a struggle. Every puzzle can be skipped."}
+};
+const PT = () => PZT[L()];
+const rnd = n => Math.floor(Math.random() * n);
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--){ const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const pickN = (a, n) => shuffle(a).slice(0, n);
+function numOpts(ans, spread){
+  const s = new Set([ans]);
+  while (s.size < 3){ const d = (rnd(spread) + 1) * (Math.random() < .5 ? -1 : 1); if (ans + d > 0) s.add(ans + d); }
+  return shuffle([...s]);
+}
+const withAns = (opts, correct) => { const o = shuffle(opts); return {opts:o, ans:o.indexOf(correct)}; };
+function pzWord(ch, lang){
+  const w = ch.word && ch.word.w ? (lang === "en" ? ch.word.w.toLowerCase() : lower(ch.word.w)).trim() : "";
+  const ok = lang === "en" ? /^[a-z]{3,9}$/ : /^[a-zçğıöşü]{3,9}$/;
+  if (ok.test(w)) return {w, m:ch.word.m || ""};
+  const [bw, bm] = PZ_WORDS[lang][rnd(PZ_WORDS[lang].length)];
+  return {w:bw, m:bm};
+}
+const PZ_MAKE = {
+  count({pool, lv, t}){ const [a, b] = [[2,4],[3,6],[4,8]][lv]; const n = a + rnd(b - a + 1), e = pool[rnd(pool.length)], o = numOpts(n, 2);
+    return {e, n, opts:o, ans:o.indexOf(n), q:t.count(e), say:t.countSay}; },
+  odd({pool, lv, t}){ const [base, diff] = pickN(pool, 2), k = [4,5,6][lv], at = rnd(k);
+    return {opts:Array.from({length:k}, (_, i) => i === at ? diff : base), ans:at, q:t.odd}; },
+  shadow({pool, lv, t}){ const o = pickN(pool, [2,3,4][lv]), target = o[rnd(o.length)];
+    return {target, opts:o, ans:o.indexOf(target), q:t.shadow}; },
+  pattern({pool, lv, age, t}){
+    const unit = (age === "3-5" ? ["AB","AAB","ABC"] : ["AAB","ABC","ABBC"])[lv];
+    const keys = [...new Set(unit)], em = pickN(pool, keys.length + 1), map = {};
+    keys.forEach((k, i) => map[k] = em[i]);
+    let seq = ""; while (seq.length < unit.length * 2 + 1) seq += unit;
+    seq = seq.slice(0, unit.length * 2 + 1);
+    const items = [...seq].map(k => map[k]), answer = items.pop();
+    const distract = [...new Set([...keys.map(k => map[k]), em[keys.length]])].slice(0, 3);
+    return Object.assign({items, q:t.pattern}, withAns(distract, answer)); },
+  add({pool, lv, t}){ const max = [5,8,10][lv], a = 1 + rnd(max - 1), b = 1 + rnd(max - a), e = pool[rnd(pool.length)], o = numOpts(a + b, 2);
+    return {e, a, b, opts:o, ans:o.indexOf(a + b), q:t.add}; },
+  numseq({lv, t}){
+    let items, next, spread;
+    if (lv === 0){ const s = 1 + rnd(10), d = 2 + rnd(4); items = [0,1,2,3].map(i => s + i * d); next = s + 4 * d; spread = d; }
+    else if (lv === 1){ const s = 40 + rnd(30), d = 3 + rnd(7); items = [0,1,2,3].map(i => s - i * d); next = s - 4 * d; spread = d; }
+    else if (Math.random() < .5){ const s = 1 + rnd(4); items = [0,1,2,3].map(i => s * 2 ** i); next = s * 16; spread = s * 4; }
+    else { const s = 1 + rnd(5); items = [s, s + 1, s + 3, s + 6]; next = s + 10; spread = 3; }
+    const o = numOpts(next, spread); return {items, opts:o, ans:o.indexOf(next), q:t.numseq}; },
+  memory({pool, lv, age, t}){ const pairs = {"3-5":[2,3,3], "6-8":[3,4,4], "9-11":[4,5,6]}[age][lv];
+    return {cards:shuffle(pickN(pool, pairs).flatMap(e => [e, e])), up:[], done:[], q:t.memory}; },
+  sequence({lv, age, lang, t}){
+    const n = age === "9-11" && lv > 0 ? 4 : 3, list = PZ_SEQ.filter(s => s.length >= n), col = lang === "en" ? 2 : 1;
+    const steps = list[rnd(list.length)].slice(0, n).map(s => [s[0], s[col]]);
+    let order; do order = shuffle(steps.map((_, i) => i)); while (order.every((v, i) => v === i));
+    return {steps, order, got:0, q:t.sequence}; },
+  cause({lang, t}){ const c = PZ_CAUSE[rnd(PZ_CAUSE.length)], col = lang === "en" ? 2 : 1, f = x => [x[0], x[col]];
+    const right = f(c.r); return Object.assign({cause:f(c.c), q:t.cause}, withAns([right, ...c.w.map(f)], right)); },
+  missing({lang, word, t}){ const w = [...word.w], idx = rnd(w.length), letter = w[idx], abc = [...ABC[lang]].filter(x => x !== letter);
+    return Object.assign({letters:w, idx, m:word.m, q:t.missing}, withAns([letter, ...pickN(abc, 2)], letter)); },
+  anagram({word, t}){ const w = [...word.w]; let tiles; do tiles = shuffle(w); while (tiles.join("") === w.join("") && w.length > 1);
+    return {word:w, tiles, used:[], m:word.m, q:t.anagram}; },
+  riddle({lang, t}){ const r = PZ_RIDDLE[lang][rnd(PZ_RIDDLE[lang].length)];
+    return Object.assign({text:r.q, q:t.riddle, say:t.riddle + " " + r.q}, withAns([r.a, ...r.w], r.a)); }
+};
+function makePuzzle(st, ch){
+  const age = PZ_TYPES[st.hero.age] ? st.hero.age : "6-8", lang = st.lang || "tr", t = PZT[lang];
+  if (st.pzLevel == null) st.pzLevel = age === "3-5" ? 0 : 1;
+  const used = st.chapters.map(c => c.puzzle && c.puzzle.type).filter(Boolean);
+  let pool = PZ_TYPES[age].filter(x => !used.includes(x));
+  if (!pool.length) pool = PZ_TYPES[age];
+  const type = pool[rnd(pool.length)];
+  const emojis = [...new Set([st.hero.e, ...(PZ_POOLS[st.hero.world] || PZ_POOLS.orman)])];
+  const p = PZ_MAKE[type]({pool:emojis, lv:st.pzLevel, age, lang, t, word:pzWord(ch, lang)});
+  return Object.assign(p, {type, state:"open", tries:0, wrong:[]});
+}
+function pzSolve(p){
+  const st = S.story;
+  p.state = "solved"; p.fresh = true; p.praise = rnd(4);
+  st.pzLevel = Math.min(2, Math.max(0, (st.pzLevel || 0) + (p.tries === 0 ? 1 : p.tries >= 3 ? -1 : 0)));
+  delete p.lock; delete p.bad;
+  render();
+  requestAnimationFrame(() => { const w = $("#pzwin"); if (w) w.scrollIntoView({behavior:"smooth", block:"center"}); });
+  if (S.autoRead) speak(PT().praise[p.praise] + " " + PT().star, "pz");
+}
+function pzRefresh(){ const el = $("#pz"), st = S.story; if (el && st) el.outerHTML = puzzleHTML(st, st.chapters[st.chapters.length - 1]); }
+const curPz = () => { const st = S.story; const ch = st && st.chapters[st.chapters.length - 1]; return ch && ch.puzzle && ch.puzzle.state === "open" ? ch.puzzle : null; };
+function puzzleHTML(st, ch){
+  const p = ch.puzzle, t = PT(), w = world(st.hero.world, L());
+  const opt = (inner, i, cls = "") => `<button class="pz-opt ${cls}" data-act="pzopt" data-i="${i}" ${p.wrong.includes(i) ? "disabled" : ""}>${inner}</button>`;
+  let body = "";
+  switch (p.type){
+    case "count":
+      body = `<div class="pz-stage">${Array(p.n).fill(`<span>${p.e}</span>`).join("")}</div><div class="pz-opts">${p.opts.map((n, i) => opt(n, i)).join("")}</div>`; break;
+    case "odd":
+      body = `<div class="pz-opts">${p.opts.map((e, i) => opt(e, i)).join("")}</div>`; break;
+    case "shadow":
+      body = `<div class="pz-stage"><span class="big">${p.target}</span></div><div class="pz-opts">${p.opts.map((e, i) => opt(`<span>${e}</span>`, i, "sil")).join("")}</div>`; break;
+    case "pattern":
+      body = `<div class="pz-stage">${p.items.map(e => `<span>${e}</span>`).join("")}<span class="q">?</span></div><div class="pz-opts">${p.opts.map((e, i) => opt(e, i)).join("")}</div>`; break;
+    case "add":
+      body = `<div class="pz-stage"><span>${Array(p.a).fill(p.e).join("")}</span><span class="op">+</span><span>${Array(p.b).fill(p.e).join("")}</span><span class="op">=</span><span class="q">?</span></div><div class="pz-opts">${p.opts.map((n, i) => opt(n, i)).join("")}</div>`; break;
+    case "numseq":
+      body = `<div class="pz-stage">${p.items.map(n => `<span class="op" style="color:var(--ink);font-size:1em">${n}</span><span class="op">,</span>`).join("")}<span class="q">?</span></div><div class="pz-opts">${p.opts.map((n, i) => opt(n, i)).join("")}</div>`; break;
+    case "memory": {
+      const cols = {4:4, 6:3, 8:4, 10:5, 12:4}[p.cards.length] || 4;
+      body = `<div class="mem" style="--cols:${cols}">${p.cards.map((e, i) => { const up = p.up.includes(i), done = p.done.includes(i);
+        return `<button class="card ${up ? "up" : ""} ${done ? "done" : ""}" data-act="pzcard" data-i="${i}" aria-label="${up || done ? e : "?"}">${up || done ? e : "?"}</button>`; }).join("")}</div>`; break; }
+    case "sequence":
+      body = `<div class="seq">${p.steps.map((s, i) => `<span class="slot ${i < p.got ? "on" : ""}">${i < p.got ? s[0] : i + 1}</span>`).join("")}</div>
+        <div class="tiles">${p.order.map((k, i) => `<button class="tile step ${p.bad === i ? "bad" : ""}" data-act="pzseq" data-i="${i}" ${k < p.got ? "disabled" : ""}><span class="oe">${p.steps[k][0]}</span>${esc(p.steps[k][1])}</button>`).join("")}</div>`; break;
+    case "cause":
+      body = `<div class="pz-stage text"><span class="big">${p.cause[0]}</span> ${esc(p.cause[1])}</div><div class="pz-opts wide">${p.opts.map((o, i) => opt(`<span class="oe">${o[0]}</span>${esc(o[1])}`, i, "txt")).join("")}</div>`; break;
+    case "missing":
+      body = `<div class="seq">${p.letters.map((c, i) => `<span class="slot ${i === p.idx ? "miss" : ""}">${i === p.idx ? "?" : esc(c.toLocaleUpperCase(L() === "en" ? "en" : "tr"))}</span>`).join("")}</div>
+        ${p.m ? `<p class="pz-hint"><b>${t.meaning}:</b> ${esc(p.m)}</p>` : ""}<div class="pz-opts">${p.opts.map((c, i) => opt(esc(c.toLocaleUpperCase(L() === "en" ? "en" : "tr")), i)).join("")}</div>`; break;
+    case "anagram":
+      body = `<div class="seq">${p.word.map((c, i) => `<span class="slot ${i < p.used.length ? "on" : ""}">${i < p.used.length ? esc(c.toLocaleUpperCase(L() === "en" ? "en" : "tr")) : ""}</span>`).join("")}</div>
+        ${p.m ? `<p class="pz-hint"><b>${t.meaning}:</b> ${esc(p.m)}</p>` : ""}
+        <div class="tiles">${p.tiles.map((c, i) => `<button class="tile ${p.bad === i ? "bad" : ""}" data-act="pztile" data-i="${i}" ${p.used.includes(i) ? "disabled" : ""}>${esc(c.toLocaleUpperCase(L() === "en" ? "en" : "tr"))}</button>`).join("")}</div>`; break;
+    case "riddle":
+      body = `<div class="pz-stage text">${esc(p.text)}</div><div class="pz-opts wide">${p.opts.map((o, i) => opt(`<span class="oe">${o[0]}</span>${esc(o[1])}`, i, "txt")).join("")}</div>`; break;
+  }
+  return `<section class="pz" id="pz" aria-labelledby="pzQ">
+    <div class="pz-top"><div><span class="label">🧩 ${t.label}</span><h2 id="pzQ">${esc(p.q)}</h2><p>${esc(t.intro(w.helper))}</p></div></div>
+    ${body}
+    <div class="pz-foot"><button class="btn ghost sm" data-act="pzsay">${t.say}</button><button class="btn ghost sm" data-act="pzskip">${t.skip}</button></div>
+  </section>`;
+}
+function pzWinHTML(p){
+  const t = PT();
+  return p.state === "solved"
+    ? `<div class="pz-win" id="pzwin" role="status"><span class="burst" aria-hidden="true">⭐</span><div>${t.praise[p.praise || 0]}<small>${t.star}</small></div></div>`
+    : `<div class="pz-win" id="pzwin" role="status" style="background:var(--bg);border-color:var(--line)"><span aria-hidden="true">🧩</span><div>${t.skipped}</div></div>`;
+}
+function pzChip(c){
+  const p = c.puzzle; if (!p || p.state === "open") return "";
+  const t = PT();
+  return p.state === "solved" ? `<span class="pz-chip">🧩 ${t.chipSolved} ⭐</span>` : `<span class="pz-chip skip">🧩 ${t.chipSkipped}</span>`;
+}
+function pzStars(st){
+  const ps = st.chapters.map(c => c.puzzle).filter(Boolean);
+  if (!ps.length) return "";
+  const won = ps.filter(p => p.state === "solved").length;
+  return `<div class="section"><span class="label">${PT().stars}</span><span class="stars" aria-label="${won} / ${ps.length}">${"⭐".repeat(won)}${"☆".repeat(ps.length - won)}</span></div>`;
+}
+const PZ_ACT = {
+  pzopt(b){ const p = curPz(); if (!p) return; const i = +b.dataset.i;
+    if (i === p.ans) return pzSolve(p);
+    if (!p.wrong.includes(i)){ p.wrong.push(i); p.tries++; } pzRefresh(); },
+  pzcard(b){ const p = curPz(); if (!p || p.lock) return; const i = +b.dataset.i;
+    if (p.up.includes(i) || p.done.includes(i)) return;
+    p.up.push(i);
+    if (p.up.length === 2){
+      const [x, y] = p.up;
+      if (p.cards[x] === p.cards[y]){ p.done.push(x, y); p.up = []; if (p.done.length === p.cards.length) return pzSolve(p); }
+      else { p.tries++; p.lock = true; setTimeout(() => { p.up = []; p.lock = false; pzRefresh(); }, 850); }
+    }
+    pzRefresh(); },
+  pzseq(b){ const p = curPz(); if (!p) return; const i = +b.dataset.i;
+    if (p.order[i] === p.got){ p.got++; p.bad = null; if (p.got === p.steps.length) return pzSolve(p); }
+    else { p.tries++; p.bad = i; }
+    pzRefresh(); },
+  pztile(b){ const p = curPz(); if (!p) return; const i = +b.dataset.i;
+    if (p.used.includes(i)) return;
+    if (p.tiles[i] === p.word[p.used.length]){ p.used.push(i); p.bad = null; if (p.used.length === p.word.length) return pzSolve(p); }
+    else { p.tries++; p.bad = i; }
+    pzRefresh(); },
+  pzskip(){ const p = curPz(); if (!p) return; p.state = "skipped"; p.fresh = true;
+    S.story.pzLevel = Math.max(0, (S.story.pzLevel || 0) - 1); stopSpeak(); render(); },
+  pzsay(){ const p = curPz(); if (p) speak(p.say || p.q, "pz"); },
+  puzzles(b){ S.puzzles = b.dataset.v === "on"; store.set("masal-bulmaca", S.puzzles); render(); }
+};
 
 /* ---------- sesli okuma ---------- */
 const synth = window.speechSynthesis;
@@ -872,6 +1162,14 @@ const V = {
       <section class="parents">
         <h2>${t.parents}</h2>
         <ul>${k(t.k1, "--leaf")}${k(t.k2, "--accent")}${k(t.k3, "--sun")}</ul>
+        <div class="section">
+          <span class="label">${PT().setting}</span>
+          <div class="chips">
+            <button class="chip" data-act="puzzles" data-v="on" aria-pressed="${S.puzzles}">🧩 ${PT().on}</button>
+            <button class="chip" data-act="puzzles" data-v="off" aria-pressed="${!S.puzzles}">${PT().off}</button>
+          </div>
+          <p class="hint">${PT().settingHint}</p>
+        </div>
         ${window.claude ? `<div class="section">
           <span class="label">${t.engineQ}</span>
           <div class="chips">
@@ -943,7 +1241,8 @@ const V = {
         ${S.ctl ? `<button class="btn ghost sm" data-act="cancel">${t.cancel}</button>` : ""}
       </div>`;
     else if (st.ended) tail = endHTML(st);
-    else if (last && !S.readOnly) tail = `<section class="ask" aria-labelledby="askT">
+    else if (last && !S.readOnly && last.puzzle && last.puzzle.state === "open") tail = puzzleHTML(st, last);
+    else if (last && !S.readOnly) tail = (last.puzzle && last.puzzle.fresh ? pzWinHTML(last.puzzle) : "") + `<section class="ask" aria-labelledby="askT">
         <h2 id="askT">${t.askH}</h2>
         <div class="choices">${last.choices.map((c, i) =>
           `<button class="choice" data-act="choose" data-i="${i}"><span class="n">${i + 1}</span><span class="ce" aria-hidden="true">${esc(c.e)}</span><span>${esc(c.label)}</span></button>`).join("")}</div>
@@ -977,6 +1276,7 @@ function chapterHTML(st, c, i, w){
       <button class="btn ghost sm" data-act="speak" data-i="${i}" aria-pressed="false">${t.listen}</button>
     </div>
     ${c.word ? `<div class="word"><span class="label">${t.newWord}</span><b>${esc(c.word.w)}</b><span>${esc(c.word.m)}</span></div>` : ""}
+    ${S.readOnly || i < st.chapters.length - 1 ? pzChip(c) : ""}
   </article>`;
 }
 function endHTML(st){
@@ -985,6 +1285,7 @@ function endHTML(st){
     <span class="label">${t.theEnd}</span>
     ${st.moral ? `<p class="moral">${esc(st.moral)}</p>` : ""}
     ${st.questions && st.questions.length ? `<div class="section"><span class="label">${t.talk}</span><ol>${st.questions.map(q => `<li>${esc(q)}</li>`).join("")}</ol></div>` : ""}
+    ${pzStars(st)}
     <p class="hint">${st.example ? t.exampleNote : t.savedNote}</p>
     <div class="row">
       <button class="btn" data-act="new">${t.newStory}</button>
@@ -1065,6 +1366,7 @@ const A = {
     S.story = null; S.readOnly = false; go("world");
   }
 };
+Object.assign(A, PZ_ACT);
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-act]");
   if (!b || b.disabled) return;
