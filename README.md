@@ -5,6 +5,8 @@ yön verdiği interaktif masal uygulaması.
 
 **Uygulamayı aç:** https://memreunlucan15.github.io/akilli-masal-fabrikasi/
 
+Uygulama **Türkçe** ve **İngilizce** kullanılabilir; dil, ana sayfanın sağ üstündeki TR / EN düğmesiyle değişir.
+
 Telefonda açtıktan sonra tarayıcı menüsünden **Ana ekrana ekle** dersen uygulama gibi
 tam ekran açılır.
 

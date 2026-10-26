@@ -41,6 +41,9 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
 .brand{display:flex;align-items:center;gap:8px;background:none;border:0;padding:4px 0;font-family:var(--font-display);font-weight:800;font-size:1.15rem;white-space:nowrap;min-width:0}
 @media (max-width:420px){ .top-actions .pill{display:none} }
+.lang{display:flex;border:2px solid var(--line);border-radius:999px;background:var(--surface);padding:2px}
+.lang button{border:0;background:none;border-radius:999px;padding:6px 12px;font-weight:800;font-size:.85rem;min-height:36px;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--chip-on);color:var(--chip-on-ink)}
 .brand .gear{display:inline-block;font-size:1.3rem}
 .top-actions{display:flex;gap:8px;align-items:center}
 .pill{font-size:.75rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--surface);border:2px solid var(--line);color:var(--muted);white-space:nowrap}
@@ -195,85 +198,232 @@ main.nobar{padding-bottom:48px}
 
 <script>
 "use strict";
-document.documentElement.lang = "tr";
 /* ---------- veri ---------- */
 const TOTAL = 4;
 const HEROES = {
-  kedi:    {label:"Uzaylı Kedi",     e:"🐱", noun:"uzaylı kedi",      def:"Pıtırcık"},
-  sincap:  {label:"Cesur Sincap",    e:"🐿️", noun:"sincap",           def:"Fındık"},
-  ejderha: {label:"Minik Ejderha",   e:"🐉", noun:"minik ejderha",    def:"Közcük"},
-  robot:   {label:"Robot",           e:"🤖", noun:"robot",            def:"Vidalı"},
-  tavsan:  {label:"Tavşan",          e:"🐰", noun:"tavşan",           def:"Pamuk"},
-  dinozor: {label:"Dinozor",         e:"🦕", noun:"dinozor",          def:"Dino"},
-  tilki:   {label:"Tilki",           e:"🦊", noun:"tilki",            def:"Tarçın"},
-  unicorn: {label:"Tek Boynuzlu At", e:"🦄", noun:"tek boynuzlu at",  def:"Işıltı"},
-  ozel:    {label:"Kendi kahramanım",e:"⭐", noun:"",                 def:"Yıldız"}
+  kedi:    {e:"🐱", tr:{label:"Uzaylı Kedi", noun:"uzaylı kedi", def:"Pıtırcık"},          en:{label:"Alien Cat", noun:"alien cat", def:"Whiskers"}},
+  sincap:  {e:"🐿️", tr:{label:"Cesur Sincap", noun:"sincap", def:"Fındık"},               en:{label:"Brave Squirrel", noun:"squirrel", def:"Hazel"}},
+  ejderha: {e:"🐉", tr:{label:"Minik Ejderha", noun:"minik ejderha", def:"Közcük"},        en:{label:"Little Dragon", noun:"little dragon", def:"Ember"}},
+  robot:   {e:"🤖", tr:{label:"Robot", noun:"robot", def:"Vidalı"},                        en:{label:"Robot", noun:"robot", def:"Bolt"}},
+  tavsan:  {e:"🐰", tr:{label:"Tavşan", noun:"tavşan", def:"Pamuk"},                       en:{label:"Bunny", noun:"bunny", def:"Cotton"}},
+  dinozor: {e:"🦕", tr:{label:"Dinozor", noun:"dinozor", def:"Dino"},                      en:{label:"Dinosaur", noun:"dinosaur", def:"Dino"}},
+  tilki:   {e:"🦊", tr:{label:"Tilki", noun:"tilki", def:"Tarçın"},                        en:{label:"Fox", noun:"fox", def:"Ginger"}},
+  unicorn: {e:"🦄", tr:{label:"Tek Boynuzlu At", noun:"tek boynuzlu at", def:"Işıltı"},    en:{label:"Unicorn", noun:"unicorn", def:"Glimmer"}},
+  ozel:    {e:"⭐", tr:{label:"Kendi kahramanım", noun:"", def:"Yıldız"},                   en:{label:"My own hero", noun:"", def:"Star"}}
 };
-const TRAITS = ["cesur","meraklı","komik","nazik","akıllı","utangaç","hızlı","yardımsever"];
+const TRAITS = {
+  cesur:{tr:"cesur", en:"brave"}, merakli:{tr:"meraklı", en:"curious"}, komik:{tr:"komik", en:"funny"}, nazik:{tr:"nazik", en:"kind"},
+  akilli:{tr:"akıllı", en:"clever"}, utangac:{tr:"utangaç", en:"shy"}, hizli:{tr:"hızlı", en:"fast"}, yardimsever:{tr:"yardımsever", en:"helpful"}
+};
 const POWERS = {
-  uc:      {label:"Uçabilir",            e:"🕊️", ability:"kanat çırpıp gökyüzüne uçabiliyormuş",   use:"kanatlarını çırpıp engelin üstünden uçmuş", because:"uçabildiği"},
-  gorunmez:{label:"Görünmez olur",       e:"👻", ability:"istediği zaman görünmez olabiliyormuş",    use:"bir anda görünmez olup engelin yanından sessizce süzülmüş", because:"görünmez olabildiği"},
-  konus:   {label:"Hayvanlarla konuşur", e:"🗣️", ability:"bütün hayvanlarla konuşabiliyormuş",       use:"etraftaki hayvanlara seslenmiş ve hep birlikte bir köprü kurmuşlar", because:"hayvanlarla konuşabildiği"},
-  guc:     {label:"Çok güçlü",           e:"💪", ability:"kocaman kayaları bile kaldırabiliyormuş",   use:"bütün gücüyle kocaman bir kütüğü itip kendine köprü yapmış", because:"çok güçlü olduğu"},
-  isik:    {label:"Işık saçar",          e:"🌟", ability:"karanlıkta ışıl ışıl parlayabiliyormuş",   use:"ışıl ışıl parlayıp önündeki gizli yolu aydınlatmış", because:"ışık saçabildiği"},
-  zipla:   {label:"Süper zıplar",        e:"🦘", ability:"bulutlara kadar zıplayabiliyormuş",       use:"öyle bir zıplamış ki engelin üstünden aşıvermiş", because:"çok yükseğe zıplayabildiği"}
+  uc:{e:"🕊️",
+    tr:{label:"Uçabilir", ability:"kanat çırpıp gökyüzüne uçabiliyormuş", use:"kanatlarını çırpıp engelin üstünden uçmuş", because:"uçabildiği"},
+    en:{label:"Can fly", ability:"could fly high up into the sky", use:"flew right over it", because:"could fly"}},
+  gorunmez:{e:"👻",
+    tr:{label:"Görünmez olur", ability:"istediği zaman görünmez olabiliyormuş", use:"bir anda görünmez olup engelin yanından sessizce süzülmüş", because:"görünmez olabildiği"},
+    en:{label:"Turns invisible", ability:"could turn invisible at any time", use:"turned invisible and slipped quietly past it", because:"could turn invisible"}},
+  konus:{e:"🗣️",
+    tr:{label:"Hayvanlarla konuşur", ability:"bütün hayvanlarla konuşabiliyormuş", use:"etraftaki hayvanlara seslenmiş ve hep birlikte bir köprü kurmuşlar", because:"hayvanlarla konuşabildiği"},
+    en:{label:"Talks to animals", ability:"could talk to every animal", use:"called to the animals nearby, and together they built a bridge", because:"could talk to animals"}},
+  guc:{e:"💪",
+    tr:{label:"Çok güçlü", ability:"kocaman kayaları bile kaldırabiliyormuş", use:"bütün gücüyle kocaman bir kütüğü itip kendine köprü yapmış", because:"çok güçlü olduğu"},
+    en:{label:"Super strong", ability:"could lift even giant rocks", use:"pushed a huge log across to make a bridge", because:"was so strong"}},
+  isik:{e:"🌟",
+    tr:{label:"Işık saçar", ability:"karanlıkta ışıl ışıl parlayabiliyormuş", use:"ışıl ışıl parlayıp önündeki gizli yolu aydınlatmış", because:"ışık saçabildiği"},
+    en:{label:"Glows with light", ability:"could glow brightly in the dark", use:"glowed brightly and lit up a hidden path", because:"could glow with light"}},
+  zipla:{e:"🦘",
+    tr:{label:"Süper zıplar", ability:"bulutlara kadar zıplayabiliyormuş", use:"öyle bir zıplamış ki engelin üstünden aşıvermiş", because:"çok yükseğe zıplayabildiği"},
+    en:{label:"Super jumper", ability:"could jump all the way up to the clouds", use:"jumped so high that it sailed right over the top", because:"could jump so high"}}
 };
 const COLORS = {
-  mor:{v:"#9B6CFF"}, turuncu:{v:"#FF8A3D"}, mavi:{v:"#3E8BFF"}, "yeşil":{v:"#2DBE7E"}, pembe:{v:"#FF6FB1"}, "sarı":{v:"#FFC928"}
+  mor:{v:"#9B6CFF", tr:"mor", en:"purple"}, turuncu:{v:"#FF8A3D", tr:"turuncu", en:"orange"}, mavi:{v:"#3E8BFF", tr:"mavi", en:"blue"},
+  yesil:{v:"#2DBE7E", tr:"yeşil", en:"green"}, pembe:{v:"#FF6FB1", tr:"pembe", en:"pink"}, sari:{v:"#FFC928", tr:"sarı", en:"yellow"}
 };
 const WORLDS = {
-  orman:{label:"Fısıltılı Orman", e:"🌳", bg:["#C9F0D3","#7FCB98"], desc:"konuşan ağaçların olduğu yemyeşil bir orman",
-    loc:"Fısıltılı Orman'da", title:"ve Işık Pınarı",
-    problem:"ormanın en yaşlı ağacı Koca Çınar'ın yaprakları birden solmaya başlamış", fix:"Koca Çınar'ın yaprakları yeniden yemyeşil olmuş",
-    helper:"Bilge Baykuş", helperDat:"Bilge Baykuş'a", helperE:"🦉",
-    item:"parlayan bir meşe palamudu", itemN:"parlayan meşe palamudu", itemAcc:"parlayan meşe palamudunu", itemE:"🌰",
-    obstacle:"köpük köpük akan bir dere", obstacleE:"🌊", goalDat:"Işık Pınarı'na", goalE:"✨",
-    friends:"sincaplar, kirpiler ve tavşanlar", final:"ışığı sönmüş minik bir ateş böceği oturuyormuş"},
-  uzay:{label:"Yıldız Galaksisi", e:"🪐", bg:["#2B2E7A","#7B5BD6"], desc:"gezegenler ve yıldızlarla dolu bir galaksi",
-    loc:"Yıldız Tozu Galaksisi'nde", title:"ve Sönen Yıldız",
-    problem:"gökyüzünün en parlak yıldızı Parıltı yavaş yavaş sönmeye başlamış", fix:"Parıltı yeniden ışıl ışıl parlamaya başlamış",
-    helper:"Kuyruklu Yıldız Zıpzıp", helperDat:"Kuyruklu Yıldız Zıpzıp'a", helperE:"☄️",
-    item:"cebe sığan minik bir roket", itemN:"cebe sığan minik roket", itemAcc:"minik roketini", itemE:"🚀",
-    obstacle:"fırıl fırıl dönen bir meteor yağmuru", obstacleE:"🌠", goalDat:"Ay'ın arkasındaki Işık Fabrikası'na", goalE:"🌙",
-    friends:"minik uzaylılar ve gezegen kurbağaları", final:"yolunu kaybetmiş minik bir uzaylı ağlıyormuş"},
-  deniz:{label:"Mercan Krallığı", e:"🐠", bg:["#9EE6F5","#2F8FD0"], desc:"rengarenk mercanlarla dolu bir deniz altı krallığı",
-    loc:"Mercan Krallığı'nda", title:"ve Renkli Mercanlar",
-    problem:"mercanların rengarenk renkleri birer birer solmuş", fix:"mercanlar gökkuşağı gibi rengarenk olmuş",
-    helper:"Yaşlı Kaplumbağa Tospi", helperDat:"Yaşlı Kaplumbağa Tospi'ye", helperE:"🐢",
-    item:"şarkı söyleyen bir deniz kabuğu", itemN:"şarkı söyleyen deniz kabuğu", itemAcc:"şarkı söyleyen deniz kabuğunu", itemE:"🐚",
-    obstacle:"karanlık bir deniz mağarası", obstacleE:"🪨", goalDat:"İnci Sarayı'na", goalE:"🦪",
-    friends:"yunuslar, ahtapotlar ve denizatları", final:"arkadaşlarını kaybetmiş minik bir balık bekliyormuş"},
-  seker:{label:"Şeker Kasabası", e:"🍭", bg:["#FFD3E8","#FF97C4"], desc:"evleri kurabiyeden yapılmış tatlı bir kasaba",
-    loc:"Şeker Kasabası'nda", title:"ve Gökkuşağı Çeşmesi",
-    problem:"kasabanın ortasındaki gökkuşağı çeşmesi birden durmuş", fix:"gökkuşağı çeşmesi yeniden rengarenk fışkırmaya başlamış",
-    helper:"Pastacı Ayıcık Bal", helperDat:"Pastacı Ayıcık Bal'a", helperE:"🧸",
-    item:"sihirli bir tahta kaşık", itemN:"sihirli tahta kaşık", itemAcc:"sihirli tahta kaşığını", itemE:"🥄",
-    obstacle:"yapış yapış bir karamel bataklığı", obstacleE:"🍯", goalDat:"Kurabiye Dağı'na", goalE:"🍪",
-    friends:"şekerleme cüceleri ve lolipop kuşları", final:"karnı guruldayan küçük bir şeker cücesi oturuyormuş"},
-  buz:{label:"Kar Tanesi Vadisi", e:"❄️", bg:["#E2F3FF","#9CC9EE"], desc:"her yerin bembeyaz karla kaplı olduğu bir vadi",
-    loc:"Kar Tanesi Vadisi'nde", title:"ve Kayıp Kuzey Işıkları",
-    problem:"geceleri gökyüzünü boyayan kuzey ışıkları kaybolmuş", fix:"kuzey ışıkları gökyüzünde yeniden dans etmeye başlamış",
-    helper:"Penguen Pofuduk", helperDat:"Penguen Pofuduk'a", helperE:"🐧",
-    item:"hiç erimeyen bir kar tanesi", itemN:"hiç erimeyen kar tanesi", itemAcc:"hiç erimeyen kar tanesini", itemE:"❄️",
-    obstacle:"kaygan mı kaygan bir buz tepesi", obstacleE:"🏔️", goalDat:"Kuzey Işıkları Mağarası'na", goalE:"🌌",
-    friends:"kutup ayıları ve kar tilkileri", final:"üşüyen küçük bir penguen yavrusu titriyormuş"},
-  sato:{label:"Bulut Şatosu", e:"🏰", bg:["#FFF1C9","#B9A7FF"], desc:"bulutların üstünde süzülen bir şato",
-    loc:"Bulut Şatosu'nda", title:"ve Susan Müzik Kutusu",
-    problem:"şatonun herkesi neşelendiren müzik kutusu susmuş", fix:"müzik kutusu yeniden neşeli şarkılar çalmaya başlamış",
-    helper:"Rüzgâr Perisi Esinti", helperDat:"Rüzgâr Perisi Esinti'ye", helperE:"🧚",
-    item:"altın bir müzik anahtarı", itemN:"altın müzik anahtarı", itemAcc:"altın müzik anahtarını", itemE:"🗝️",
-    obstacle:"sallanıp duran bir gökkuşağı köprüsü", obstacleE:"🌈", goalDat:"şatonun en yüksek kulesine", goalE:"🎵",
-    friends:"bulut kuzuları ve rüzgâr kuşları", final:"kanadı incinmiş küçük bir kuş duruyormuş"}
+  orman:{e:"🌳", bg:["#C9F0D3","#7FCB98"], helperE:"🦉", itemE:"🌰", obstacleE:"🌊", goalE:"✨",
+    tr:{label:"Fısıltılı Orman", desc:"konuşan ağaçların olduğu yemyeşil bir orman",
+      loc:"Fısıltılı Orman'da", title:"ve Işık Pınarı",
+      problem:"ormanın en yaşlı ağacı Koca Çınar'ın yaprakları birden solmaya başlamış", fix:"Koca Çınar'ın yaprakları yeniden yemyeşil olmuş",
+      helper:"Bilge Baykuş", helperDat:"Bilge Baykuş'a",
+      item:"parlayan bir meşe palamudu", itemN:"parlayan meşe palamudu", itemAcc:"parlayan meşe palamudunu",
+      obstacle:"köpük köpük akan bir dere", goalDat:"Işık Pınarı'na",
+      friends:"sincaplar, kirpiler ve tavşanlar", final:"ışığı sönmüş minik bir ateş böceği oturuyormuş"},
+    en:{label:"Whispering Forest", desc:"a green forest full of talking trees",
+      loc:"in the Whispering Forest", title:"and the Spring of Light",
+      problem:"the leaves of Old Oak, the oldest tree in the forest, had started to wilt", fix:"Old Oak's leaves turned bright green again",
+      helper:"Wise Owl", item:"a glowing acorn", itemN:"glowing acorn",
+      obstacle:"a foaming, rushing stream", goal:"the Spring of Light",
+      friends:"squirrels, hedgehogs and rabbits", final:"a tiny firefly whose light had gone out"}},
+  uzay:{e:"🪐", bg:["#2B2E7A","#7B5BD6"], helperE:"☄️", itemE:"🚀", obstacleE:"🌠", goalE:"🌙",
+    tr:{label:"Yıldız Galaksisi", desc:"gezegenler ve yıldızlarla dolu bir galaksi",
+      loc:"Yıldız Tozu Galaksisi'nde", title:"ve Sönen Yıldız",
+      problem:"gökyüzünün en parlak yıldızı Parıltı yavaş yavaş sönmeye başlamış", fix:"Parıltı yeniden ışıl ışıl parlamaya başlamış",
+      helper:"Kuyruklu Yıldız Zıpzıp", helperDat:"Kuyruklu Yıldız Zıpzıp'a",
+      item:"cebe sığan minik bir roket", itemN:"cebe sığan minik roket", itemAcc:"minik roketini",
+      obstacle:"fırıl fırıl dönen bir meteor yağmuru", goalDat:"Ay'ın arkasındaki Işık Fabrikası'na",
+      friends:"minik uzaylılar ve gezegen kurbağaları", final:"yolunu kaybetmiş minik bir uzaylı ağlıyormuş"},
+    en:{label:"Star Galaxy", desc:"a galaxy full of planets and stars",
+      loc:"in the Stardust Galaxy", title:"and the Fading Star",
+      problem:"Sparkle, the brightest star in the sky, was slowly fading", fix:"Sparkle began to shine brightly again",
+      helper:"Zippy the Comet", item:"a tiny pocket rocket", itemN:"tiny pocket rocket",
+      obstacle:"a whirling meteor shower", goal:"the Light Factory behind the Moon",
+      friends:"little aliens and planet frogs", final:"a little alien who had lost the way home, crying softly"}},
+  deniz:{e:"🐠", bg:["#9EE6F5","#2F8FD0"], helperE:"🐢", itemE:"🐚", obstacleE:"🪨", goalE:"🦪",
+    tr:{label:"Mercan Krallığı", desc:"rengarenk mercanlarla dolu bir deniz altı krallığı",
+      loc:"Mercan Krallığı'nda", title:"ve Renkli Mercanlar",
+      problem:"mercanların rengarenk renkleri birer birer solmuş", fix:"mercanlar gökkuşağı gibi rengarenk olmuş",
+      helper:"Yaşlı Kaplumbağa Tospi", helperDat:"Yaşlı Kaplumbağa Tospi'ye",
+      item:"şarkı söyleyen bir deniz kabuğu", itemN:"şarkı söyleyen deniz kabuğu", itemAcc:"şarkı söyleyen deniz kabuğunu",
+      obstacle:"karanlık bir deniz mağarası", goalDat:"İnci Sarayı'na",
+      friends:"yunuslar, ahtapotlar ve denizatları", final:"arkadaşlarını kaybetmiş minik bir balık bekliyormuş"},
+    en:{label:"Coral Kingdom", desc:"an underwater kingdom full of colourful corals",
+      loc:"in the Coral Kingdom", title:"and the Colourful Corals",
+      problem:"the corals' bright colours had faded one by one", fix:"the corals became as colourful as a rainbow",
+      helper:"Old Turtle Shelly", item:"a singing seashell", itemN:"singing seashell",
+      obstacle:"a dark sea cave", goal:"the Pearl Palace",
+      friends:"dolphins, octopuses and seahorses", final:"a little fish who had lost all its friends"}},
+  seker:{e:"🍭", bg:["#FFD3E8","#FF97C4"], helperE:"🧸", itemE:"🥄", obstacleE:"🍯", goalE:"🍪",
+    tr:{label:"Şeker Kasabası", desc:"evleri kurabiyeden yapılmış tatlı bir kasaba",
+      loc:"Şeker Kasabası'nda", title:"ve Gökkuşağı Çeşmesi",
+      problem:"kasabanın ortasındaki gökkuşağı çeşmesi birden durmuş", fix:"gökkuşağı çeşmesi yeniden rengarenk fışkırmaya başlamış",
+      helper:"Pastacı Ayıcık Bal", helperDat:"Pastacı Ayıcık Bal'a",
+      item:"sihirli bir tahta kaşık", itemN:"sihirli tahta kaşık", itemAcc:"sihirli tahta kaşığını",
+      obstacle:"yapış yapış bir karamel bataklığı", goalDat:"Kurabiye Dağı'na",
+      friends:"şekerleme cüceleri ve lolipop kuşları", final:"karnı guruldayan küçük bir şeker cücesi oturuyormuş"},
+    en:{label:"Candy Town", desc:"a sweet town with houses made of cookies",
+      loc:"in Candy Town", title:"and the Rainbow Fountain",
+      problem:"the rainbow fountain in the middle of town had suddenly stopped", fix:"the rainbow fountain began to splash in all its colours again",
+      helper:"Honey the Baker Bear", item:"a magic wooden spoon", itemN:"magic wooden spoon",
+      obstacle:"a sticky caramel swamp", goal:"Cookie Mountain",
+      friends:"candy elves and lollipop birds", final:"a little candy elf with a rumbling tummy"}},
+  buz:{e:"❄️", bg:["#E2F3FF","#9CC9EE"], helperE:"🐧", itemE:"❄️", obstacleE:"🏔️", goalE:"🌌",
+    tr:{label:"Kar Tanesi Vadisi", desc:"her yerin bembeyaz karla kaplı olduğu bir vadi",
+      loc:"Kar Tanesi Vadisi'nde", title:"ve Kayıp Kuzey Işıkları",
+      problem:"geceleri gökyüzünü boyayan kuzey ışıkları kaybolmuş", fix:"kuzey ışıkları gökyüzünde yeniden dans etmeye başlamış",
+      helper:"Penguen Pofuduk", helperDat:"Penguen Pofuduk'a",
+      item:"hiç erimeyen bir kar tanesi", itemN:"hiç erimeyen kar tanesi", itemAcc:"hiç erimeyen kar tanesini",
+      obstacle:"kaygan mı kaygan bir buz tepesi", goalDat:"Kuzey Işıkları Mağarası'na",
+      friends:"kutup ayıları ve kar tilkileri", final:"üşüyen küçük bir penguen yavrusu titriyormuş"},
+    en:{label:"Snowflake Valley", desc:"a valley covered in white snow",
+      loc:"in Snowflake Valley", title:"and the Lost Northern Lights",
+      problem:"the northern lights that painted the night sky had disappeared", fix:"the northern lights began to dance across the sky again",
+      helper:"Fluffy the Penguin", item:"a snowflake that never melts", itemN:"snowflake that never melts",
+      obstacle:"a very, very slippery ice hill", goal:"the Northern Lights Cave",
+      friends:"polar bears and snow foxes", final:"a little penguin chick, shivering with cold"}},
+  sato:{e:"🏰", bg:["#FFF1C9","#B9A7FF"], helperE:"🧚", itemE:"🗝️", obstacleE:"🌈", goalE:"🎵",
+    tr:{label:"Bulut Şatosu", desc:"bulutların üstünde süzülen bir şato",
+      loc:"Bulut Şatosu'nda", title:"ve Susan Müzik Kutusu",
+      problem:"şatonun herkesi neşelendiren müzik kutusu susmuş", fix:"müzik kutusu yeniden neşeli şarkılar çalmaya başlamış",
+      helper:"Rüzgâr Perisi Esinti", helperDat:"Rüzgâr Perisi Esinti'ye",
+      item:"altın bir müzik anahtarı", itemN:"altın müzik anahtarı", itemAcc:"altın müzik anahtarını",
+      obstacle:"sallanıp duran bir gökkuşağı köprüsü", goalDat:"şatonun en yüksek kulesine",
+      friends:"bulut kuzuları ve rüzgâr kuşları", final:"kanadı incinmiş küçük bir kuş duruyormuş"},
+    en:{label:"Cloud Castle", desc:"a castle floating above the clouds",
+      loc:"in the Cloud Castle", title:"and the Silent Music Box",
+      problem:"the castle's music box, which made everyone happy, had gone silent", fix:"the music box began to play happy songs again",
+      helper:"Breeze the Wind Fairy", item:"a golden music key", itemN:"golden music key",
+      obstacle:"a wobbly rainbow bridge", goal:"the highest tower of the castle",
+      friends:"cloud lambs and wind birds", final:"a little bird with a hurt wing"}}
 };
 const AGES = {
-  "3-5": {label:"3–5 yaş", rule:"çok kısa ve basit cümleler (en fazla 8 kelime), 60-90 kelime"},
-  "6-8": {label:"6–8 yaş", rule:"kısa ve anlaşılır cümleler, 100-130 kelime"},
-  "9-11":{label:"9–11 yaş", rule:"zengin ama anlaşılır bir dil, 140-180 kelime"}
+  "3-5": {tr:{label:"3–5 yaş", rule:"çok kısa ve basit cümleler (en fazla 8 kelime), 60-90 kelime"}, en:{label:"Ages 3–5", rule:"very short, simple sentences (8 words at most), 60-90 words"}},
+  "6-8": {tr:{label:"6–8 yaş", rule:"kısa ve anlaşılır cümleler, 100-130 kelime"},                   en:{label:"Ages 6–8", rule:"short, clear sentences, 100-130 words"}},
+  "9-11":{tr:{label:"9–11 yaş", rule:"zengin ama anlaşılır bir dil, 140-180 kelime"},                en:{label:"Ages 9–11", rule:"rich but easy-to-follow language, 140-180 words"}}
 };
-const NAMES = ["Pıtırcık","Fındık","Boncuk","Zıpzıp","Minnoş","Tarçın","Limon","Pofuduk","Şimşek","Karamel","Yıldız","Bulut","Pırıl","Gofret"];
-const LOADING = ["Hayal çarkları dönüyor…","Kelimeler kazana dökülüyor…","Masal fabrikası çalışıyor…","Sihirli mürekkep hazırlanıyor…"];
+const NAMES = {
+  tr:["Pıtırcık","Fındık","Boncuk","Zıpzıp","Minnoş","Tarçın","Limon","Pofuduk","Şimşek","Karamel","Yıldız","Bulut","Pırıl","Gofret"],
+  en:["Whiskers","Peanut","Button","Bouncy","Biscuit","Ginger","Lemon","Fluffy","Zoom","Caramel","Pip","Cloud","Sunny","Waffle"]
+};
+const LOADING = {
+  tr:["Hayal çarkları dönüyor…","Kelimeler kazana dökülüyor…","Masal fabrikası çalışıyor…","Sihirli mürekkep hazırlanıyor…"],
+  en:["Imagination gears are turning…","Pouring words into the cauldron…","The story factory is working…","Mixing the magic ink…"]
+};
 
-/* ---------- Türkçe ek yardımcıları ---------- */
+/* ---------- arayüz metinleri ---------- */
+const TXT = {
+  tr:{
+    docTitle:"Akıllı Masal Fabrikası", brand:"Masal Fabrikası", home:"Ana sayfa", shelfBtn:"Kitaplığım",
+    pillAI:"Claude yazıyor", pillOff:"Hazır motor", steps:["Kahraman","Özellikler","Dünya","Masal"], stepOf:(i) => `Adım ${i} / 4`,
+    eyebrow:"İnteraktif hikâye oluşturma", h1:"Akıllı Masal <span>Fabrikası</span>",
+    intro:"Kahramanını seç, ona isim ve süper güç ver. Masalın nasıl devam edeceğine sen karar ver.",
+    newStory:"Yeni masal yap", shelf:"Masal kitaplığım", shelfEmpty:"Bitirdiğin masallar burada birikecek.",
+    example:"Örnek masal", exampleTag:"Örnek", del:"Sil", delSure:"Emin misin? Sil", deleted:"Masal silindi.",
+    parents:"Ebeveynler için",
+    k1:["Neden-sonuç","Her bölüm, çocuğun seçiminin sonucunu \"Sen … seçtin. Bu yüzden …\" kutusuyla gösterir."],
+    k2:["Yaratıcı yazarlık","Kahramanı çocuk kurar, her adımda kendi fikriyle masala yön verebilir."],
+    k3:["Dil gelişimi","Her bölümde yeni bir kelime, sesli okuma ve sonda birlikte konuşacağınız sorular var."],
+    engineQ:"Masalları kim yazsın?", engineOffHere:" (bu görünümde kapalı)", engineOffline:"Hazır masal motoru",
+    engineHint:"Claude, masalı açan kişinin kendi Claude hesabıyla yazar ve ilk seferde izin ister. Hazır motor internetsiz de çalışır.",
+    heroH:"Kahramanını seç", heroP:"Masalın kahramanı kim olsun?", customQ:"Kahramanın ne?", customPh:"örneğin: korsan papağan",
+    traitsH:"Kahramanını tanıyalım", traitsP:"İsmini koy, nasıl biri olduğunu seç.", nameL:"Adı", dice:"Rastgele isim",
+    traitsL:"Nasıl biri? (en fazla 2 tane)", powerL:"Süper gücü", colorL:"En sevdiği renk",
+    worldH:"Masal nerede geçsin?", worldP:"Bir dünya seç, sonra fabrikayı çalıştır.", ageL:"Kaç yaşındasın?",
+    back:"Geri", next:"Devam", start:"Masalı başlat",
+    whyHero:"Önce bir kahraman seç.", whyCustom:"Kahramanının ne olduğunu yaz.", whyWorld:"Bir masal dünyası seç.",
+    preparing:"Masal hazırlanıyor…", autoRead:on => `🔊 Otomatik sesli oku: ${on ? "açık" : "kapalı"}`, cancel:"Vazgeç",
+    askH:"Şimdi ne olsun?", or:"ya da kendi fikrin", ideaPh:"örneğin: Bir uçan halı bulsun", ideaSend:"Fikrimi gönder", micAria:"Sesle söyle",
+    micTip:"Mikrofona dokunup söyleyebilirsin: “ikinci” ya da “şarkı söylesin” gibi.",
+    noMicTip:"Okumak zorsa seçeneğin numarasına dokun. Klavyedeki mikrofon tuşuyla konuşarak da yazabilirsin.",
+    keyboardMic:"İpucu: Klavyedeki mikrofon tuşuna basıp konuşarak yazabilirsin.",
+    chapter:(i, t) => `Bölüm ${i} / ${t}`, yourChoice:"Senin seçimin:", cause:"Neden → Sonuç", listen:"🔊 Dinle", stop:"⏹ Durdur", newWord:"Yeni kelime",
+    theEnd:"Masalın sonu", talk:"Birlikte konuşalım",
+    exampleNote:"Bu örnek masal. Kendi masalını yapmak için aşağıdaki düğmeye dokun.", savedNote:"Bu masal kitaplığına kaydedildi.",
+    again:n => `${n} ile yeni macera`,
+    tNoAI:"Claude şu an kullanılamıyor. Masal hazır masal motoruyla devam ediyor.",
+    tRate:"Claude biraz dinleniyor. Bu bölüm hazır masal motorundan geldi.",
+    tNet:"Bağlantıda küçük bir sorun oldu. Bu bölüm hazır masal motorundan geldi.",
+    tBad:"Claude'un cevabı eksik geldi. Bu bölüm hazır masal motorundan geldi.",
+    tIdea:"Önce fikrini yaz ya da söyle.", tNoTTS:"Bu cihaz sesli okumayı desteklemiyor.",
+    tMicOff:"Mikrofon burada çalışmıyor. Klavyendeki mikrofon tuşuna basıp konuşarak yazabilirsin.",
+    tMicDenied:"Mikrofon izni yok. Klavyendeki mikrofon tuşuna basıp konuşarak da yazabilirsin.",
+    tNoSpeech:"Seni duyamadım. Bir daha dener misin?",
+    tHeard:(s, l) => `Duydum: "${s}" → ${l}`, tHeardIdea:s => `Duydum: "${s}". Fikrini göndermek için ok tuşuna dokun.`,
+    ordinals:[["bir","birinci","1","ilk","ilki"],["iki","ikinci","2","ortadaki"],["üç","üçüncü","3","sonuncu"]],
+    speech:"tr-TR", date:"tr-TR"
+  },
+  en:{
+    docTitle:"Smart Story Factory", brand:"Story Factory", home:"Home", shelfBtn:"My shelf",
+    pillAI:"Claude writes", pillOff:"Offline engine", steps:["Hero","Details","World","Story"], stepOf:(i) => `Step ${i} of 4`,
+    eyebrow:"Interactive story maker", h1:"Smart Story <span>Factory</span>",
+    intro:"Pick your hero, give them a name and a superpower. You decide what happens next in the story.",
+    newStory:"Make a new story", shelf:"My story shelf", shelfEmpty:"The stories you finish will be kept here.",
+    example:"Example story", exampleTag:"Example", del:"Delete", delSure:"Sure? Delete", deleted:"Story deleted.",
+    parents:"For parents",
+    k1:["Cause and effect","Every chapter shows the result of the child's choice in a \"You chose … So …\" box."],
+    k2:["Creative writing","The child builds the hero and can steer the story with their own idea at every step."],
+    k3:["Language skills","Each chapter has a new word, read-aloud audio, and questions to talk about at the end."],
+    engineQ:"Who should write the stories?", engineOffHere:" (off in this view)", engineOffline:"Offline story engine",
+    engineHint:"Claude writes with the viewer's own Claude account and asks for permission the first time. The offline engine works without internet.",
+    heroH:"Pick your hero", heroP:"Who is the hero of the story?", customQ:"What is your hero?", customPh:"e.g. pirate parrot",
+    traitsH:"Meet your hero", traitsP:"Give them a name and choose what they are like.", nameL:"Name", dice:"Random name",
+    traitsL:"What are they like? (up to 2)", powerL:"Superpower", colorL:"Favourite colour",
+    worldH:"Where does the story happen?", worldP:"Pick a world, then start the factory.", ageL:"How old are you?",
+    back:"Back", next:"Next", start:"Start the story",
+    whyHero:"Pick a hero first.", whyCustom:"Write what your hero is.", whyWorld:"Pick a story world.",
+    preparing:"Preparing the story…", autoRead:on => `🔊 Read aloud automatically: ${on ? "on" : "off"}`, cancel:"Cancel",
+    askH:"What happens next?", or:"or your own idea", ideaPh:"e.g. Find a flying carpet", ideaSend:"Send my idea", micAria:"Say it",
+    micTip:"Tap the microphone and say “second” or “sing a song”.",
+    noMicTip:"If reading is hard, tap the number of a choice. You can also talk using the microphone key on your keyboard.",
+    keyboardMic:"Tip: tap the microphone key on your keyboard to type by talking.",
+    chapter:(i, t) => `Chapter ${i} of ${t}`, yourChoice:"Your choice:", cause:"Cause → Effect", listen:"🔊 Listen", stop:"⏹ Stop", newWord:"New word",
+    theEnd:"The end", talk:"Let's talk about it",
+    exampleNote:"This is an example story. Tap the button below to make your own.", savedNote:"This story was saved to your shelf.",
+    again:n => `New adventure with ${n}`,
+    tNoAI:"Claude isn't available right now. The story continues with the offline engine.",
+    tRate:"Claude is taking a short rest. This chapter came from the offline engine.",
+    tNet:"There was a small connection problem. This chapter came from the offline engine.",
+    tBad:"Claude's answer was incomplete. This chapter came from the offline engine.",
+    tIdea:"Write or say your idea first.", tNoTTS:"This device can't read aloud.",
+    tMicOff:"The microphone doesn't work here. Tap the microphone key on your keyboard to type by talking.",
+    tMicDenied:"No microphone permission. You can tap the microphone key on your keyboard to type by talking.",
+    tNoSpeech:"I couldn't hear you. Can you try again?",
+    tHeard:(s, l) => `I heard: "${s}" → ${l}`, tHeardIdea:s => `I heard: "${s}". Tap the arrow to send your idea.`,
+    ordinals:[["one","first","1"],["two","second","2","middle"],["three","third","3","last"]],
+    speech:"en-US", date:"en-GB"
+  }
+};
+
+/* ---------- dil yardımcıları ---------- */
 const VOW = "aeıioöuü";
 const lower = s => s.toLocaleLowerCase("tr");
 function lastV(w){ const l = lower(w); for (let i = l.length - 1; i >= 0; i--) if (VOW.includes(l[i])) return l[i]; return "e"; }
@@ -283,7 +433,9 @@ const two = v => "aıou".includes(v) ? "a" : "e";
 const gen = n => n + "'" + (endsV(n) ? "n" : "") + four(lastV(n)) + "n";
 const dat = n => n + "'" + (endsV(n) ? "y" : "") + two(lastV(n));
 const cap = s => s ? s.charAt(0).toLocaleUpperCase("tr") + s.slice(1) : s;
-function traitText(t){ if (!t.length) return "neşeli"; return t.length === 1 ? t[0] : t[0] + " ve " + t[1]; }
+const poss = n => /s$/i.test(n) ? n + "'" : n + "'s";
+const aAn = w => /^[aeiou]/i.test(w) ? "an" : "a";
+function traitText(t, lang){ if (!t.length) return lang === "en" ? "cheerful" : "neşeli"; return t.length === 1 ? t[0] : t[0] + (lang === "en" ? " and " : " ve ") + t[1]; }
 
 /* ---------- yardımcılar ---------- */
 const $ = s => document.querySelector(s);
@@ -301,11 +453,16 @@ function toast(msg){ const t = $("#toast"); t.textContent = msg; t.hidden = fals
 function freshDraft(){ return {hero:null, custom:"", name:"", traits:[], power:"uc", color:"mor", world:null, age:"6-8"}; }
 const S = {
   screen:"home", draft:freshDraft(), story:null, readOnly:false,
-  busy:false, ctl:null, loadMsg:LOADING[0], confirmDel:null, listening:null,
+  busy:false, ctl:null, loadMsg:"", confirmDel:null, listening:null,
   library:store.get(LIB, []),
   autoRead:store.get("masal-oto-oku", false),
-  engine:store.get("masal-motor", "auto")
+  engine:store.get("masal-motor", "auto"),
+  lang:store.get("masal-dil", /^tr/i.test(navigator.language || "tr") ? "tr" : "en")
 };
+// Masal ekranında masalın kendi dili, başka her yerde seçili dil geçerli.
+const L = () => S.screen === "story" && S.story ? (S.story.lang || "tr") : S.lang;
+const T = () => TXT[L()];
+const world = (k, lang) => Object.assign({}, WORLDS[k] || WORLDS.orman, (WORLDS[k] || WORLDS.orman)[lang]);
 let sample = null, aiState = "checking";
 (async () => {
   await 0;
@@ -315,18 +472,18 @@ let sample = null, aiState = "checking";
 })();
 const useAI = () => aiState === "ready" && S.engine === "auto";
 
-/* ---------- yedek masal motoru ---------- */
-function offlineChapter(st, n, picked){
-  const h = st.hero, w = WORLDS[h.world], nm = h.name, P = POWERS[h.power] || POWERS.uc;
+/* ---------- yedek masal motoru: Türkçe ---------- */
+function offlineTr(st, n, picked){
+  const h = st.hero, w = world(h.world, "tr"), nm = h.name, P = (POWERS[h.power] || POWERS.uc).tr, PE = (POWERS[h.power] || POWERS.uc).e;
   const kind = picked ? picked.kind : null, idea = picked ? picked.label : "";
   let text = "", cause = "", word, choices = [], scene, moral = "", questions = [];
   if (n === 0){
-    text = `Bir varmış bir yokmuş, ${w.loc} ${nm} adında ${traitText(h.traits)}, ${h.colorAdj} renkli bir ${h.noun} yaşarmış. ${gen(nm)} bir süper gücü varmış: ${P.ability}.\n\nBir sabah ${nm} uyandığında bir terslik olduğunu fark etmiş: ${w.problem}! "Bunu mutlaka çözmeliyim," demiş ${nm}. Ama nereden başlamalıymış?`;
+    text = `Bir varmış bir yokmuş, ${w.loc} ${nm} adında ${traitText(h.traits, "tr")}, ${h.colorAdj} renkli bir ${h.noun} yaşarmış. ${gen(nm)} bir süper gücü varmış: ${P.ability}.\n\nBir sabah ${nm} uyandığında bir terslik olduğunu fark etmiş: ${w.problem}! "Bunu mutlaka çözmeliyim," demiş ${nm}. Ama nereden başlamalıymış?`;
     word = {w:"terslik", m:"Bir şeyin olması gerektiği gibi gitmemesi."};
     choices = [{e:w.helperE, label:`${w.helperDat} danış`, kind:"ask"}, {e:"🔍", label:"İpuçlarını kendin ara", kind:"explore"}, {e:"🏃", label:"Hemen yola koyul", kind:"brave"}];
     scene = [h.e, w.e];
   } else if (n === 1){
-    const P1 = {
+    const p = {
       ask:[`${nm} hemen ${w.helperDat} gitmiş ve olanları anlatmış. ${w.helper} onu dikkatle dinlemiş, sonra gülümsemiş: "Bu sorunun çaresi ${w.goalDat} gitmekte. Al, bu ${w.itemN} yol boyunca sana yardım edecek."`,
         `Sen ${w.helperDat} danışmayı seçtin. Bu yüzden ${nm} hem yolu öğrendi hem de yardımcı bir hediye kazandı.`, {w:"danışmak", m:"Bilmediğimiz bir şeyi, bilen birine sormak."}],
       explore:[`${nm} etrafı dikkatle incelemeye başlamış. Yerde minik, parıl parıl izler varmış! İzleri takip etmiş, etmiş… Sonunda ${w.item} bulmuş. Yanında küçük bir not varmış: "Çare, ${w.goalDat} giden yolda."`,
@@ -335,14 +492,13 @@ function offlineChapter(st, n, picked){
         `Sen hemen yola çıkmayı seçtin. ${nm} cesurca harekete geçtiği için yolda yeni bir yardımcı buldu.`, {w:"cesaret", m:"Biraz korksak bile doğru olanı yapabilmek."}],
       custom:[`${nm} kulağına fısıldanan fikri denemiş: "${idea}". Bu fikir harika işe yaramış! Tam o sırada ${w.item} bulmuş ve ${w.goalDat} giden gizli bir patika görmüş.`,
         `Sen kendi fikrini söyledin: "${idea}". Bu yüzden masal senin istediğin yöne döndü!`, {w:"fikir", m:"Aklımıza gelen yeni bir düşünce."}]
-    }[kind] || null;
-    const p = P1 || [`${nm} yola koyulmuş ve kısa süre sonra ${w.item} bulmuş.`, "", {w:"yolculuk", m:"Bir yerden başka bir yere gitmek."}];
+    }[kind] || [`${nm} yola koyulmuş ve kısa süre sonra ${w.item} bulmuş.`, "", {w:"yolculuk", m:"Bir yerden başka bir yere gitmek."}];
     text = p[0] + `\n\nYola devam etmiş, etmiş… Derken karşısına ${w.obstacle} çıkmış! Şimdi ne yapmalıymış?`;
     cause = p[1]; word = p[2];
-    choices = [{e:P.e, label:"Süper gücünü kullan", kind:"power"}, {e:"🤝", label:"Arkadaşlarından yardım iste", kind:"friends"}, {e:"💡", label:"Akıllıca bir plan yap", kind:"think"}];
+    choices = [{e:PE, label:"Süper gücünü kullan", kind:"power"}, {e:"🤝", label:"Arkadaşlarından yardım iste", kind:"friends"}, {e:"💡", label:"Akıllıca bir plan yap", kind:"think"}];
     scene = [h.e, w.itemE, w.obstacleE];
   } else if (n === 2){
-    const P2 = {
+    const p = {
       power:[`${nm} derin bir nefes almış ve ${P.use}. Bir, iki, üç… Engeli kolayca aşmış!`,
         `Sen süper gücü kullanmayı seçtin. ${nm} ${P.because} için engeli aşabildi.`, {w:"engel", m:"Yolumuzu kesen, aşmamız gereken şey."}],
       friends:[`${nm} yüksek sesle seslenmiş: "Bana yardım eder misiniz?" Bir anda ${w.friends} koşa koşa gelmiş. Hep birlikte el ele vermişler ve engeli birlikte aşmışlar.`,
@@ -352,12 +508,12 @@ function offlineChapter(st, n, picked){
       custom:[`${nm} senin fikrini denemiş: "${idea}". Herkes çok şaşırmış, çünkü bu fikir engeli aşmaya yetmiş!`,
         `Sen kendi fikrini söyledin: "${idea}". Bu yüzden ${nm} engeli kendine özgü bir yolla aştı.`, {w:"yaratıcı", m:"Yeni ve farklı fikirler bulabilen."}]
     }[kind] || [`${nm} engeli dikkatlice aşmış.`, "", {w:"engel", m:"Yolumuzu kesen, aşmamız gereken şey."}];
-    text = P2[0] + `\n\nSonunda ${w.goalDat} varmış. Ama orada ${w.final}. ${nm} onu öyle görünce çok üzülmüş. Ona nasıl yardım etmeliymiş?`;
-    cause = P2[1]; word = P2[2];
+    text = p[0] + `\n\nSonunda ${w.goalDat} varmış. Ama orada ${w.final}. ${nm} onu öyle görünce çok üzülmüş. Ona nasıl yardım etmeliymiş?`;
+    cause = p[1]; word = p[2];
     choices = [{e:"🎁", label:"Elindekini paylaş", kind:"share"}, {e:"🎶", label:"Neşeli bir şarkı söyle", kind:"sing"}, {e:"🫶", label:"Yanına otur, onu dinle", kind:"listen"}];
     scene = [h.e, w.goalE];
   } else {
-    const P3 = {
+    const p = {
       share:[`"Al, bu senin olsun," demiş ${nm} ve ${w.itemAcc} minik dostuna uzatmış. Minik dostunun gözleri sevinçle parlamış.`,
         `Sen paylaşmayı seçtin. ${nm} elindekini paylaştığı için minik dostu mutlu oldu ve sihir geri geldi.`, {w:"paylaşmak", m:"Sahip olduğumuz bir şeyi başkasıyla birlikte kullanmak."}, "Paylaştıkça mutluluk çoğalır."],
       sing:[`${nm} en neşeli şarkısını söylemeye başlamış. Şarkı o kadar güzelmiş ki minik dostu önce gülümsemiş, sonra o da şarkıya katılmış.`,
@@ -367,32 +523,122 @@ function offlineChapter(st, n, picked){
       custom:[`${nm} senin fikrini denemiş: "${idea}". Minik dostu buna öyle sevinmiş ki kahkahalarla gülmüş.`,
         `Sen kendi fikrini söyledin. Bu yüzden masalın sonu da senin fikrinle mutlu bitti!`, {w:"hayal", m:"Aklımızda canlandırdığımız düşünce ve resimler."}, "Her iyi fikir, dünyayı biraz daha güzelleştirebilir."]
     }[kind] || [`${nm} minik dostuna sarılmış.`, "", {w:"iyilik", m:"Başkasını mutlu etmek için yaptığımız güzel davranış."}, "İyilik her kapıyı açar."];
-    text = P3[0] + `\n\nTam o anda harika bir şey olmuş: ${w.fix}! Herkes sevinçten havalara zıplamış. Meğer sorunu çözen en büyük sihir iyilikmiş.\n\nO günden sonra ${nm}, ${w.loc} herkesin en sevdiği kahraman olmuş. Gökten üç elma düşmüş: biri bu masalı yazan sana, biri dinleyenlere, biri de kahramanımız ${dat(nm)}.`;
-    cause = P3[1]; word = P3[2]; moral = P3[3];
+    text = p[0] + `\n\nTam o anda harika bir şey olmuş: ${w.fix}! Herkes sevinçten havalara zıplamış. Meğer sorunu çözen en büyük sihir iyilikmiş.\n\nO günden sonra ${nm}, ${w.loc} herkesin en sevdiği kahraman olmuş. Gökten üç elma düşmüş: biri bu masalı yazan sana, biri dinleyenlere, biri de kahramanımız ${dat(nm)}.`;
+    cause = p[1]; word = p[2]; moral = p[3];
     questions = [`${nm} neden yola çıktı?`, `${nm} engeli nasıl aştı? Sen olsan ne yapardın?`, `Masalın sonunda sihri geri getiren neydi?`];
     scene = [h.e, "✨", w.e];
   }
-  return {text, cause, word, choices, scene, ending:n === TOTAL - 1, moral, questions,
-    title:n === 0 ? `${nm} ${w.title}` : "", src:"offline"};
+  return {text, cause, word, choices, scene, ending:n === TOTAL - 1, moral, questions, title:n === 0 ? `${nm} ${w.title}` : "", src:"offline"};
 }
+
+/* ---------- yedek masal motoru: İngilizce ---------- */
+function offlineEn(st, n, picked){
+  const h = st.hero, w = world(h.world, "en"), nm = h.name, P = (POWERS[h.power] || POWERS.uc).en, PE = (POWERS[h.power] || POWERS.uc).e;
+  const kind = picked ? picked.kind : null, idea = picked ? picked.label : "";
+  let text = "", cause = "", word, choices = [], scene, moral = "", questions = [];
+  if (n === 0){
+    const tt = traitText(h.traits, "en");
+    text = `Once upon a time, ${w.loc}, there lived ${aAn(tt)} ${tt} ${h.colorAdj} ${h.noun} called ${nm}. ${nm} had a superpower: ${nm} ${P.ability}.\n\nOne morning, ${nm} woke up and noticed that something was wrong: ${w.problem}! "I must fix this," said ${nm}. But where to begin?`;
+    word = {w:"notice", m:"To see or realise something."};
+    choices = [{e:w.helperE, label:`Ask ${w.helper} for help`, kind:"ask"}, {e:"🔍", label:"Look for clues yourself", kind:"explore"}, {e:"🏃", label:"Set off right away", kind:"brave"}];
+    scene = [h.e, w.e];
+  } else if (n === 1){
+    const p = {
+      ask:[`${nm} hurried to ${w.helper} and explained everything. ${w.helper} listened carefully, then smiled: "The answer lies on the road to ${w.goal}. Here, take this ${w.itemN}. It will help you along the way."`,
+        `You chose to ask ${w.helper}. So ${nm} learned the way and got a helpful gift.`, {w:"advice", m:"Helpful ideas from someone who knows more."}],
+      explore:[`${nm} began to look around very carefully. There were tiny, sparkly footprints on the ground! ${nm} followed them on and on… and at last found ${w.item}. Next to it was a little note: "The answer is on the road to ${w.goal}."`,
+        `You chose to look for clues. Because ${nm} looked carefully, ${nm} found the secret clue.`, {w:"clue", m:"A small sign that helps us solve a mystery."}],
+      brave:[`${nm} didn't waste a second and set off at once. Along the way, ${nm} bumped into ${w.helper}. "Where are you off to in such a hurry?" asked ${w.helper}. "To fix the problem!" said ${nm}. ${w.helper} was so pleased by this courage that they showed ${nm} the way: "Go to ${w.goal}. And take this ${w.itemN} with you."`,
+        `You chose to set off right away. Because ${nm} acted bravely, ${nm} found a new helper on the way.`, {w:"courage", m:"Doing the right thing even when we feel a little scared."}],
+      custom:[`${nm} tried the idea that was whispered in ${poss(nm)} ear: "${idea}". What a great idea it was! Right then, ${nm} found ${w.item} and spotted a secret path leading to ${w.goal}.`,
+        `You shared your own idea: "${idea}". So the story went the way you wanted!`, {w:"idea", m:"A new thought that pops into our mind."}]
+    }[kind] || [`${nm} set off and soon found ${w.item}.`, "", {w:"journey", m:"Travelling from one place to another."}];
+    text = p[0] + `\n\n${nm} walked on and on… Suddenly, ${w.obstacle} blocked the way! What should ${nm} do now?`;
+    cause = p[1]; word = p[2];
+    choices = [{e:PE, label:"Use your superpower", kind:"power"}, {e:"🤝", label:"Ask friends for help", kind:"friends"}, {e:"💡", label:"Make a clever plan", kind:"think"}];
+    scene = [h.e, w.itemE, w.obstacleE];
+  } else if (n === 2){
+    const p = {
+      power:[`${nm} took a deep breath and ${P.use}. One, two, three… ${nm} was safely across!`,
+        `You chose to use the superpower. Because ${nm} ${P.because}, ${nm} got past the obstacle.`, {w:"obstacle", m:"Something in our way that we need to get past."}],
+      friends:[`${nm} called out loudly: "Can anyone help me?" In a flash, ${w.friends} came running. They all worked together, hand in hand, and got past the obstacle as a team.`,
+        `You chose to ask for help. Because everyone worked together, the hard job became easy.`, {w:"teamwork", m:"Working together to get something done."}],
+      think:[`${nm} sat down on a rock and thought and thought… Then a bright idea popped up! Thanks to the ${w.itemN}, ${nm} found a way past the obstacle.`,
+        `You chose to make a plan. Because ${nm} stayed calm and thought it through, ${nm} found the answer.`, {w:"plan", m:"Thinking ahead about how to do something."}],
+      custom:[`${nm} tried your idea: "${idea}". Everyone was amazed, because it was just what was needed to get past the obstacle!`,
+        `You shared your own idea: "${idea}". So ${nm} got past the obstacle in a very special way.`, {w:"creative", m:"Good at thinking of new and different ideas."}]
+    }[kind] || [`${nm} carefully got past the obstacle.`, "", {w:"obstacle", m:"Something in our way that we need to get past."}];
+    text = p[0] + `\n\nAt last, ${nm} reached ${w.goal}. But waiting there was ${w.final}. ${nm} felt very sorry to see this. How could ${nm} help?`;
+    cause = p[1]; word = p[2];
+    choices = [{e:"🎁", label:"Share what you have", kind:"share"}, {e:"🎶", label:"Sing a happy song", kind:"sing"}, {e:"🫶", label:"Sit down and listen", kind:"listen"}];
+    scene = [h.e, w.goalE];
+  } else {
+    const p = {
+      share:[`"Here, this is for you," said ${nm}, and handed over the ${w.itemN}. The little friend's eyes lit up with joy.`,
+        `You chose to share. Because ${nm} shared, the little friend was happy and the magic came back.`, {w:"share", m:"To let someone else use or have something too."}, "The more we share, the more happiness grows."],
+      sing:[`${nm} began to sing the happiest song in the world. It was so lovely that the little friend first smiled, then joined in.`,
+        `You chose to sing. Because the song cheered everyone up, the magic came back.`, {w:"cheerful", m:"Happy and full of joy."}, "Joy is catching; even a little song can light up the world."],
+      listen:[`${nm} sat down next to the little friend and asked, "What's wrong?" ${nm} listened patiently. Talking it through made them both feel much better, and the little friend began to smile.`,
+        `You chose to listen. Because ${nm} listened patiently, the little friend felt better and the magic came back.`, {w:"patient", m:"Able to wait calmly without rushing."}, "Truly listening to someone is one of the best gifts we can give."],
+      custom:[`${nm} tried your idea: "${idea}". The little friend was so delighted that they burst out laughing.`,
+        `You shared your own idea. So the story had a happy ending thanks to you!`, {w:"imagine", m:"To make pictures and ideas in our mind."}, "Every good idea can make the world a little brighter."]
+    }[kind] || [`${nm} gave the little friend a big hug.`, "", {w:"kindness", m:"Doing something nice to make someone else happy."}, "Kindness opens every door."];
+    text = p[0] + `\n\nAt that very moment, something wonderful happened: ${w.fix}! Everyone jumped for joy. It turned out the greatest magic of all was kindness.\n\nFrom that day on, ${nm} was everyone's favourite hero ${w.loc}. And they all lived happily ever after. The end!`;
+    cause = p[1]; word = p[2]; moral = p[3];
+    questions = [`Why did ${nm} set off on the journey?`, `How did ${nm} get past the obstacle? What would you have done?`, `What brought the magic back at the end of the story?`];
+    scene = [h.e, "✨", w.e];
+  }
+  return {text, cause, word, choices, scene, ending:n === TOTAL - 1, moral, questions, title:n === 0 ? `${nm} ${w.title}` : "", src:"offline"};
+}
+const offlineChapter = (st, n, picked) => (st.lang === "en" ? offlineEn : offlineTr)(st, n, picked);
 
 /* ---------- Claude ile masal ---------- */
 function aiPrompt(st, n, picked){
-  const h = st.hero, w = WORLDS[h.world], P = POWERS[h.power] || POWERS.uc;
-  const past = st.chapters.map((c, i) => `Bölüm ${i + 1}: ${c.text}` + (c.picked ? `\nÇocuğun seçimi: ${c.picked.label}${c.picked.kind === "custom" ? " (çocuğun kendi fikri)" : ""}` : "")).join("\n\n");
+  const en = st.lang === "en", lang = en ? "en" : "tr";
+  const h = st.hero, w = world(h.world, lang), P = (POWERS[h.power] || POWERS.uc)[lang], A = AGES[h.age][lang];
   const ending = n === TOTAL - 1;
+  const past = st.chapters.map((c, i) => (en ? `Chapter ${i + 1}: ` : `Bölüm ${i + 1}: `) + c.text +
+    (c.picked ? (en ? `\nThe child's choice: ` : `\nÇocuğun seçimi: `) + c.picked.label + (c.picked.kind === "custom" ? (en ? " (the child's own idea)" : " (çocuğun kendi fikri)") : "") : "")).join("\n\n");
+  if (en){
+    const stage = ["opening: introduce the hero and reveal a problem that needs solving",
+      "journey: show the result of the child's choice, then an obstacle appears on the way",
+      "the obstacle is overcome and the goal is reached, but one last small problem appears",
+      "ending: the problem is solved thanks to the child's choices, a happy ending and a short lesson"][n];
+    return `You are a warm, cheerful storyteller who writes interactive stories for children. You are writing in English for a child aged ${A.label.replace("Ages ", "")}.
+
+Hero: ${h.name}, a ${traitText(h.traits, "en")} ${h.colorAdj} ${h.noun}. Superpower: ${P.label.toLowerCase()}.
+Story world: ${w.label} (${w.desc}).
+
+Rules:
+- NO scary, violent, sad or grown-up content. Instead of a villain there is a problem to solve; problems are solved with friendship, cleverness, teamwork and kindness.
+- Language: ${A.rule}. Classic fairy-tale voice in the past tense. The first chapter starts with "Once upon a time".
+- If the child's own idea is unsuitable or makes no sense, gently turn it into something positive that fits the story.
+- There are ${TOTAL} chapters in total. Write chapter ${n + 1} now. This chapter's job: ${stage}.
+${n > 0 ? `- This chapter must begin as the DIRECT RESULT of the child's last choice ("${picked ? picked.label : ""}").` : ""}
+
+${past ? "The story so far:\n" + past + "\n" : ""}
+Reply with only this JSON object:
+{${n === 0 ? `"title": "a short title for the story",` : ""}
+"text": "the chapter text, paragraphs separated by \\n\\n",
+"cause": "${n === 0 ? "leave empty" : "one sentence in the form 'You chose ... So ...' linking the choice to its result"}",
+"word": {"w": "a word from this chapter that may be new to the child", "m": "a short meaning a child can understand"},
+"scene": "2-3 emoji that show this chapter",
+"choices": ${ending ? "[]" : `[{"e": "one emoji", "label": "a choice of at most 6 words"}, ... exactly 3, each leading somewhere different]`}${ending ? `,
+"moral": "the story's lesson in one sentence",
+"questions": ["3 short questions to ask the child about the story; one should be about cause and effect"]` : ""}}`;
+  }
   const stage = ["giriş: kahramanı tanıt ve çözülmesi gereken bir sorun ortaya çıksın",
     "yolculuk: çocuğun seçiminin sonucu yaşansın, sonra yolda bir engel çıksın",
     "engel aşılır, hedefe varılır ama son küçük bir sorun belirir",
     "son: sorun çocuğun seçimleri sayesinde çözülsün, mutlu son ve kısa bir ders"][n];
-  return `Sen çocuklar için interaktif masal yazan, sıcak ve neşeli bir Türk masalcısısın. ${AGES[h.age].label} bir çocuk için Türkçe yazıyorsun.
+  return `Sen çocuklar için interaktif masal yazan, sıcak ve neşeli bir Türk masalcısısın. ${A.label} bir çocuk için Türkçe yazıyorsun.
 
-Kahraman: ${h.name}, ${traitText(h.traits)}, ${h.colorAdj} renkli bir ${h.noun}. Süper gücü: ${P.label.toLocaleLowerCase("tr")}.
+Kahraman: ${h.name}, ${traitText(h.traits, "tr")}, ${h.colorAdj} renkli bir ${h.noun}. Süper gücü: ${P.label.toLocaleLowerCase("tr")}.
 Masal dünyası: ${w.label} (${w.desc}).
 
 Kurallar:
 - Korkutucu, şiddet içeren, üzücü ya da yetişkin içerikli öğe YOK. Kötü karakter yerine çözülmesi gereken bir sorun var; sorunlar dostluk, zekâ, yardımlaşma ve iyilikle çözülür.
-- Dil: ${AGES[h.age].rule}. Geleneksel masal anlatımı (-mış'lı geçmiş zaman). İlk bölüm "Bir varmış bir yokmuş" ile başlasın.
+- Dil: ${A.rule}. Geleneksel masal anlatımı (-mış'lı geçmiş zaman). İlk bölüm "Bir varmış bir yokmuş" ile başlasın.
 - Çocuğun kendi fikri uygunsuz ya da anlamsızsa onu nazikçe masala uygun, olumlu bir hale getir.
 - Toplam ${TOTAL} bölüm var. Şimdi ${n + 1}. bölümü yaz. Bu bölümün görevi: ${stage}.
 ${n > 0 ? `- Bu bölüm, çocuğun son seçiminin ("${picked ? picked.label : ""}") DOĞRUDAN SONUCU olarak başlamalı.` : ""}
@@ -426,26 +672,32 @@ function cleanAI(o, n, st){
 function aiError(e){
   const c = e && e.code;
   if (["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed","session_expired"].includes(c)){
-    aiState = "off"; toast("Claude şu an kullanılamıyor. Masal hazır masal motoruyla devam ediyor.");
-  } else if (c === "rate_limited") toast("Claude biraz dinleniyor. Bu bölüm hazır masal motorundan geldi.");
-  else toast("Bağlantıda küçük bir sorun oldu. Bu bölüm hazır masal motorundan geldi.");
+    aiState = "off"; toast(T().tNoAI);
+  } else if (c === "rate_limited") toast(T().tRate);
+  else toast(T().tNet);
 }
 
 /* ---------- masal akışı ---------- */
-function heroSnap(d){
-  const H = HEROES[d.hero];
-  return {id:d.hero, e:H.e, noun:d.hero === "ozel" ? (lower(d.custom.trim()) || "kahraman") : H.noun,
-    name:cap(d.name.trim()).slice(0, 20) || H.def, traits:d.traits.slice(0, 2), power:d.power,
-    color:d.color, colorAdj:d.color, colorV:COLORS[d.color].v, world:d.world, age:d.age};
+function heroSnap(d, lang){
+  const H = HEROES[d.hero], HL = H[lang];
+  let noun = HL.noun;
+  if (d.hero === "ozel"){
+    noun = d.custom.trim().replace(/\s+/g, " ");
+    noun = lang === "en" ? noun.toLowerCase().replace(/^(a|an|the)\s+/, "") : lower(noun).replace(/^bir\s+/, "");
+    noun = noun || (lang === "en" ? "hero" : "kahraman");
+  }
+  return {id:d.hero, e:H.e, noun, name:cap(d.name.trim()).slice(0, 20) || HL.def,
+    traits:d.traits.slice(0, 2).map(k => TRAITS[k][lang]), traitKeys:d.traits.slice(0, 2), power:d.power,
+    color:d.color, colorAdj:COLORS[d.color][lang], colorV:COLORS[d.color].v, world:d.world, age:d.age};
 }
 async function startStory(){
-  S.story = {id:"m" + Date.now(), created:Date.now(), hero:heroSnap(S.draft), chapters:[], ended:false, title:""};
+  S.story = {id:"m" + Date.now(), lang:S.lang, created:Date.now(), hero:heroSnap(S.draft, S.lang), chapters:[], ended:false, title:""};
   S.readOnly = false; S.screen = "story"; window.scrollTo(0, 0);
   await makeChapter(null);
 }
 async function makeChapter(picked){
-  const st = S.story, n = st.chapters.length;
-  S.busy = true; S.loadMsg = LOADING[Math.floor(Math.random() * LOADING.length)];
+  const st = S.story, n = st.chapters.length, msgs = LOADING[st.lang];
+  S.busy = true; S.loadMsg = msgs[Math.floor(Math.random() * msgs.length)];
   render(); requestAnimationFrame(() => { const l = $("#loading"); if (l && n) l.scrollIntoView({behavior:"smooth", block:"center"}); });
   let ch = null;
   if (useAI()){
@@ -453,10 +705,10 @@ async function makeChapter(picked){
     try {
       const o = await sample.json(aiPrompt(st, n, picked), {modelTier:"quick", signal:S.ctl.signal, cache:false});
       ch = cleanAI(o, n, st);
-      if (!ch) toast("Claude'un cevabı eksik geldi. Bu bölüm hazır masal motorundan geldi.");
+      if (!ch) toast(T().tBad);
     } catch (e){
       if (e && e.code === "cancelled"){
-        S.busy = false;
+        S.busy = false; S.ctl = null;
         if (n === 0){ S.story = null; S.screen = "world"; } else st.chapters[n - 1].picked = null;
         render(); return;
       }
@@ -481,16 +733,16 @@ function pick(choice){
 }
 function sendIdea(text){
   const t = String(text || "").replace(/\s+/g, " ").trim().slice(0, 120);
-  if (t.length < 2){ toast("Önce fikrini yaz ya da söyle."); return; }
+  if (t.length < 2){ toast(T().tIdea); return; }
   pick({e:"💭", label:t, kind:"custom"});
 }
 function saveStory(st){
   S.library = [st, ...S.library.filter(s => s.id !== st.id)].slice(0, 30);
   store.set(LIB, S.library);
 }
-function exampleStory(){
-  const st = {id:"ornek", example:true, created:0, ended:true, chapters:[],
-    hero:{id:"kedi", e:"🐱", noun:"uzaylı kedi", name:"Pıtırcık", traits:["meraklı","nazik"], power:"uc", color:"mor", colorAdj:"mor", colorV:"#9B6CFF", world:"uzay", age:"6-8"}};
+function exampleStory(lang){
+  const d = {hero:"kedi", custom:"", name:HEROES.kedi[lang].def, traits:["merakli","nazik"], power:"uc", color:"mor", world:"uzay", age:"6-8"};
+  const st = {id:"ornek-" + lang, lang, example:true, created:0, ended:true, chapters:[], hero:heroSnap(d, lang)};
   const path = ["ask", "friends", "share"];
   for (let n = 0; n < TOTAL; n++){
     const prev = n ? st.chapters[n - 1].choices.find(c => c.kind === path[n - 1]) : null;
@@ -500,24 +752,27 @@ function exampleStory(){
   st.title = st.chapters[0].title; st.moral = st.chapters[3].moral; st.questions = st.chapters[3].questions;
   return st;
 }
+const EXAMPLES = {tr:exampleStory("tr"), en:exampleStory("en")};
 
 /* ---------- sesli okuma ---------- */
 const synth = window.speechSynthesis;
 let speaking = null;
 function stopSpeak(){ if (synth) synth.cancel(); speaking = null; markSpeak(); }
 function speak(text, i){
-  if (!synth || !window.SpeechSynthesisUtterance){ toast("Bu cihaz sesli okumayı desteklemiyor."); return; }
+  if (!synth || !window.SpeechSynthesisUtterance){ toast(T().tNoTTS); return; }
   synth.cancel();
-  const u = new SpeechSynthesisUtterance(String(text).replace(/\n+/g, " "));
-  u.lang = "tr-TR"; u.rate = .9; u.pitch = 1.1;
-  const v = synth.getVoices().find(v => /^tr/i.test(v.lang)); if (v) u.voice = v;
+  const code = T().speech, u = new SpeechSynthesisUtterance(String(text).replace(/\n+/g, " "));
+  u.lang = code; u.rate = .9; u.pitch = 1.1;
+  const voices = synth.getVoices();
+  const v = voices.find(v => v.lang.replace("_", "-") === code) || voices.find(v => v.lang.slice(0, 2) === code.slice(0, 2));
+  if (v) u.voice = v;
   u.onend = u.onerror = () => { if (speaking === i){ speaking = null; markSpeak(); } };
   speaking = i; markSpeak(); synth.speak(u);
 }
 function markSpeak(){
   document.querySelectorAll('[data-act="speak"]').forEach(b => {
     const on = String(speaking) === b.dataset.i;
-    b.innerHTML = on ? "⏹ Durdur" : "🔊 Dinle"; b.setAttribute("aria-pressed", on);
+    b.textContent = on ? T().stop : T().listen; b.setAttribute("aria-pressed", on);
   });
 }
 
@@ -525,15 +780,14 @@ function markSpeak(){
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let micOk = !!SR, rec = null;
 function listen(target){
-  if (!micOk){ toast("Mikrofon burada çalışmıyor. Klavyendeki mikrofon tuşuna basıp konuşarak yazabilirsin."); return; }
+  if (!micOk){ toast(T().tMicOff); return; }
   if (rec){ try { rec.abort(); } catch {} rec = null; S.listening = null; markMic(); return; }
   try { rec = new SR(); } catch { micOk = false; render(); return; }
-  rec.lang = "tr-TR"; rec.interimResults = false; rec.maxAlternatives = 1;
+  rec.lang = T().speech; rec.interimResults = false; rec.maxAlternatives = 1;
   rec.onresult = e => onHeard(target, e.results[0][0].transcript);
   rec.onerror = e => {
-    if (["not-allowed","service-not-allowed","audio-capture"].includes(e.error)){
-      micOk = false; render(); toast("Mikrofon izni yok. Klavyendeki mikrofon tuşuna basıp konuşarak da yazabilirsin.");
-    } else if (e.error === "no-speech") toast("Seni duyamadım. Bir daha dener misin?");
+    if (["not-allowed","service-not-allowed","audio-capture"].includes(e.error)){ micOk = false; render(); toast(T().tMicDenied); }
+    else if (e.error === "no-speech") toast(T().tNoSpeech);
   };
   rec.onend = () => { rec = null; S.listening = null; markMic(); };
   S.listening = target; markMic();
@@ -542,15 +796,15 @@ function listen(target){
 function markMic(){ document.querySelectorAll('[data-act="mic"]').forEach(b => b.classList.toggle("listening", S.listening === b.dataset.t)); }
 const norm = s => lower(s).replace(/[^a-zçğıöşü0-9 ]/g, " ").replace(/\s+/g, " ").trim();
 function matchChoice(said, choices){
-  const s = norm(said); let best = -1, score = 0;
+  const s = norm(said), words = s.split(" "); let best = -1, score = 0;
   choices.forEach((c, i) => {
     const hit = norm(c.label).split(" ").filter(w => w.length > 2).filter(w => s.includes(w.slice(0, Math.max(3, w.length - 2)))).length;
     if (hit > score){ score = hit; best = i; }
   });
   if (score) return best;
-  if (s.split(" ").length <= 3){
-    const ord = [["bir","birinci","1","ilk","ilki"],["iki","ikinci","2","ortadaki"],["üç","üçüncü","3","sonuncu"]];
-    for (let i = 0; i < choices.length; i++) if (ord[i].some(o => s.split(" ").includes(o))) return i;
+  if (words.length <= 3){
+    const ord = T().ordinals;
+    for (let i = 0; i < choices.length; i++) if (ord[i].some(o => words.includes(o))) return i;
   }
   return -1;
 }
@@ -559,149 +813,149 @@ function onHeard(target, said){
     const nm = cap(said.trim().split(" ")[0] || "");
     S.draft.name = nm; const el = $("#heroName"); if (el) el.value = nm;
   } else if (target === "custom"){
-    S.draft.custom = said; const el = $("#customHero"); if (el) el.value = said;
+    S.draft.custom = said; const el = $("#customHero"); if (el) el.value = said; renderBar();
   } else if (target === "idea"){
     const st = S.story, ch = st && st.chapters[st.chapters.length - 1];
     if (!ch) return;
     const i = matchChoice(said, ch.choices);
-    if (i >= 0){ toast(`Duydum: "${said}" → ${ch.choices[i].label}`); pick(ch.choices[i]); }
-    else { const el = $("#idea"); if (el) el.value = said; toast(`Duydum: "${said}". Fikrini göndermek için ok tuşuna dokun.`); }
+    if (i >= 0){ toast(T().tHeard(said, ch.choices[i].label)); pick(ch.choices[i]); }
+    else { const el = $("#idea"); if (el) el.value = said; toast(T().tHeardIdea(said)); }
   }
 }
 
 /* ---------- görünümler ---------- */
-const STEPS = [["hero","Kahraman"],["traits","Özellikler"],["world","Dünya"],["story","Masal"]];
+const STEPS = ["hero","traits","world","story"];
 function renderHead(){
-  const idx = STEPS.findIndex(s => s[0] === S.screen);
-  const mode = S.engine === "offline" || aiState === "off" ? `<span class="pill">Hazır motor</span>`
-    : aiState === "ready" ? `<span class="pill ai">Claude yazıyor</span>` : "";
+  const t = T(), idx = STEPS.indexOf(S.screen);
+  const mode = S.engine === "offline" || aiState === "off" ? `<span class="pill">${t.pillOff}</span>`
+    : aiState === "ready" ? `<span class="pill ai">${t.pillAI}</span>` : "";
+  const right = S.screen === "home"
+    ? `<div class="lang" role="group" aria-label="Dil / Language">${["tr","en"].map(l => `<button data-act="lang" data-v="${l}" aria-pressed="${S.lang === l}" lang="${l}">${l.toUpperCase()}</button>`).join("")}</div>`
+    : `<button class="btn ghost sm" data-act="shelf">${t.shelfBtn}</button>`;
   $("#head").innerHTML = `<div class="topbar">
-      <button class="brand" data-act="home" aria-label="Ana sayfa"><span class="gear spin" aria-hidden="true">⚙️</span>Masal Fabrikası</button>
-      <div class="top-actions">${mode}${S.screen !== "home" ? `<button class="btn ghost sm" data-act="shelf">Kitaplığım</button>` : ""}</div>
-    </div>` + (idx >= 0 && !S.readOnly ? `<div class="steps" aria-label="Adım ${idx + 1} / 4">${STEPS.map((s, i) =>
-      `<div class="step ${i === idx ? "on" : i < idx ? "done" : ""}"><i></i>${i + 1}. ${s[1]}</div>`).join("")}</div>` : "");
+      <button class="brand" data-act="home" aria-label="${t.home}"><span class="gear spin" aria-hidden="true">⚙️</span>${t.brand}</button>
+      <div class="top-actions">${mode}${right}</div>
+    </div>` + (idx >= 0 && !S.readOnly ? `<div class="steps" aria-label="${t.stepOf(idx + 1)}">${t.steps.map((s, i) =>
+      `<div class="step ${i === idx ? "on" : i < idx ? "done" : ""}"><i></i>${i + 1}. ${s}</div>`).join("")}</div>` : "");
 }
 function bookCard(st){
-  const w = WORLDS[st.hero.world] || WORLDS.orman;
-  const date = st.example ? "Örnek masal" : new Date(st.created).toLocaleDateString("tr-TR", {day:"numeric", month:"long"});
+  const t = T(), w = world(st.hero.world, st.lang || "tr");
+  const date = st.example ? t.example : new Date(st.created).toLocaleDateString(t.date, {day:"numeric", month:"long"});
   const sure = S.confirmDel === st.id;
   return `<div class="book-card">
     <button class="open" data-act="open" data-id="${esc(st.id)}">
       <span class="cover" style="background:linear-gradient(135deg,${w.bg[0]},${w.bg[1]})" aria-hidden="true">${esc(st.hero.e)}</span>
-      <span class="meta"><b>${esc(st.title)}${st.example ? `<span class="tag">Örnek</span>` : ""}</b><span>${esc(w.label)} · ${esc(date)}</span></span>
+      <span class="meta"><b lang="${st.lang || "tr"}">${esc(st.title)}${st.example ? `<span class="tag">${t.exampleTag}</span>` : ""}</b><span>${esc(w.label)} · ${esc(date)}</span></span>
     </button>
-    ${st.example ? "" : `<button class="del ${sure ? "sure" : ""}" data-act="del" data-id="${esc(st.id)}">${sure ? "Emin misin? Sil" : "Sil"}</button>`}
+    ${st.example ? "" : `<button class="del ${sure ? "sure" : ""}" data-act="del" data-id="${esc(st.id)}">${sure ? t.delSure : t.del}</button>`}
   </div>`;
 }
 const V = {
   home(){
-    const belt = Object.values(HEROES).filter(h => h.noun).map(h => h.e).join("");
+    const t = T(), belt = Object.values(HEROES).filter(h => h.tr.noun).map(h => h.e).join("");
+    const k = (o, c) => `<li><span class="dot" style="background:var(${c})"></span><div><b>${o[0]}</b><span>${esc(o[1])}</span></div></li>`;
     return `<div class="screen">
       <section class="factory">
-        <span class="label">İnteraktif hikâye oluşturma</span>
-        <h1>Akıllı Masal <span>Fabrikası</span></h1>
-        <p>Kahramanını seç, ona isim ve süper güç ver. Masalın nasıl devam edeceğine sen karar ver.</p>
-        <button class="btn" data-act="new">Yeni masal yap</button>
+        <span class="label">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
+        <p>${t.intro}</p>
+        <button class="btn" data-act="new">${t.newStory}</button>
         <div class="belt" aria-hidden="true"><div class="belt-track">${belt}${belt}${belt}${belt}</div><span class="book">📖</span></div>
       </section>
       <section class="section" id="kitaplik">
-        <h2>Masal kitaplığım</h2>
+        <h2>${t.shelf}</h2>
         <div class="shelf">
-          ${S.library.length ? S.library.map(bookCard).join("") : `<p class="empty">Bitirdiğin masallar burada birikecek.</p>`}
-          ${bookCard(EXAMPLE)}
+          ${S.library.length ? S.library.map(bookCard).join("") : `<p class="empty">${t.shelfEmpty}</p>`}
+          ${bookCard(EXAMPLES[S.lang])}
         </div>
       </section>
       <section class="parents">
-        <h2>Ebeveynler için</h2>
-        <ul>
-          <li><span class="dot" style="background:var(--leaf)"></span><div><b>Neden-sonuç</b><span>Her bölüm, çocuğun seçiminin sonucunu "Sen … seçtin. Bu yüzden …" kutusuyla gösterir.</span></div></li>
-          <li><span class="dot" style="background:var(--accent)"></span><div><b>Yaratıcı yazarlık</b><span>Kahramanı çocuk kurar, her adımda kendi fikriyle masala yön verebilir.</span></div></li>
-          <li><span class="dot" style="background:var(--sun)"></span><div><b>Dil gelişimi</b><span>Her bölümde yeni bir kelime, sesli okuma ve sonda birlikte konuşacağınız sorular var.</span></div></li>
-        </ul>
+        <h2>${t.parents}</h2>
+        <ul>${k(t.k1, "--leaf")}${k(t.k2, "--accent")}${k(t.k3, "--sun")}</ul>
         ${window.claude ? `<div class="section">
-          <span class="label">Masalları kim yazsın?</span>
+          <span class="label">${t.engineQ}</span>
           <div class="chips">
-            <button class="chip" data-act="engine" data-v="auto" aria-pressed="${S.engine === "auto"}">Claude${aiState === "off" ? " (bu görünümde kapalı)" : ""}</button>
-            <button class="chip" data-act="engine" data-v="offline" aria-pressed="${S.engine === "offline"}">Hazır masal motoru</button>
+            <button class="chip" data-act="engine" data-v="auto" aria-pressed="${S.engine === "auto"}">Claude${aiState === "off" ? t.engineOffHere : ""}</button>
+            <button class="chip" data-act="engine" data-v="offline" aria-pressed="${S.engine === "offline"}">${t.engineOffline}</button>
           </div>
-          <p class="hint">Claude, masalı açan kişinin kendi Claude hesabıyla yazar ve ilk seferde izin ister. Hazır motor internetsiz de çalışır.</p>
+          <p class="hint">${t.engineHint}</p>
         </div>` : ""}
       </section>
     </div>`;
   },
   hero(){
-    const d = S.draft;
+    const t = T(), d = S.draft;
     return `<div class="screen">
-      <div class="lead"><h1>Kahramanını seç</h1><p>Masalın kahramanı kim olsun?</p></div>
+      <div class="lead"><h1>${t.heroH}</h1><p>${t.heroP}</p></div>
       <div class="grid3">${Object.entries(HEROES).map(([k, h]) =>
-        `<button class="pick" data-act="hero" data-v="${k}" aria-pressed="${d.hero === k}"><span class="em" aria-hidden="true">${h.e}</span>${h.label}</button>`).join("")}</div>
+        `<button class="pick" data-act="hero" data-v="${k}" aria-pressed="${d.hero === k}"><span class="em" aria-hidden="true">${h.e}</span>${h[S.lang].label}</button>`).join("")}</div>
       ${d.hero === "ozel" ? `<div class="section">
-        <label class="label" for="customHero">Kahramanın ne?</label>
-        <div class="field"><input id="customHero" maxlength="30" placeholder="örneğin: korsan papağan" value="${esc(d.custom)}" autocomplete="off">${micBtn("custom")}</div>
+        <label class="label" for="customHero">${t.customQ}</label>
+        <div class="field"><input id="customHero" maxlength="30" placeholder="${t.customPh}" value="${esc(d.custom)}" autocomplete="off">${micBtn("custom")}</div>
         ${micHint()}
       </div>` : ""}
     </div>`;
   },
   traits(){
-    const d = S.draft, H = HEROES[d.hero];
+    const t = T(), d = S.draft, H = HEROES[d.hero];
     return `<div class="screen">
-      <div class="lead"><h1>${H.e} Kahramanını tanıyalım</h1><p>İsmini koy, nasıl biri olduğunu seç.</p></div>
+      <div class="lead"><h1>${H.e} ${t.traitsH}</h1><p>${t.traitsP}</p></div>
       <div class="section">
-        <label class="label" for="heroName">Adı</label>
-        <div class="field"><input id="heroName" maxlength="20" value="${esc(d.name)}" autocomplete="off" placeholder="${esc(H.def)}">${micBtn("name")}<button class="btn ghost icon" data-act="dice" aria-label="Rastgele isim">🎲</button></div>
+        <label class="label" for="heroName">${t.nameL}</label>
+        <div class="field"><input id="heroName" maxlength="20" value="${esc(d.name)}" autocomplete="off" placeholder="${esc(H[S.lang].def)}">${micBtn("name")}<button class="btn ghost icon" data-act="dice" aria-label="${t.dice}">🎲</button></div>
         ${micHint()}
       </div>
       <div class="section">
-        <span class="label">Nasıl biri? (en fazla 2 tane)</span>
-        <div class="chips">${TRAITS.map(t => `<button class="chip" data-act="trait" data-v="${t}" aria-pressed="${d.traits.includes(t)}">${cap(t)}</button>`).join("")}</div>
+        <span class="label">${t.traitsL}</span>
+        <div class="chips">${Object.entries(TRAITS).map(([k, tr]) => `<button class="chip" data-act="trait" data-v="${k}" aria-pressed="${d.traits.includes(k)}">${cap(tr[S.lang])}</button>`).join("")}</div>
       </div>
       <div class="section">
-        <span class="label">Süper gücü</span>
-        <div class="chips">${Object.entries(POWERS).map(([k, p]) => `<button class="chip" data-act="power" data-v="${k}" aria-pressed="${d.power === k}">${p.e} ${p.label}</button>`).join("")}</div>
+        <span class="label">${t.powerL}</span>
+        <div class="chips">${Object.entries(POWERS).map(([k, p]) => `<button class="chip" data-act="power" data-v="${k}" aria-pressed="${d.power === k}">${p.e} ${p[S.lang].label}</button>`).join("")}</div>
       </div>
       <div class="section">
-        <span class="label">En sevdiği renk</span>
-        <div class="swatches">${Object.entries(COLORS).map(([k, c]) => `<button class="sw" data-act="color" data-v="${k}" style="background:${c.v}" aria-label="${cap(k)}" aria-pressed="${d.color === k}"></button>`).join("")}</div>
+        <span class="label">${t.colorL}</span>
+        <div class="swatches">${Object.entries(COLORS).map(([k, c]) => `<button class="sw" data-act="color" data-v="${k}" style="background:${c.v}" aria-label="${cap(c[S.lang])}" aria-pressed="${d.color === k}"></button>`).join("")}</div>
       </div>
     </div>`;
   },
   world(){
-    const d = S.draft;
+    const t = T(), d = S.draft;
     return `<div class="screen">
-      <div class="lead"><h1>Masal nerede geçsin?</h1><p>Bir dünya seç, sonra fabrikayı çalıştır.</p></div>
-      <div class="grid2 worlds">${Object.entries(WORLDS).map(([k, w]) =>
-        `<button class="pick world" data-act="world" data-v="${k}" aria-pressed="${d.world === k}" style="background-image:linear-gradient(180deg,transparent 55%,${w.bg[0]}55)"><span class="em" aria-hidden="true">${w.e}</span>${w.label}<small>${w.desc}</small></button>`).join("")}</div>
+      <div class="lead"><h1>${t.worldH}</h1><p>${t.worldP}</p></div>
+      <div class="grid2 worlds">${Object.keys(WORLDS).map(k => { const w = world(k, S.lang);
+        return `<button class="pick world" data-act="world" data-v="${k}" aria-pressed="${d.world === k}" style="background-image:linear-gradient(180deg,transparent 55%,${w.bg[0]}55)"><span class="em" aria-hidden="true">${w.e}</span>${w.label}<small>${w.desc}</small></button>`; }).join("")}</div>
       <div class="section">
-        <span class="label">Kaç yaşındasın?</span>
-        <div class="chips">${Object.entries(AGES).map(([k, a]) => `<button class="chip" data-act="age" data-v="${k}" aria-pressed="${d.age === k}">${a.label}</button>`).join("")}</div>
+        <span class="label">${t.ageL}</span>
+        <div class="chips">${Object.entries(AGES).map(([k, a]) => `<button class="chip" data-act="age" data-v="${k}" aria-pressed="${d.age === k}">${a[S.lang].label}</button>`).join("")}</div>
       </div>
     </div>`;
   },
   story(){
     const st = S.story; if (!st) return "";
-    const w = WORLDS[st.hero.world];
+    const t = T(), w = world(st.hero.world, L());
     const chs = st.chapters.map((c, i) => chapterHTML(st, c, i, w)).join(`<div class="divider"></div>`);
     const last = st.chapters[st.chapters.length - 1];
     let tail = "";
     if (S.busy) tail = `<div class="loading" id="loading" role="status">
         <div class="gears" aria-hidden="true"><span class="spin">⚙️</span><span class="spin">⚙️</span></div>
         <p>${esc(S.loadMsg)}</p>
-        ${S.ctl ? `<button class="btn ghost sm" data-act="cancel">Vazgeç</button>` : ""}
+        ${S.ctl ? `<button class="btn ghost sm" data-act="cancel">${t.cancel}</button>` : ""}
       </div>`;
     else if (st.ended) tail = endHTML(st);
     else if (last && !S.readOnly) tail = `<section class="ask" aria-labelledby="askT">
-        <h2 id="askT">Şimdi ne olsun?</h2>
+        <h2 id="askT">${t.askH}</h2>
         <div class="choices">${last.choices.map((c, i) =>
           `<button class="choice" data-act="choose" data-i="${i}"><span class="n">${i + 1}</span><span class="ce" aria-hidden="true">${esc(c.e)}</span><span>${esc(c.label)}</span></button>`).join("")}</div>
-        <div class="or">ya da kendi fikrin</div>
-        <div class="field"><input id="idea" maxlength="120" placeholder="örneğin: Bir uçan halı bulsun" autocomplete="off">${micBtn("idea")}<button class="btn icon" data-act="idea" aria-label="Fikrimi gönder">➜</button></div>
-        <p class="hint">${micOk ? "Mikrofona dokunup söyleyebilirsin: “ikinci” ya da “şarkı söylesin” gibi." : "Okumak zorsa seçeneğin numarasına dokun. Klavyedeki mikrofon tuşuyla konuşarak da yazabilirsin."}</p>
+        <div class="or">${t.or}</div>
+        <div class="field"><input id="idea" maxlength="120" placeholder="${t.ideaPh}" autocomplete="off">${micBtn("idea")}<button class="btn icon" data-act="idea" aria-label="${t.ideaSend}">➜</button></div>
+        <p class="hint">${micOk ? t.micTip : t.noMicTip}</p>
       </section>`;
     return `<div class="screen">
       <div class="story-head">
         <span class="label">${esc(st.hero.e)} ${esc(st.hero.name)} · ${esc(w.label)}</span>
-        <h1>${esc(st.title || "Masal hazırlanıyor…")}</h1>
-        <div class="sub"><button class="toggle" data-act="auto" aria-pressed="${S.autoRead}">🔊 Otomatik sesli oku: ${S.autoRead ? "açık" : "kapalı"}</button></div>
+        <h1>${esc(st.title || t.preparing)}</h1>
+        <div class="sub"><button class="toggle" data-act="auto" aria-pressed="${S.autoRead}">${t.autoRead(S.autoRead)}</button></div>
       </div>
       ${chs}
       ${tail}
@@ -709,62 +963,67 @@ const V = {
   }
 };
 function chapterHTML(st, c, i, w){
-  const prev = i ? st.chapters[i - 1].picked : null;
+  const t = T(), prev = i ? st.chapters[i - 1].picked : null;
   const scene = (c.scene && c.scene.length ? c.scene : [st.hero.e]).map((e, k) => `<span class="e ${k === 0 ? "hero" : ""}">${esc(e)}</span>`).join("");
   return `<article class="chapter" id="ch${i}">
-    ${prev ? `<span class="picked">${esc(prev.e)} Senin seçimin: ${esc(prev.label)}</span>` : ""}
+    ${prev ? `<span class="picked">${esc(prev.e)} ${t.yourChoice} ${esc(prev.label)}</span>` : ""}
     <div class="scene" style="background:linear-gradient(135deg,${w.bg[0]},${w.bg[1]})" aria-hidden="true">
       <span class="glow" style="background:${esc(st.hero.colorV)}"></span>${scene}
-      <span class="num">Bölüm ${i + 1} / ${TOTAL}</span>
+      <span class="num">${t.chapter(i + 1, TOTAL)}</span>
     </div>
-    ${c.cause ? `<div class="cause"><span class="label">Neden → Sonuç</span><p>${esc(c.cause)}</p></div>` : ""}
+    ${c.cause ? `<div class="cause"><span class="label">${t.cause}</span><p>${esc(c.cause)}</p></div>` : ""}
     <div class="read">${c.text.split(/\n{2,}/).map(p => `<p>${esc(p)}</p>`).join("")}</div>
     <div class="chapter-tools">
-      <button class="btn ghost sm" data-act="speak" data-i="${i}" aria-pressed="false">🔊 Dinle</button>
+      <button class="btn ghost sm" data-act="speak" data-i="${i}" aria-pressed="false">${t.listen}</button>
     </div>
-    ${c.word ? `<div class="word"><span class="label">Yeni kelime</span><b>${esc(c.word.w)}</b><span>${esc(c.word.m)}</span></div>` : ""}
+    ${c.word ? `<div class="word"><span class="label">${t.newWord}</span><b>${esc(c.word.w)}</b><span>${esc(c.word.m)}</span></div>` : ""}
   </article>`;
 }
 function endHTML(st){
+  const t = T();
   return `<section class="end">
-    <span class="label">Masalın sonu</span>
+    <span class="label">${t.theEnd}</span>
     ${st.moral ? `<p class="moral">${esc(st.moral)}</p>` : ""}
-    ${st.questions && st.questions.length ? `<div class="section"><span class="label">Birlikte konuşalım</span><ol>${st.questions.map(q => `<li>${esc(q)}</li>`).join("")}</ol></div>` : ""}
-    <p class="hint">${st.example ? "Bu örnek masal. Kendi masalını yapmak için aşağıdaki düğmeye dokun." : "Bu masal kitaplığına kaydedildi."}</p>
+    ${st.questions && st.questions.length ? `<div class="section"><span class="label">${t.talk}</span><ol>${st.questions.map(q => `<li>${esc(q)}</li>`).join("")}</ol></div>` : ""}
+    <p class="hint">${st.example ? t.exampleNote : t.savedNote}</p>
     <div class="row">
-      <button class="btn" data-act="new">Yeni masal yap</button>
-      ${st.example ? "" : `<button class="btn ghost" data-act="again">${esc(st.hero.name)} ile yeni macera</button>`}
+      <button class="btn" data-act="new">${t.newStory}</button>
+      ${st.example ? "" : `<button class="btn ghost" data-act="again">${esc(t.again(st.hero.name))}</button>`}
     </div>
   </section>`;
 }
-const micBtn = t => micOk ? `<button class="btn ghost icon" data-act="mic" data-t="${t}" aria-label="Sesle söyle">🎤</button>` : "";
-const micHint = () => micOk ? "" : `<p class="hint">İpucu: Klavyedeki mikrofon tuşuna basıp konuşarak yazabilirsin.</p>`;
+const micBtn = id => micOk ? `<button class="btn ghost icon" data-act="mic" data-t="${id}" aria-label="${T().micAria}">🎤</button>` : "";
+const micHint = () => micOk ? "" : `<p class="hint">${T().keyboardMic}</p>`;
 
 function renderBar(){
-  const d = S.draft, bar = $("#bar"); let html = "";
+  const t = T(), d = S.draft, bar = $("#bar"); let html = "";
   if (S.screen === "hero"){
     const ok = d.hero && (d.hero !== "ozel" || d.custom.trim());
-    html = `${ok ? "" : `<p class="why">${d.hero === "ozel" ? "Kahramanının ne olduğunu yaz." : "Önce bir kahraman seç."}</p>`}<div class="row"><button class="btn ghost" data-act="home">Geri</button><button class="btn" data-act="go" data-v="traits" ${ok ? "" : "disabled"}>Devam</button></div>`;
+    html = `${ok ? "" : `<p class="why">${d.hero === "ozel" ? t.whyCustom : t.whyHero}</p>`}<div class="row"><button class="btn ghost" data-act="home">${t.back}</button><button class="btn" data-act="go" data-v="traits" ${ok ? "" : "disabled"}>${t.next}</button></div>`;
   } else if (S.screen === "traits"){
-    html = `<div class="row"><button class="btn ghost" data-act="go" data-v="hero">Geri</button><button class="btn" data-act="go" data-v="world">Devam</button></div>`;
+    html = `<div class="row"><button class="btn ghost" data-act="go" data-v="hero">${t.back}</button><button class="btn" data-act="go" data-v="world">${t.next}</button></div>`;
   } else if (S.screen === "world"){
-    html = `${d.world ? "" : `<p class="why">Bir masal dünyası seç.</p>`}<div class="row"><button class="btn ghost" data-act="go" data-v="traits">Geri</button><button class="btn" data-act="start" ${d.world ? "" : "disabled"}>Masalı başlat</button></div>`;
+    html = `${d.world ? "" : `<p class="why">${t.whyWorld}</p>`}<div class="row"><button class="btn ghost" data-act="go" data-v="traits">${t.back}</button><button class="btn" data-act="start" ${d.world ? "" : "disabled"}>${t.start}</button></div>`;
   }
   bar.hidden = !html; $("#barIn").innerHTML = html;
   $("#main").classList.toggle("nobar", !html);
 }
-function render(){ renderHead(); $("#main").innerHTML = V[S.screen](); renderBar(); markSpeak(); markMic(); }
+function render(){
+  document.documentElement.lang = L(); document.title = T().docTitle;
+  renderHead(); $("#main").innerHTML = V[S.screen](); renderBar(); markSpeak(); markMic();
+}
 
 /* ---------- olaylar ---------- */
 function go(screen){ stopSpeak(); S.screen = screen; render(); window.scrollTo(0, 0); }
 const A = {
   home(){ if (S.ctl) S.ctl.abort(); S.readOnly = false; S.confirmDel = null; go("home"); },
   shelf(){ A.home(); requestAnimationFrame(() => $("#kitaplik").scrollIntoView({behavior:"smooth"})); },
+  lang(b){ S.lang = b.dataset.v; store.set("masal-dil", S.lang); render(); },
   new(){ S.draft = freshDraft(); S.story = null; S.readOnly = false; go("hero"); },
   hero(b){
-    const d = S.draft, old = d.hero ? HEROES[d.hero].def : "";
+    const d = S.draft, olds = d.hero ? [HEROES[d.hero].tr.def, HEROES[d.hero].en.def] : [];
     d.hero = b.dataset.v;
-    if (!d.name || d.name === old) d.name = HEROES[d.hero].def;
+    if (!d.name || olds.includes(d.name)) d.name = HEROES[d.hero][S.lang].def;
     render();
   },
   go(b){ go(b.dataset.v); },
@@ -777,39 +1036,39 @@ const A = {
   color(b){ S.draft.color = b.dataset.v; render(); },
   world(b){ S.draft.world = b.dataset.v; render(); },
   age(b){ S.draft.age = b.dataset.v; render(); },
-  dice(){ const cur = S.draft.name; let n = cur; while (n === cur) n = NAMES[Math.floor(Math.random() * NAMES.length)]; S.draft.name = n; $("#heroName").value = n; },
+  dice(){ const list = NAMES[S.lang], cur = S.draft.name; let n = cur; while (n === cur) n = list[Math.floor(Math.random() * list.length)]; S.draft.name = n; $("#heroName").value = n; },
   start(){ if (S.draft.world) startStory(); },
   choose(b){ const st = S.story, ch = st.chapters[st.chapters.length - 1]; pick(ch.choices[+b.dataset.i]); },
   idea(){ sendIdea($("#idea").value); },
   mic(b){ listen(b.dataset.t); },
-  speak(b){
-    const i = +b.dataset.i;
-    if (speaking === i) stopSpeak(); else speak(S.story.chapters[i].text, i);
-  },
+  speak(b){ const i = +b.dataset.i; if (speaking === i) stopSpeak(); else speak(S.story.chapters[i].text, i); },
   auto(){ S.autoRead = !S.autoRead; store.set("masal-oto-oku", S.autoRead); if (!S.autoRead) stopSpeak(); render(); },
   cancel(){ if (S.ctl) S.ctl.abort(); },
   engine(b){ S.engine = b.dataset.v; store.set("masal-motor", S.engine); render(); },
   open(b){
     const id = b.dataset.id;
-    S.story = id === "ornek" ? EXAMPLE : S.library.find(s => s.id === id);
+    S.story = id.startsWith("ornek") ? EXAMPLES[id.slice(6)] : S.library.find(s => s.id === id);
     if (!S.story) return;
     S.readOnly = true; S.confirmDel = null; go("story");
   },
   del(b){
     const id = b.dataset.id;
     if (S.confirmDel !== id){ S.confirmDel = id; render(); return; }
-    S.library = S.library.filter(s => s.id !== id); store.set(LIB, S.library); S.confirmDel = null; render(); toast("Masal silindi.");
+    S.library = S.library.filter(s => s.id !== id); store.set(LIB, S.library); S.confirmDel = null; render(); toast(T().deleted);
   },
   again(){
-    const h = S.story.hero;
-    S.draft = {hero:h.id, custom:h.id === "ozel" ? h.noun : "", name:h.name, traits:h.traits.slice(), power:h.power, color:h.color, world:null, age:h.age};
+    const h = S.story.hero, lang = S.story.lang || "tr";
+    const keys = h.traitKeys || Object.keys(TRAITS).filter(k => (h.traits || []).includes(TRAITS[k][lang]));
+    const color = COLORS[h.color] ? h.color : (Object.keys(COLORS).find(k => COLORS[k].tr === h.color) || "mor");
+    S.lang = lang; store.set("masal-dil", lang);
+    S.draft = {hero:h.id, custom:h.id === "ozel" ? h.noun : "", name:h.name, traits:keys, power:h.power, color, world:null, age:h.age};
     S.story = null; S.readOnly = false; go("world");
   }
 };
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-act]");
   if (!b || b.disabled) return;
-  if (S.confirmDel && b.dataset.act !== "del"){ S.confirmDel = null; }
+  if (S.confirmDel && b.dataset.act !== "del") S.confirmDel = null;
   const f = A[b.dataset.act]; if (f) f(b);
 });
 document.addEventListener("input", e => {
@@ -822,11 +1081,12 @@ document.addEventListener("keydown", e => {
 });
 if (synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = () => {};
 
-const EXAMPLE = exampleStory();
 try { window.claude && window.claude.hot && window.claude.hot.snapshot && window.claude.hot.snapshot(() => ({screen:S.screen, draft:S.draft, story:S.busy ? null : S.story, readOnly:S.readOnly})); } catch {}
 function boot(data){
   if (data && data.screen){
-    S.draft = data.draft || S.draft; S.story = data.story || null; S.readOnly = !!data.readOnly;
+    S.draft = Object.assign(freshDraft(), data.draft || {});
+    S.draft.traits = (S.draft.traits || []).filter(k => TRAITS[k]);
+    if (!COLORS[S.draft.color]) S.draft.color = "mor"; S.story = data.story || null; S.readOnly = !!data.readOnly;
     S.screen = data.screen === "story" && !S.story ? "home" : data.screen;
   }
   render();
